@@ -389,17 +389,14 @@ app.get('/test', async (req, res) => {
   try {
     var i = 0;
     var jsonInfo = {};
-    while(true){
-	i = i + 1;
-        //const result = await Eclass.Eclass('admin', 'joonkkkk1234', '@kjkszpj12');
-	try {
-	    jsonInfo = JSON.parse(await Eclass.Eclass('admin', 'joonkkkk1234', '@kjkszpj12'));
-	    if(jsonInfo.timeTable.length !== 0) break;
-	} catch (error) {
-	}
+    while (true) {
+      i = i + 1;
+      try {
+        jsonInfo = JSON.parse(await Eclass.Eclass('admin', 'joonkkkk1234', '@kjkszpj12'));
+        if (jsonInfo.timeTable.length !== 0) break;
+      } catch (error) {
+      }
     }
-    //const __result = await Eclass.Eclass('admin', 'joonkkkk1234', '@kjkszpj12');
-    //const _result = JSON.parse(__result);
     console.log(jsonInfo);
     const result1 = await DB_IO.course_to_db("2023-3", jsonInfo.timeTable);
     const result2 = await DB_IO.timetable_to_db("admin", "2023-3", jsonInfo.timeTable_small);
