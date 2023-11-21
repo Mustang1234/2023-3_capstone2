@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Application</title>
+</head>
+<body>
+  <ul id="messages"></ul>
+  <form action="" id="form" autocomplete="off">
+    <input id="m" autocomplete="off" />
+    <button>Send</button>
+  </form>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script>
+    $(document).ready(() => {
+      const socket = io();
+      const userId = prompt('Enter your user ID:');
+      const userName = prompt('Enter your name:');
+      const room = prompt('Enter the room name:');
+
+      // Notify the server about the user joining the room
+      socket.emit('join', userId, userName, room);
+
+      $('#form').submit(() => {
+        const msg = $('#m').val();
+
+        // Send the chat message to the server
+        socket.emit('chat message', msg);
+        $('#m').val('');
+        return false;
+      });
+
+      socket.on('chat message', (senderName, msg) => {
+        $('#messages').append($('<li>').text(`${senderName}: ${msg}`));
+      });
+    });
+  </script>
+</body>
+</html>
