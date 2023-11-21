@@ -1,0 +1,101 @@
+get signup
+	받아오는것 : json
+		{ type: "signup_process1", Student_id: "admin", Student_pw:"fdsa" , portal_id: "fdsa4321", portal_pw:"rewqrewq"  }
+
+	보내는것: json
+		{ permision: "accepted"/ "already exists"/ "protal login fail" /* "accepted" : 가능, others : 재시도 필요 */}
+
+
+get login
+	받아오는것 : json
+		{ type: "login", id: "fdsa4321", pw: "rewqrewq"}
+
+	보내는것: redirect
+		redirect('/main_page')
+	
+
+get loading
+	받아오는것 : json
+		{ type: "loading", Student_id: "admin", Student_pw:"fdsa" , portal_id: "fdsa4321", portal_pw:"rewqrewq" }
+
+	보내는것: json
+		{ name: "홍길동", department: "소프트웨어",
+		  timeTable: [
+		    { day: '월', time: '14:00', name: '인공지능' },
+		    { day: '월', time: '14:30', name: '인공지능' } ...
+		  ], schedule: [
+			{
+				deadline: "2023-11-05 23:59",
+				subject: "인공지능",
+				description: '1차 목표',
+				groupName": "orange"
+			}, ...
+		], photo: {사진} }
+	
+
+get main_page
+	받아오는것 : json
+		{ type: "main_page", Student_id: "admin"  }
+
+	보내는것: json
+		{ response_code: true/false } // true : 정상, false : 비정상
+
+
+get my_page
+	받아오는것 : json
+		{ type: "my_page_photo_upload", studentID: "fdsa4321", photo: {사진}  }
+
+	보내는것: json
+		{ response_code: true/false }
+
+	받아오는것 : json
+		{ type: "my_page_load_new_portal", studentID: "fdsa4321", portal_id: "fdsa4321", portal_pw:"rewqrewq"  }
+
+	보내는것: json
+		{ response_code: true/false }
+	
+	
+post add_schedule
+	받아오는것 : json
+		{
+			type: "add_schedule",
+			studentID: "fdsa4321",
+			datetime: "2023-11-05",
+			subject: "캡스톤 디자인",
+			description: "멘토링 보고서 1차 Orange"
+		}
+
+	보내는것: redirect
+		redirect('/main_page')
+
+
+get timeTable
+	받아오는것: json
+		{ type: "timeTable", year_semester: "2023-3", studentID: "fdsa1234", id: "portal_fdsa", pw: "43214312" }
+
+	보내는것: json
+		{
+		  studentID: "deadbeefc0ffee",
+		  retCode: true,
+		  timeTable: [
+		    { day: '월', time: '14:00', name: '인공지능' },
+		    { day: '월', time: '14:30', name: '인공지능' } ...
+		  ]
+		}
+
+
+get chat
+	받아오는것: json
+		{ type: "chat", StudentID1: 'fdsa4321', StudentID2: 'fdsa1234' }
+
+	보내는것: json
+		{
+		  fromStudentID: 'fdsa1234',
+		  toStudentID: 'fdsa4321',
+		  previousChat: [
+		    { datetime: '2023-11-05 14:00', fromStudentID: 'fdsa1234', toStudentID: 'fdsa4321', description: 'hello' },
+		    { datetime: '2023-11-05 14:01', fromStudentID: 'fdsa4321', toStudentID: 'fdsa1234', description: 'hello' } ...
+		  ]
+		}
+
+
