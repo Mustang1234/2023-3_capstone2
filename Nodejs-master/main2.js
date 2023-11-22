@@ -115,27 +115,27 @@ app.post('/login', function (req, res) {
     res.redirect(`/pages`);
     return false;
   }
-    
+
   console.log('login :', req.body);
-  
+
   const secondPostData = {
-      Student_id: req.body.Student_id,
-      Student_pw: req.body.Student_pw
-    };
+    Student_id: req.body.Student_id,
+    Student_pw: req.body.Student_pw
+  };
 
   var data;
-  fetch(`http://localhost:${port}/login_process`, {
-      method: 'POST',
-      body: JSON.stringify(secondPostData),
+  fetch(`http://20.39.186.138:${port}/login_process`, {
+    method: 'POST',
+    body: JSON.stringify(secondPostData),
   })
-      .then(response => response.json())
-      .then(_data => {
-          data = _data;
-          console.log('Response from second POST request:', data);
-      })
-      .catch(error => {
-          console.error('Error during second POST request:', error);
-      });
+    .then(response => response.json())
+    .then(_data => {
+      data = _data;
+      console.log('Response from second POST request:', data);
+    })
+    .catch(error => {
+      console.error('Error during second POST request:', error);
+    });
 
   res.json({ result: 'success', result: data });
   //console.log("postData", postData);
