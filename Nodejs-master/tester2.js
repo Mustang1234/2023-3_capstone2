@@ -5,6 +5,7 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const passport = require('passport');
 const FindUser = require('./FindUser'); // FindUser는 사용자를 데이터베이스에서 찾는 함수입니다.
 const port = 1234;
+const app = express();
 
 const opts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
