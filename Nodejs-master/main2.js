@@ -163,7 +163,7 @@ app.post('/signup_process', async (req, res) => {
 app.post('/login', async (req, res) => {
   try {
     const requestData = req.body;
-    console.log('Received data from first POST request:', requestData);
+    console.log('login :', requestData);
     const secondPostData = {
       Student_id: requestData.Student_id,
       Student_pw: requestData.Student_pw
@@ -176,12 +176,11 @@ app.post('/login', async (req, res) => {
       },
     });
     
-    if (!response.ok) {
+    /*if (!response.ok) {
       throw new Error('Failed to fetch');
-    }
+    }*/
 
     const data = await response.json();
-    console.log('Response from second POST request:', data);
     console.log('Response from second POST request:', data);
     res.json({ result: 'success', data });
   } catch (error) {
