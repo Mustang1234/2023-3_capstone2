@@ -168,7 +168,7 @@ app.post('/login', async (req, res) => {
       Student_id: requestData.Student_id,
       Student_pw: requestData.Student_pw
     };
-    const response = await fetch(`http://${ip}:${port}/login_process`, {
+    const response = await fetch(`http://localhost:${port}/login_process`, {
       method: 'POST',
       body: JSON.stringify(secondPostData),
       headers: {
