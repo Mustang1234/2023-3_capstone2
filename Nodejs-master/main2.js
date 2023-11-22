@@ -163,7 +163,7 @@ app.post('/signup_process', async (req, res) => {
 app.post('/login', async (req, res) => {
   try {
     const requestData = req.body;
-    console.log('login :', requestData);
+    console.log('login :', req.body);
     const secondPostData = {
       Student_id: requestData.Student_id,
       Student_pw: requestData.Student_pw
