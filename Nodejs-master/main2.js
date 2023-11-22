@@ -90,6 +90,7 @@ app.get('/signup', function (req, res) {
 });
 
 app.post('/signup_process', async (req, res) => {
+  console.log(req.doby);
   const { Student_id, Student_pw, student_name, student_number, department } = req.body;
 
   if (!Student_id || !Student_pw) {
@@ -120,7 +121,7 @@ app.get('/login', function (req, res) {
     Student_pw: req.query.pw
   };
   console.log(postData);
-  res.status(307).location('/login_process').json(postData);
+  res.status(307).location('/signup_process').json(postData);
   
 
   //res.redirect(307, '/login_process');
