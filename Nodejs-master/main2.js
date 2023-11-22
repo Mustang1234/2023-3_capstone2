@@ -161,7 +161,7 @@ app.post('/signup_process', async (req, res) => {
   res.send(html);
 });*/
 
-app.post('/login', async (req, res) => {
+app.post('/login', async (req, res, next) => {
   try {
     passport.authenticate('local', (err, user, info) => {
       if (err) { return next(err); }
@@ -179,7 +179,7 @@ app.post('/login', async (req, res) => {
       res.status(500).json({ result: 'error', error: error.message });
   }
 });
-
+/*
 app.post('/login_process', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) { return next(err); }
@@ -191,7 +191,7 @@ app.post('/login_process', (req, res, next) => {
     // 로그인 성공 시 JSON 응답과 함께 리다이렉트
     return res.json({ success: true, message: '로그인 성공!', data: user });
   })(req, res, next);
-});
+});*/
 
 /*app.post('/login_process',
   passport.authenticate('local', {
