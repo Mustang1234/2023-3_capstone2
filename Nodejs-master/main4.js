@@ -316,7 +316,7 @@ app.get('/get_timetable_from_portal', async (req, res) => {
     const _result = await Eclass.Eclass_Timetable('StudentID', 'Student_id', 'Student_pw');
     const result = JSON.parse(_result);
     console.log(result);
-    res.redirect('/pages');
+    res.json(result);
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
