@@ -164,7 +164,7 @@ app.post('/login', async (req, res) => {
   try {
       const requestData = req.body;
       console.log('Received data from first POST request:', requestData);
-      const secondPostData = {
+      const secondPostData = {  
           Student_id: requestData.Student_id,
           Student_pw: requestData.Student_pw
       };
@@ -175,6 +175,7 @@ app.post('/login', async (req, res) => {
               'Content-Type': 'application/json'
           },
       });
+      console.log(response)
       if (!response.ok) {
           throw new Error('Failed to fetch');
       }
