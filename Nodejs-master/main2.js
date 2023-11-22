@@ -121,12 +121,12 @@ app.get('/login', function (req, res) {
   };
   //console.log("postData", postData);
   //res.status(307).location('/login_process').json(postData);
-  //res.json({ redirectTo: '/login_process', type:'post', data: postData });
-  //return;
+  res.json({ redirectTo: '/login_process', type:'post', data: postData });
+  return;
 
   //res.redirect(307, '/login_process');
 
-  var title = 'login';
+  /*var title = 'login';
   var list = template.list(req.list);
   var html = template.HTML(title, list,
     `<form action="login_process" method="post">
@@ -137,10 +137,10 @@ app.get('/login', function (req, res) {
     ``,
     req.session.isLogedin
   );
-  res.send(html);
+  res.send(html);*/
 });
 
-app.post('/login_process', (req, res, next) => {
+/*app.post('/login_process', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) { return next(err); }
     if (!user) {
@@ -152,7 +152,8 @@ app.post('/login_process', (req, res, next) => {
     return res.json({ success: true, message: '로그인 성공!' });
   })(req, res, next);
 });
-/*
+*/
+
 app.post('/login_process',
   passport.authenticate('local', {
     successFlash: '로그인 성공!',
@@ -160,7 +161,6 @@ app.post('/login_process',
     successReturnToOrRedirect: '/pages', // 성공 시 리다이렉트할 경로
     failureRedirect: '/login' // 실패 시 리다이렉트할 경로
   }));
-*/
 
 /*app.post('/login_process', async (req, res) => {
   console.log('req.body', req.body);
