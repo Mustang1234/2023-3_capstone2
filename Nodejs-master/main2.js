@@ -121,25 +121,8 @@ app.get('/login', function (req, res) {
   };
   //console.log("postData", postData);
   //res.status(307).location('/login_process').json(postData);
-  //res.json({ redirectTo: '/login_process', type:'post', data: postData });
-  //return;
-  const secondPostData = { message: 'Hello from server!' };
-
-  fetch('http://20.39.186.138:1234/second-post', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(postData),
-  })
-  .then(response => response.json())
-  .then(data => {
-    // 두 번째 POST 요청에 대한 응답 확인 (예시: 콘솔 출력)
-    console.log('Response from second POST request:', data);
-  })
-  .catch(error => {
-    console.error('Error during second POST request:', error);
-  });
+  res.json({ redirectTo: '/login_process', type:'post', data: postData });
+  return;
 
   //res.redirect(307, '/login_process');
 
@@ -157,10 +140,7 @@ app.get('/login', function (req, res) {
   res.send(html);*/
 });
 
-app.post('/login_process', (req, res, next) => {
-  console.log(req.body);
-  const { Student_id, Student_pw } = JSON.parse(req.body);
-  console.log(Student_id, Student_pw);
+/*app.post('/login_process', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) { return next(err); }
     if (!user) {
@@ -172,15 +152,15 @@ app.post('/login_process', (req, res, next) => {
     return res.json({ success: true, message: '로그인 성공!' });
   })(req, res, next);
 });
-/*
+*/
+
 app.post('/login_process',
   passport.authenticate('local', {
-    //successFlash: '로그인 성공!',
-    //failureFlash: '로그인 실패!',
-    successRedirect: '/pages', // 성공 시 리다이렉트할 경로
+    successFlash: '로그인 성공!',
+    failureFlash: '로그인 실패!',
+    successReturnToOrRedirect: '/pages', // 성공 시 리다이렉트할 경로
     failureRedirect: '/login' // 실패 시 리다이렉트할 경로
   }));
-*/
 
 /*app.post('/login_process', async (req, res) => {
   console.log('req.body', req.body);
