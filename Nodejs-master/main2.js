@@ -188,17 +188,12 @@ app.post('/login', async (req, res) => {
   }
 });
 
-app.post('/login_process', (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
-    if (err) { return next(err); }
-    if (!user) {
-      // 로그인 실패 시 JSON 응답과 함께 리다이렉트
-      return res.json({ success: false, message: '로그인 실패!' });
-    }
+app.post('/login_process', (req, res) => {
+  const requestData = req.body;
+  console.log('Received data from second POST request:', requestData);
 
-    // 로그인 성공 시 JSON 응답과 함께 리다이렉트
-    return res.json({ success: true, message: '로그인 성공!', data: user });
-  })(req, res, next);
+  // 두 번째 POST 요청에 응답
+  res.json({ result: 'success', data: requestData });
 });
 
 /*app.post('/login_process',
