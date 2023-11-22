@@ -110,7 +110,7 @@ app.post('/signup_process', async (req, res) => {
   });
 });
 
-app.post('/login', function (req, res) {
+/*app.post('/login', function (req, res) {
   res.setHeader('Content-Security-Policy', "form-action 'self' *");
   if (req.user !== undefined) {
     res.redirect(`/pages`);
@@ -146,7 +146,7 @@ app.post('/login', function (req, res) {
 
   //res.redirect(307, '/login_process');
 
-  /*var title = 'login';
+  var title = 'login';
   var list = template.list(req.list);
   var html = template.HTML(title, list,
     `<form action="login_process" method="post">
@@ -157,7 +157,36 @@ app.post('/login', function (req, res) {
     ``,
     req.session.isLogedin
   );
-  res.send(html);*/
+  res.send(html);
+});*/
+
+app.post('/login', async (req, res) => {
+  try {
+      const requestData = req.body;
+      console.log('Received data from first POST request:', requestData);
+      const secondPostData = {
+          Student_id: requestData.Student_id,
+          Student_pw: requestData.Student_pw
+      };
+      const response = await fetch(`http://${ip}:${port}/login_process`, {
+          method: 'POST',
+          body: JSON.stringify(secondPostData),
+          headers: {
+              'Content-Type': 'application/json'
+          },
+      });
+      if (!response.ok) {
+          throw new Error('Failed to fetch');
+      }
+
+      const data = await response.json();
+      console.log('Response from second POST request:', data);
+      console.log('Response from second POST request:', data);
+      res.json({ result: 'success', data });
+  } catch (error) {
+      console.error('Error during first POST request:', error);
+      res.status(500).json({ result: 'error', error: error.message });
+  }
 });
 
 app.post('/login_process', (req, res, next) => {
@@ -169,7 +198,7 @@ app.post('/login_process', (req, res, next) => {
     }
     
     // 로그인 성공 시 JSON 응답과 함께 리다이렉트
-    return res.json({ success: true, message: '로그인 성공!' });
+    return res.json({ success: true, message: '로그인 성공!', data: user });
   })(req, res, next);
 });
 

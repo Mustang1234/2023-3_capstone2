@@ -13,13 +13,10 @@ app.post('/login', async (req, res) => {
     try {
         const requestData = req.body;
         console.log('Received data from first POST request:', requestData);
-
         const secondPostData = {
             Student_id: requestData.Student_id,
             Student_pw: requestData.Student_pw
         };
-
-        // 두 번째 POST 요청을 보내고 응답을 기다림
         const response = await fetch(`http://${ip}:${port}/login_process`, {
             method: 'POST',
             body: JSON.stringify(secondPostData),
@@ -27,16 +24,12 @@ app.post('/login', async (req, res) => {
                 'Content-Type': 'application/json'
             },
         });
-
-        // 응답이 JSON 형식인지 확인
         if (!response.ok) {
             throw new Error('Failed to fetch');
         }
 
         const data = await response.json();
         console.log('Response from second POST request:', data);
-
-        // 첫 번째 POST 요청에 응답
         res.json({ result: 'success', data });
     } catch (error) {
         console.error('Error during first POST request:', error);
