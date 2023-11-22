@@ -1,47 +1,60 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const template = require('./template.js');
+
 const app = express();
-const port = 1234;
+const port = 3000;
 
-app.get('/', (req, res) => {
-    res.send('Hello, this is your Node.js server!');
+// body-parser middleware 설정
+app.use(bodyParser.json());
+
+// 첫 번째 POST 요청 처리
+app.post('/first-post', (req, res) => {``
+    const requestData = req.body;
+
+    // 받은 데이터 확인 (예시: 콘솔 출력)
+    console.log('Received data from first POST request:', requestData);
+
+    // 여기에서 필요한 작업 수행
+
+    // 두 번째 POST 요청을 보내기
+    const secondPostData = { message: 'Hello from server!' };
+
+    fetch('http://localhost:3000/second-post', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(secondPostData),
+    })
+        .then(response => response.json())
+        .then(data => {
+            // 두 번째 POST 요청에 대한 응답 확인 (예시: 콘솔 출력)
+            console.log('Response from second POST request:', data);
+        })
+        .catch(error => {
+            console.error('Error during second POST request:', error);
+        });
+
+    // 첫 번째 POST 요청에 대한 응답
+    res.redirect('/login');
 });
 
+app.post('/second-post', (req, res) => {
+    const requestData = req.body;
+
+    // 받은 데이터 확인 (예시: 콘솔 출력)
+    console.log('Received data from second POST request:', requestData);
+
+    // 여기에서 필요한 작업 수행
+
+    // 두 번째 POST 요청을 보내기
+    const secondPostData = { message: 'Hello from server2!' };
+
+    res.json({ result: 'success', message: 'First POST request processed.', PostData2: secondPostData });
+});
+
+// 서버 시작
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    console.log(`Server is running at http://localhost:${port}`);
 });
-/*
-npm install -s compression
-npm install -s express
-npm install -s express-session
-npm install -s helmet
-npm install -s lodash
-npm install -s mysql2
-npm install -s passport
-npm install -s passport-local
-npm install -s puppeteer
-npm install -s request
-npm install -s sanitize-html
-npm install -s session-file-store
-npm install -s socket.io
-npm install -s xml-js
-npm install -s xml2js
-
-    "compression": "^1.7.4",
-    "cookie": "^0.5.0",
-    "crypto": "^1.0.1",
-    "express": "^4.18.2",
-    "express-session": "^1.17.3",
-    "helmet": "^7.0.0",
-    "lodash": "^4.17.21",
-    "mysql": "^2.18.1",
-    "mysql2": "^3.6.2",
-    "passport": "^0.6.0",
-    "passport-local": "^1.0.0",
-    "puppeteer": "^21.4.1",
-    "request": "^2.88.2",
-    "sanitize-html": "^1.18.2",
-    "session-file-store": "^1.5.0",
-    "socket.io": "^4.7.2",
-    "xml-js": "^1.6.11",
-    "xml2js": "^0.6.2"
-*/
