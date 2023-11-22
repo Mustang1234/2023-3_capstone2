@@ -29,6 +29,7 @@ const { post } = require('request');
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(compression());
 app.use(express.static('public'));
 app.use(helmet());
@@ -65,7 +66,7 @@ app.get('*', function (req, res, next) {
     next();
   });
 });
-/*
+
 app.get('/signup', function (req, res) {
   res.setHeader('Content-Security-Policy', "form-action 'self' *");
   if (req.user !== undefined) {
@@ -109,7 +110,7 @@ app.post('/signup_process', async (req, res) => {
     }
   });
 });
-*/
+
 /*app.post('/login', function (req, res) {
   res.setHeader('Content-Security-Policy', "form-action 'self' *");
   if (req.user !== undefined) {
