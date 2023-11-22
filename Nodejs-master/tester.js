@@ -14,8 +14,8 @@ app.post('/first-post', (req, res) => {
     console.log('Received data from first POST request:', requestData);
     
     const secondPostData = {
-        Student_id: req.body.Student_id,
-        Student_pw: req.body.Student_pw
+        Student_id: requestData.Student_id,
+        Student_pw: requestData.Student_pw
       };
 
     var data;
