@@ -9,7 +9,7 @@ const ip = '20.39.186.138';
 app.use(bodyParser.json());
 
 // 첫 번째 POST 요청 처리
-app.post('/first-post', (req, res) => {
+app.post('/login', (req, res) => {
     const requestData = req.body;
     
     console.log('Received data from first POST request:', requestData);
@@ -18,11 +18,9 @@ app.post('/first-post', (req, res) => {
         Student_id: requestData.Student_id,
         Student_pw: requestData.Student_pw
       };
-      
-    console.log('to send:', requestData);
 
     var data;
-    fetch(`http://${ip}:${port}/second-post`, {
+    fetch(`http://${ip}:${port}/login_process`, {
         method: 'POST',
         body: JSON.stringify(secondPostData),
     })
@@ -38,7 +36,7 @@ app.post('/first-post', (req, res) => {
     res.json({ result: 'success', result: data });
 });
 
-app.post('/second-post', (req, res) => {
+app.post('/login_process', (req, res) => {
     const requestData = req.body;
 
     console.log('Received data from second POST request:', requestData);
