@@ -65,7 +65,7 @@ app.get('*', function (req, res, next) {
     next();
   });
 });
-
+/*
 app.get('/signup', function (req, res) {
   res.setHeader('Content-Security-Policy', "form-action 'self' *");
   if (req.user !== undefined) {
@@ -109,7 +109,7 @@ app.post('/signup_process', async (req, res) => {
     }
   });
 });
-
+*/
 /*app.post('/login', function (req, res) {
   res.setHeader('Content-Security-Policy', "form-action 'self' *");
   if (req.user !== undefined) {
@@ -164,6 +164,24 @@ app.post('/login', async (req, res) => {
   try {
       const requestData = req.body;
       console.log('Received data from first POST request:', requestData);
+      const secondPostData = {
+          Student_id: requestData.Student_id,
+          Student_pw: requestData.Student_pw
+      };
+      const response = await fetch(`http://${ip}:${port}/login_process`, {
+          method: 'POST',
+          body: JSON.stringify(secondPostData),
+          headers: {
+              'Content-Type': 'application/json'
+          },
+      });
+      if (!response.ok) {
+          throw new Error('Failed to fetch');
+      }
+
+      const data = await response.json();
+      console.log('Response from second POST request:', data);
+      res.json({ result: 'success', data });
   } catch (error) {
       console.error('Error during first POST request:', error);
       res.status(500).json({ result: 'error', error: error.message });
