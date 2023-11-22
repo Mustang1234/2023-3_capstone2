@@ -165,6 +165,17 @@ app.get('/login', function (req, res) {
     res.redirect(`/pages`);
     return false;
   }
+  const id = req.query.id;
+  const pw = req.query.pw;
+  const postData = {
+    Student_id: id,
+    Student_pw: pw
+  };
+  res.json(postData);
+
+  res.redirect(307, '/login_process');
+
+  /*
   var title = 'login';
   var list = template.list(req.list);
   var html = template.HTML(title, list,
@@ -176,7 +187,7 @@ app.get('/login', function (req, res) {
     ``,
     req.session.isLogedin
   );
-  res.send(html);
+  res.send(html);*/
 });
 
 app.post('/login_process',
