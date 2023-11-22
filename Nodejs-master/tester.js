@@ -10,15 +10,15 @@ app.use(bodyParser.json());
 // 첫 번째 POST 요청 처리
 app.post('/first-post', (req, res) => {``
     const requestData = req.body;
-
-    // 받은 데이터 확인 (예시: 콘솔 출력)
+    
     console.log('Received data from first POST request:', requestData);
+    
+    const secondPostData = {
+        Student_id: req.body.Student_id,
+        Student_pw: req.body.Student_pw
+      };
 
-    // 여기에서 필요한 작업 수행
-
-    // 두 번째 POST 요청을 보내기
-    const secondPostData = { message: 'Hello from server!' };
-
+    var data;
     fetch('http://20.39.186.138:3000/second-post', {
         method: 'POST',
         headers: {
@@ -27,33 +27,28 @@ app.post('/first-post', (req, res) => {``
         body: JSON.stringify(secondPostData),
     })
         .then(response => response.json())
-        .then(data => {
-            // 두 번째 POST 요청에 대한 응답 확인 (예시: 콘솔 출력)
+        .then(_data => {
+            data = _data;
             console.log('Response from second POST request:', data);
         })
         .catch(error => {
             console.error('Error during second POST request:', error);
         });
 
-    // 첫 번째 POST 요청에 대한 응답
-    res.redirect('/login');
+    res.json({ result: 'success', result: data });
 });
 
 app.post('/second-post', (req, res) => {
     const requestData = req.body;
 
-    // 받은 데이터 확인 (예시: 콘솔 출력)
     console.log('Received data from second POST request:', requestData);
+    const { Student_id, Student_pw } = req.body;
+    const secondPostData = { Student_id: Student_id, Student_pw: Student_pw };
 
-    // 여기에서 필요한 작업 수행
-
-    // 두 번째 POST 요청을 보내기
-    const secondPostData = { message: 'Hello from server2!' };
-
-    res.json({ result: 'success', message: 'First POST request processed.', PostData2: secondPostData });
+    res.json({ result: 'success', result: secondPostData });
 });
 
 // 서버 시작
 app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+    console.log(`Server is running at http://20.39.186.138:${port}`);
 });
