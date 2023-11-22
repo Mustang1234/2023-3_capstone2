@@ -23,6 +23,7 @@ const { assert } = require('console');
 
 const Eclass = require('./Eclass');
 const DB_IO = require('./db_io.js');
+const { post } = require('request');
 
 
 
@@ -56,58 +57,6 @@ passport.deserializeUser(function (Student_id, done) {
   });
   //done(null, FindUser.findById(id));
 })
-
-passport.use(new LocalStrategy(
-  {
-    usernameField: 'Student_id',
-    passwordField: 'Student_pw'
-  },
-  function verify(Student_id, Student_pw, cb) {
-    /*db.query('SELECT * from Users', (error, rows, fields) => {
-      if (error) throw error;
-      else{
-        console.log('User info is: ', rows);
-      }
-    });
-
-    if (id === authdata.id && pw === authdata.pw) {
-      console.log("ok");
-      return cb(null, authdata);
-    }
-    else {
-      console.log("no");
-      return cb(null, false, { message: 'no' });
-    }*/
-    console.log(Student_id, Student_pw);
-    FindUser.findByIdPw(Student_id, Student_pw, function (user) {
-      //console.log('j', user.Student_id);
-      if (user !== false) return cb(null, user);
-      return cb(null, false, { message: 'no' });
-    });/* 
-    db.get('SELECT * FROM Users WHERE id = ?', [id], function (err, user) {
-      console.log("hi");
-      if (err) { return cb(err); }
-      if (!user) { console.log('Incorrect id or pw.'); return cb(null, false, { message: 'Incorrect id or pw.' }); }
-      if (user.id == id) {
-        if (user.pw == pw) {
-          console.log("ok");
-          return cb(null, authdata);
-        }
-        else {
-          console.log("no");
-          return cb(null, false, { message: 'no' });
-        }
-      }
-      crypto.pbkdf2(pw, user.salt, 310000, 32, 'sha256', function(err, hashedpw) {
-        if (err) { return cb(err); }
-        if (!crypto.timingSafeEqual(user.hashed_pw, hashedpw)) {
-          console.log('Incorrect id or pw.');
-          return cb(null, false, { message: 'Incorrect id or pw.' });
-        }
-        return cb(null, user);
-      });
-    });*/
-  }));
 
 app.get('*', function (req, res, next) {
   fs.readdir('./data', function (error, filelist) {
@@ -166,12 +115,11 @@ app.get('/login', function (req, res) {
     res.redirect(`/pages`);
     return false;
   }
-  const id = req.query.id;
-  const pw = req.query.pw;
   const postData = {
-    Student_id: id,
-    Student_pw: pw
+    Student_id: req.query.id,
+    Student_pw: req.query.pw
   };
+  console.log(postData);
   res.status(307).location('/login_process').json(postData);
   
 
@@ -196,6 +144,58 @@ app.post('/login_process',
   passport.authenticate('local', {
     successRedirect: '/pages',
     failureRedirect: '/login'
+  }));
+
+passport.use(new LocalStrategy(
+  {
+    usernameField: 'Student_id',
+    passwordField: 'Student_pw'
+  },
+  function verify(Student_id, Student_pw, cb) {
+    /*db.query('SELECT * from Users', (error, rows, fields) => {
+      if (error) throw error;
+      else{
+        console.log('User info is: ', rows);
+      }
+    });
+ 
+    if (id === authdata.id && pw === authdata.pw) {
+      console.log("ok");
+      return cb(null, authdata);
+    }
+    else {
+      console.log("no");
+      return cb(null, false, { message: 'no' });
+    }*/
+    console.log(Student_id, Student_pw);
+    FindUser.findByIdPw(Student_id, Student_pw, function (user) {
+      //console.log('j', user.Student_id);
+      if (user !== false) return cb(null, user);
+      return cb(null, false, { message: 'no' });
+    });/* 
+      db.get('SELECT * FROM Users WHERE id = ?', [id], function (err, user) {
+        console.log("hi");
+        if (err) { return cb(err); }
+        if (!user) { console.log('Incorrect id or pw.'); return cb(null, false, { message: 'Incorrect id or pw.' }); }
+        if (user.id == id) {
+          if (user.pw == pw) {
+            console.log("ok");
+            return cb(null, authdata);
+          }
+          else {
+            console.log("no");
+            return cb(null, false, { message: 'no' });
+          }
+        }
+        crypto.pbkdf2(pw, user.salt, 310000, 32, 'sha256', function(err, hashedpw) {
+          if (err) { return cb(err); }
+          if (!crypto.timingSafeEqual(user.hashed_pw, hashedpw)) {
+            console.log('Incorrect id or pw.');
+            return cb(null, false, { message: 'Incorrect id or pw.' });
+          }
+          return cb(null, user);
+        });
+      });*/
   }));
 /*
 app.post('/login_process', function (req, res) {
