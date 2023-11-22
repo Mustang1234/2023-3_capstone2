@@ -146,7 +146,7 @@ app.get('/login', function (req, res) {
     failureRedirect: '/login'
   }));*/
 app.post('/login_process', async (req, res) => {
-  console.log(req.body);
+  console.log('req.body', req.body);
   res.redirect(`/pages`);
   return;
 });
