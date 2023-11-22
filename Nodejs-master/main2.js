@@ -78,6 +78,7 @@ passport.use(new LocalStrategy(
       console.log("no");
       return cb(null, false, { message: 'no' });
     }*/
+      console.log(Student_id, Student_pw);
     FindUser.findByIdPw(Student_id, Student_pw, function (user) {
       //console.log('j', user.Student_id);
       if (user !== false) return cb(null, user);
