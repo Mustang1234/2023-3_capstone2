@@ -115,14 +115,33 @@ app.get('/login', function (req, res) {
     res.redirect(`/pages`);
     return false;
   }
-  const postData = {
-    Student_id: req.query.id,
-    Student_pw: req.query.pw
-  };
+    
+  console.log('Received data from first POST request:', requestData);
+  
+  const secondPostData = {
+      Student_id: req.body.Student_id,
+      Student_pw: req.body.Student_pw
+    };
+
+  var data;
+  fetch(`http://localhost:${port}/login_process`, {
+      method: 'POST',
+      body: JSON.stringify(secondPostData),
+  })
+      .then(response => response.json())
+      .then(_data => {
+          data = _data;
+          console.log('Response from second POST request:', data);
+      })
+      .catch(error => {
+          console.error('Error during second POST request:', error);
+      });
+
+  res.json({ result: 'success', result: data });
   //console.log("postData", postData);
   //res.status(307).location('/login_process').json(postData);
-  res.json({ redirectTo: '/login_process', type:'post', data: postData });
-  return;
+  //res.json({ redirectTo: '/login_process', type:'post', data: postData });
+  //return;
 
   //res.redirect(307, '/login_process');
 
@@ -156,9 +175,9 @@ app.get('/login', function (req, res) {
 
 app.post('/login_process',
   passport.authenticate('local', {
-    successFlash: '로그인 성공!',
-    failureFlash: '로그인 실패!',
-    successReturnToOrRedirect: '/pages', // 성공 시 리다이렉트할 경로
+    //successFlash: '로그인 성공!',
+    //failureFlash: '로그인 실패!',
+    successRedirect: '/pages', // 성공 시 리다이렉트할 경로
     failureRedirect: '/login' // 실패 시 리다이렉트할 경로
   }));
 

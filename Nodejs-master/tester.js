@@ -8,7 +8,7 @@ const port = 1234;
 app.use(bodyParser.json());
 
 // 첫 번째 POST 요청 처리
-app.post('/first-post', (req, res) => {``
+app.post('/first-post', (req, res) => {
     const requestData = req.body;
     
     console.log('Received data from first POST request:', requestData);
@@ -21,9 +21,6 @@ app.post('/first-post', (req, res) => {``
     var data;
     fetch(`http://localhost:${port}/second-post`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
         body: JSON.stringify(secondPostData),
     })
         .then(response => response.json())
