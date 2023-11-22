@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const port = 1234;
+const ip = '20.39.186.138';
 
 // body-parser middleware 설정
 app.use(bodyParser.json());
@@ -19,7 +20,7 @@ app.post('/first-post', (req, res) => {
       };
 
     var data;
-    fetch(`http://localhost:${port}/second-post`, {
+    fetch(`http://${ip}:${port}/second-post`, {
         method: 'POST',
         body: JSON.stringify(secondPostData),
     })
