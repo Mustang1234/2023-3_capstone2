@@ -19,7 +19,7 @@ app.post('/first-post', (req, res) => {``
     // 두 번째 POST 요청을 보내기
     const secondPostData = { message: 'Hello from server!' };
 
-    fetch('http://localhost:3000/second-post', {
+    fetch('http://20.39.186.138:3000/second-post', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
