@@ -173,7 +173,7 @@ app.get('/login', function (req, res) {
   };
   res.json(postData);
 
-  res.redirect(307, '/login_process');
+  //res.redirect(307, '/login_process');
 
   /*
   var title = 'login';
