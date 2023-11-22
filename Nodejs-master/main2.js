@@ -162,31 +162,31 @@ app.post('/signup_process', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   try {
-      const requestData = req.body;
-      console.log('Received data from first POST request:', requestData);
-      const secondPostData = {  
-          Student_id: requestData.Student_id,
-          Student_pw: requestData.Student_pw
-      };
-      const response = await fetch(`http://${ip}:${port}/login_process`, {
-          method: 'POST',
-          body: JSON.stringify(secondPostData),
-          headers: {
-              'Content-Type': 'application/json'
-          },
-      });
-      console.log(response)
-      if (!response.ok) {
-          throw new Error('Failed to fetch');
-      }
+    const requestData = req.body;
+    console.log('Received data from first POST request:', requestData);
+    const secondPostData = {
+      Student_id: requestData.Student_id,
+      Student_pw: requestData.Student_pw
+    };
+    const response = await fetch(`http://${ip}:${port}/login_process`, {
+      method: 'POST',
+      body: JSON.stringify(secondPostData),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch');
+    }
 
-      const data = await response.json();
-      console.log('Response from second POST request:', data);
-      console.log('Response from second POST request:', data);
-      res.json({ result: 'success', data });
+    const data = await response.json();
+    console.log('Response from second POST request:', data);
+    console.log('Response from second POST request:', data);
+    res.json({ result: 'success', data });
   } catch (error) {
-      console.error('Error during first POST request:', error);
-      res.status(500).json({ result: 'error', error: error.message });
+    console.error('Error during first POST request:', error);
+    res.status(500).json({ result: 'error', error: error.message });
   }
 });
 
@@ -195,9 +195,9 @@ app.post('/login_process', (req, res, next) => {
     if (err) { return next(err); }
     if (!user) {
       // 로그인 실패 시 JSON 응답과 함께 리다이렉트
-      return res.status(401).json({ success: false, error: '로그인 실패!' });
+      return res.json({ success: false, message: '로그인 실패!' });
     }
-    
+
     // 로그인 성공 시 JSON 응답과 함께 리다이렉트
     return res.json({ success: true, message: '로그인 성공!', data: user });
   })(req, res, next);
@@ -679,13 +679,13 @@ app.get('/add_schedule', function (req, res) {
   var title = 'add_schedule';
   var list = template.list(req.list);
   var html = template.HTML(title, list,
-     `<form action="/add_schedule_process" method="post">
+    `<form action="/add_schedule_process" method="post">
      <p><input type="text" name="Team_id" placeholder="Team_id"></p>
      <p><input type="text" name="Deadline" placeholder="Deadline"></p>
      <p><input type="text" name="description" placeholder="description"></p>
      <p><input type="submit"></p>
      </form>`,
-     ``,
+    ``,
     req.session.isLogedin
   );
   res.send(html);
@@ -749,7 +749,7 @@ app.post('/join_team_process', async (req, res) => {
 
 app.get('/tester', function (req, res) {
   res.setHeader('Content-Security-Policy', "form-action 'self' *");
-	/*if (req.user !== undefined) {
+  /*if (req.user !== undefined) {
       res.redirect(`/pages`);
       return false;
   }*/
