@@ -1,5 +1,5 @@
 get signup
-	받아오는것 : json
+	받아오는것 : urlinfo
 		{ type: "signup_process1", Student_id: "admin", Student_pw:"fdsa", year_semester: '2023-3', portal_id: "fdsa4321", portal_pw:"rewqrewq"  }
 
 	보내는것: json
@@ -7,15 +7,37 @@ get signup
 
 
 get login
-	받아오는것 : json
+	받아오는것 : urlinfo
 		{ type: "login", id: "admin", pw: "fdsa"}
 
+	보내는것: json
+		{ redirectTo: '/login_process', data: {
+    		  Student_id: "admin",
+    		  Student_pw: "fdsa"
+  		} }
+
+
+post login_process
+	받아오는것 : json
+		{ type: "login_process", data: {
+    		  Student_id: "admin",
+    		  Student_pw: "fdsa"
+  		 }}
+
 	보내는것: redirect
-		redirect('/main_page')
+		{ redirectTo: '/pages' or '/login' }
+	
+
+get logout
+	받아오는것 : urlinfo
+		{ type: "logout", Student_id: "admin" }
+
+	보내는것: redirect
+		{ redirectTo: '/login' }
 	
 
 get main_page
-	받아오는것 : json
+	받아오는것 : urlinfo
 		{ type: "main_page", Student_id: "admin", year_semester: '2023-3' }
 
 	보내는것: json
@@ -39,7 +61,7 @@ get main_page
 
 
 get my_page
-	받아오는것 : json
+	받아오는것 : urlinfo
 		{ type: "my_page", studentID: "admin"  }
 
 	보내는것: json
@@ -55,9 +77,9 @@ get my_page
 
 
 get my_page_load_new_portal
-	받아오는것 : json
+	받아오는것 : urlinfo
 		{ type: "my_page_load_new_portal", studentID: "admin",
-		   year_semester: '2023-3', portal_id: "fdsa4321", portal_pw:"rewqrewq"  }
+		   year_semester: '2023-3', portal_id: "fdsa4321", portal_pw:"rewqrewq" }
 
 	보내는것: json
 		{
@@ -74,15 +96,15 @@ get my_page_load_new_portal
 
 
 get my_page_photo_upload
-	받아오는것 : json
-		{ type: "my_page_photo_upload", studentID: "admin", photo: {사진}  }
+	받아오는것 : urlinfo
+		{ type: "my_page_photo_upload", studentID: "admin", photo: {사진} }
 
 	보내는것: json
 		{ retCode: true/false, photo: {사진} }
 
 
 get list_project
-	받아오는것: json
+	받아오는것: urlinfo
 		{ type: "list_project", year_semester: "2023-3", studentID: "admin" }
 
 	보내는것: json
@@ -102,7 +124,7 @@ get list_project
 
 
 get add_project1
-	받아오는것: json
+	받아오는것: urlinfo
 		{ type: "add_project1", year_semester: "2023-3", studentID: "admin" }
 
 	보내는것: json
@@ -117,7 +139,7 @@ get add_project1
 
 
 get add_project2
-	받아오는것: json
+	받아오는것: urlinfo
 		{ type: "add_project2", Course_id: '2023-3월14:00인공지능',
 		  start_time: 'yyyy-mm-dd HH:MM', finish_time: 'yyyy-mm-dd HH:MM', description: 'fdsafdsa' }
 
@@ -129,7 +151,7 @@ get add_project2
 
 
 get create_team1
-	받아오는것: json
+	받아오는것: urlinfo
 		{ type: "create_team1", year_semester: "2023-3", studentID: "admin" }
 
 	보내는것: json

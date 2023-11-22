@@ -121,12 +121,11 @@ app.get('/login', function (req, res) {
   };
   //console.log("postData", postData);
   //res.status(307).location('/login_process').json(postData);
-  res.json({ redirectTo: '/login_process', type:'post', data: postData });
-  
+  //res.json({ redirectTo: '/login_process', type:'post', data: postData });
+  //return;
 
   //res.redirect(307, '/login_process');
 
-  /*
   var title = 'login';
   var list = template.list(req.list);
   var html = template.HTML(title, list,
@@ -138,7 +137,7 @@ app.get('/login', function (req, res) {
     ``,
     req.session.isLogedin
   );
-  res.send(html);*/
+  res.send(html);
 });
 
 app.post('/login_process', (req, res, next) => {
