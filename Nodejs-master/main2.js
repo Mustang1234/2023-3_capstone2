@@ -152,6 +152,15 @@ app.post('/login_process', (req, res, next) => {
     return res.json({ success: true, message: '로그인 성공!' });
   })(req, res, next);
 });
+/*
+app.post('/login_process',
+  passport.authenticate('local', {
+    successFlash: '로그인 성공!',
+    failureFlash: '로그인 실패!',
+    successReturnToOrRedirect: '/pages', // 성공 시 리다이렉트할 경로
+    failureRedirect: '/login' // 실패 시 리다이렉트할 경로
+  }));
+*/
 
 /*app.post('/login_process', async (req, res) => {
   console.log('req.body', req.body);
