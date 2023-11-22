@@ -1,7 +1,10 @@
+const express = require('express');
+const bodyParser = require('body-parser');
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const passport = require('passport');
 const FindUser = require('./FindUser'); // FindUser는 사용자를 데이터베이스에서 찾는 함수입니다.
+const port = 1234;
 
 const opts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -21,3 +24,25 @@ passport.use(new JwtStrategy(opts, (jwtPayload, done) => {
     }
   });
 }));
+
+app.post('/login', async (req, res, next) => {
+  try {
+    passport.authenticate('local', (err, user, info) => {
+      if (err) { return next(err); }
+      if (!user) {
+        // 로그인 실패 시 JSON 응답과 함께 리다이렉트
+        return res.json({ success: false, message: 'login failed' });
+      }
+      // 로그인 성공 시 JSON 응답과 함께 리다이렉트
+      return res.json({ success: true, message: 'login success', data: user });
+    })(req, res, next);
+    //res.json({ result: 'success' });
+  } catch (error) {
+      console.error('Error during first POST request:', error);
+      res.status(500).json({ result: 'error', error: error.message });
+  }
+});
+
+app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
+});
