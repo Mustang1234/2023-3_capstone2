@@ -159,7 +159,7 @@ app.get('/login', function (req, res) {
 
 app.post('/login_process', (req, res, next) => {
   console.log(req.body);
-  { Student_id, Student_pw } = JSON.parse(req.body);
+  const { Student_id, Student_pw } = JSON.parse(req.body);
   console.log(Student_id, Student_pw);
   passport.authenticate('local', (err, user, info) => {
     if (err) { return next(err); }
