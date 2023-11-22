@@ -171,7 +171,7 @@ app.get('/login', function (req, res) {
     Student_id: id,
     Student_pw: pw
   };
-  res.json(postData);
+  res.status(307).location('/login_process').json(postData);
 
   //res.redirect(307, '/login_process');
 
