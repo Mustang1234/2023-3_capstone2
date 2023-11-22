@@ -18,6 +18,8 @@ app.post('/first-post', (req, res) => {
         Student_id: requestData.Student_id,
         Student_pw: requestData.Student_pw
       };
+      
+    console.log('to send:', requestData);
 
     var data;
     fetch(`http://${ip}:${port}/second-post`, {
