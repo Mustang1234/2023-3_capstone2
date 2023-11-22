@@ -164,36 +164,23 @@ app.post('/login', async (req, res) => {
   try {
       const requestData = req.body;
       console.log('Received data from first POST request:', requestData);
-      const secondPostData = {
-          Student_id: requestData.Student_id,
-          Student_pw: requestData.Student_pw
-      };
-      const response = await fetch(`http://${ip}:${port}/login_process`, {
-          method: 'POST',
-          body: JSON.stringify(secondPostData),
-          headers: {
-              'Content-Type': 'application/json'
-          },
-      });
-      if (!response.ok) {
-          throw new Error('Failed to fetch');
-      }
-
-      const data = await response.json();
-      console.log('Response from second POST request:', data);
-      res.json({ result: 'success', data });
   } catch (error) {
       console.error('Error during first POST request:', error);
       res.status(500).json({ result: 'error', error: error.message });
   }
 });
 
-app.post('/login_process', (req, res) => {
-  const requestData = req.body;
-  console.log('Received data from second POST request:', requestData);
+app.post('/login_process', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) { return next(err); }
+    if (!user) {
+      // 로그인 실패 시 JSON 응답과 함께 리다이렉트
+      return res.json({ success: false, message: '로그인 실패!' });
+    }
 
-  // 두 번째 POST 요청에 응답
-  res.json({ result: 'success', data: requestData });
+    // 로그인 성공 시 JSON 응답과 함께 리다이렉트
+    return res.json({ success: true, message: '로그인 성공!', data: user });
+  })(req, res, next);
 });
 
 /*app.post('/login_process',
