@@ -116,7 +116,7 @@ app.post('/login', function (req, res) {
     return false;
   }
     
-  console.log('Received data from first POST request:', requestData);
+  console.log('login :', req.body);
   
   const secondPostData = {
       Student_id: req.body.Student_id,
