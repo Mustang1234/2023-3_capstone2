@@ -120,7 +120,8 @@ app.get('/login', function (req, res) {
     Student_pw: req.query.pw
   };
   console.log("postData", postData);
-  res.status(307).location('/login_process').json(postData);
+  //res.status(307).location('/login_process').json(postData);
+  res.json({ redirectTo: '/login_process', data: postData });
   
 
   //res.redirect(307, '/login_process');
