@@ -109,7 +109,7 @@ app.post('/signup_process', async (req, res) => {
   });
 });
 
-app.get('/login', function (req, res) {
+app.post('/login', function (req, res) {
   res.setHeader('Content-Security-Policy', "form-action 'self' *");
   if (req.user !== undefined) {
     res.redirect(`/pages`);
