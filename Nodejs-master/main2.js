@@ -78,6 +78,7 @@ passport.use(new LocalStrategy(
       console.log("no");
       return cb(null, false, { message: 'no' });
     }*/
+    console.log(Student_id, Student_pw);
     FindUser.findByIdPw(Student_id, Student_pw, function (user) {
       //console.log('j', user.Student_id);
       if (user !== false) return cb(null, user);
@@ -195,10 +196,7 @@ app.post('/login_process',
   passport.authenticate('local', {
     successRedirect: '/pages',
     failureRedirect: '/login'
-  }),
-  (req, res) => {
-    res.status(200).json({ message: 'Login successful', user: req.user });
-  });
+  }));
 /*
 app.post('/login_process', function (req, res) {
   var post = req.body;
