@@ -121,8 +121,25 @@ app.get('/login', function (req, res) {
   };
   //console.log("postData", postData);
   //res.status(307).location('/login_process').json(postData);
-  res.json({ redirectTo: '/login_process', type:'post', data: postData });
-  return;
+  //res.json({ redirectTo: '/login_process', type:'post', data: postData });
+  //return;
+  const secondPostData = { message: 'Hello from server!' };
+
+  fetch('/login_process', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(postData),
+  })
+  .then(response => response.json())
+  .then(data => {
+    // 두 번째 POST 요청에 대한 응답 확인 (예시: 콘솔 출력)
+    console.log('Response from second POST request:', data);
+  })
+  .catch(error => {
+    console.error('Error during second POST request:', error);
+  });
 
   //res.redirect(307, '/login_process');
 
