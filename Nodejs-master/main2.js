@@ -155,10 +155,10 @@ app.get('/login', function (req, res) {
 */
 
 app.post('/login_process',
-  passport.authenticate('local', {
+  passport.authenticate('local', {/*
     successFlash: '로그인 성공!',
-    failureFlash: '로그인 실패!',
-    successReturnToOrRedirect: '/pages', // 성공 시 리다이렉트할 경로
+    failureFlash: '로그인 실패!',*/
+    successRedirect: '/pages', // 성공 시 리다이렉트할 경로
     failureRedirect: '/login' // 실패 시 리다이렉트할 경로
   }));
 
