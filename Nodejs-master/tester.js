@@ -19,7 +19,7 @@ app.post('/first-post', (req, res) => {``
       };
 
     var data;
-    fetch('http://20.39.186.138:3000/second-post', {
+    fetch(`http://localhost:${port}/second-post`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -50,5 +50,5 @@ app.post('/second-post', (req, res) => {
 
 // 서버 시작
 app.listen(port, () => {
-    console.log(`Server is running at http://20.39.186.138:${port}`);
+    console.log(`Server is running at http://localhost:${port}`);
 });
