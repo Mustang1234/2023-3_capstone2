@@ -19,10 +19,10 @@ var passport = require('passport')
 
 //var db = require('./db');
 //const crypto = require('crypto')
-var FindUser = require('./FindUser');
+var FindUser = require('./FindUser.js');
 const { assert } = require('console');
 
-const Eclass = require('./Eclass');
+const Eclass = require('./Eclass.js');
 const DB_IO = require('./db_io.js');
 const { post } = require('request');
 
@@ -57,7 +57,6 @@ passport.deserializeUser(function (Student_id, done) {
     done(null, user);
     return;
   });
-  //done(null, FindUser.findById(id));
 })
 
 app.get('*', function (req, res, next) {
@@ -67,31 +66,35 @@ app.get('*', function (req, res, next) {
   });
 });
 
-app.get('/signup', function (req, res) {
-  res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }
-  var title = 'signup';
-  var list = template.list(req.list);
-  var html = template.HTML(title, list,
-    `<form action="signup_process" method="post">
-    <p><input type="text" name="Student_id" placeholder="id"></p>
-    <p><input type="password" name="Student_pw" placeholder="password"></p>
-    <p><input type="text" name="student_name" placeholder="student_name"></p>
-    <p><input type="text" name="student_number" placeholder="student_number"></p>
-    <p><input type="text" name="department" placeholder="department"></p>
-    <p><input type="submit"></p>
-    </form>`,
-    ``,
-    req.session.isLogedin
-  );
-  //console.log(html);
-  res.send(html);
-});
+/*app.get('/signup', async (req, res) => {
+  try {
+      const requestData = req.body;
+      console.log('Received data from first POST request:', requestData);
+      const secondPostData = {
+          Student_id: requestData.Student_id,
+          Student_pw: requestData.Student_pw
+      };
+      const response = await fetch(`http://${ip}:${port}/signup_process`, {
+          method: 'POST',
+          body: JSON.stringify(secondPostData),
+          headers: {
+              'Content-Type': 'application/json'
+          },
+      });
+      if (!response.ok) {
+          throw new Error('Failed to fetch');
+      }
 
-app.post('/signup_process', async (req, res) => {
+      const data = await response.json();
+      console.log('Response from second POST request:', data);
+      res.json({ result: 'success', data });
+  } catch (error) {
+      console.error('Error during first POST request:', error);
+      res.status(500).json({ result: 'error', error: error.message });
+  }
+});*/
+
+app.post('/signup', async (req, res) => {
   const { Student_id, Student_pw, student_name, student_number, department } = req.body;
 
   if (!Student_id || !Student_pw) {
@@ -100,66 +103,14 @@ app.post('/signup_process', async (req, res) => {
   FindUser.findById(Student_id, async (user) => {
     if (user === false) {
       const result = await DB_IO.add_student_table(Student_id, Student_pw, student_name, student_number, department);
-      res.redirect(`/pages`);
-      return result;
+      return res.status(400).json({ message: 'sign up success', status: result });
     }
     else {
-      res.redirect(`/signup`);
-      //return res.status(400).json({ message: 'username already exists' });
-      return;
+      return res.status(400).json({ message: 'username already exists' });
     }
   });
 });
 
-/*app.post('/login', function (req, res) {
-  res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }
-
-  console.log('login :', req.body);
-
-  const secondPostData = {
-    Student_id: req.body.Student_id,
-    Student_pw: req.body.Student_pw
-  };
-
-  var data;
-  fetch(`http://${ip}:${port}/login_process`, {
-    method: 'POST',
-    body: JSON.stringify(secondPostData),
-  })
-    .then(response => response.json())
-    .then(_data => {
-      data = _data;
-      console.log('Response from second POST request:', data);
-    })
-    .catch(error => {
-      console.error('Error during second POST request:', error);
-    });
-
-  res.json({ result: 'success', result: data });
-  //console.log("postData", postData);
-  //res.status(307).location('/login_process').json(postData);
-  //res.json({ redirectTo: '/login_process', type:'post', data: postData });
-  //return;
-
-  //res.redirect(307, '/login_process');
-
-  var title = 'login';
-  var list = template.list(req.list);
-  var html = template.HTML(title, list,
-    `<form action="login_process" method="post">
-    <p><input type="text" name="Student_id" placeholder="id"></p>
-    <p><input type="password" name="Student_pw" placeholder="password"></p>
-    <p><input type="submit"></p>
-    </form>`,
-    ``,
-    req.session.isLogedin
-  );
-  res.send(html);
-});*/
 
 app.post('/login', async (req, res, next) => {
   try {
@@ -178,34 +129,6 @@ app.post('/login', async (req, res, next) => {
       res.status(500).json({ result: 'error', error: error.message });
   }
 });
-/*
-app.post('/login_process', (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
-    if (err) { return next(err); }
-    if (!user) {
-      // 로그인 실패 시 JSON 응답과 함께 리다이렉트
-      return res.json({ success: false, message: '로그인 실패!' });
-    }
-
-    // 로그인 성공 시 JSON 응답과 함께 리다이렉트
-    return res.json({ success: true, message: '로그인 성공!', data: user });
-  })(req, res, next);
-});*/
-
-/*app.post('/login_process',
-  passport.authenticate('local', {
-    //successFlash: '로그인 성공!',
-    //failureFlash: '로그인 실패!',
-    successRedirect: '/pages', // 성공 시 리다이렉트할 경로
-    failureRedirect: '/login' // 실패 시 리다이렉트할 경로
-  }));
-*/
-
-/*app.post('/login_process', async (req, res) => {
-  console.log('req.body', req.body);
-  res.redirect(`/pages`);
-  return;
-});*/
 
 passport.use(new LocalStrategy(
   {
@@ -213,71 +136,12 @@ passport.use(new LocalStrategy(
     passwordField: 'Student_pw'
   },
   function verify(Student_id, Student_pw, cb) {
-    /*db.query('SELECT * from Users', (error, rows, fields) => {
-      if (error) throw error;
-      else{
-        console.log('User info is: ', rows);
-      }
-    });
- 
-    if (id === authdata.id && pw === authdata.pw) {
-      console.log("ok");
-      return cb(null, authdata);
-    }
-    else {
-      console.log("no");
-      return cb(null, false, { message: 'no' });
-    }*/
-    //console.log(Student_id, Student_pw);
     FindUser.findByIdPw(Student_id, Student_pw, function (user) {
       //console.log('j', user.Student_id);
       if (user !== false) return cb(null, user);
       return cb(null, false, { message: 'no' });
-    });/* 
-      db.get('SELECT * FROM Users WHERE id = ?', [id], function (err, user) {
-        console.log("hi");
-        if (err) { return cb(err); }
-        if (!user) { console.log('Incorrect id or pw.'); return cb(null, false, { message: 'Incorrect id or pw.' }); }
-        if (user.id == id) {
-          if (user.pw == pw) {
-            console.log("ok");
-            return cb(null, authdata);
-          }
-          else {
-            console.log("no");
-            return cb(null, false, { message: 'no' });
-          }
-        }
-        crypto.pbkdf2(pw, user.salt, 310000, 32, 'sha256', function(err, hashedpw) {
-          if (err) { return cb(err); }
-          if (!crypto.timingSafeEqual(user.hashed_pw, hashedpw)) {
-            console.log('Incorrect id or pw.');
-            return cb(null, false, { message: 'Incorrect id or pw.' });
-          }
-          return cb(null, user);
-        });
-      });*/
+    });
   }));
-/*
-app.post('/login_process', function (req, res) {
-  var post = req.body;
-  var id = post.id;
-  var pw = post.pw;
-  if(id === 'fdsa' && pw === 'rewq'){
-    req.session.isLogedin = true;
-    req.session.id = id;
-    req.session.save(function(){
-      res.redirect(`/pages`);
-    });
-  }
-  else{
-    req.session.isLogedin = false;
-    req.session.id = '';
-    req.session.save(function(){
-      res.redirect(`/login`);
-    });
-  }
-});*/
 
 app.get('/logout', (req, res) => {
   req.logout(() => {
