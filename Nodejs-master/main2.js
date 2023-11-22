@@ -173,7 +173,7 @@ app.post('/login', async (req, res, next) => {
       // 로그인 성공 시 JSON 응답과 함께 리다이렉트
       return res.json({ success: true, message: '로그인 성공!', data: user });
     })(req, res, next);
-      res.json({ result: 'success' });
+    //res.json({ result: 'success' });
   } catch (error) {
       console.error('Error during first POST request:', error);
       res.status(500).json({ result: 'error', error: error.message });
