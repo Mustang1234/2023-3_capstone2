@@ -6,6 +6,7 @@ const path = require('path');
 //const qs = require('querystring');
 const sanitizeHtml = require('sanitize-html');
 const port = 1234;
+const ip = '20.39.186.138';
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const helmet = require('helmet');
@@ -124,7 +125,7 @@ app.post('/login', function (req, res) {
   };
 
   var data;
-  fetch(`http://20.39.186.138:${port}/login_process`, {
+  fetch(`http://${ip}:${port}/login_process`, {
     method: 'POST',
     body: JSON.stringify(secondPostData),
   })
@@ -159,7 +160,7 @@ app.post('/login', function (req, res) {
   res.send(html);*/
 });
 
-/*app.post('/login_process', (req, res, next) => {
+app.post('/login_process', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) { return next(err); }
     if (!user) {
@@ -171,15 +172,15 @@ app.post('/login', function (req, res) {
     return res.json({ success: true, message: '로그인 성공!' });
   })(req, res, next);
 });
-*/
 
-app.post('/login_process',
+/*app.post('/login_process',
   passport.authenticate('local', {
     //successFlash: '로그인 성공!',
     //failureFlash: '로그인 실패!',
     successRedirect: '/pages', // 성공 시 리다이렉트할 경로
     failureRedirect: '/login' // 실패 시 리다이렉트할 경로
   }));
+*/
 
 /*app.post('/login_process', async (req, res) => {
   console.log('req.body', req.body);
