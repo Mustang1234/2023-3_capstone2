@@ -119,9 +119,9 @@ app.get('/login', function (req, res) {
     Student_id: req.query.id,
     Student_pw: req.query.pw
   };
-  console.log("postData", postData);
+  //console.log("postData", postData);
   //res.status(307).location('/login_process').json(postData);
-  res.json({ redirectTo: '/login_process', data: postData });
+  res.json({ redirectTo: '/login_process', type:'post', data: postData });
   
 
   //res.redirect(307, '/login_process');
@@ -141,16 +141,24 @@ app.get('/login', function (req, res) {
   res.send(html);*/
 });
 
-/*app.post('/login_process',
-  passport.authenticate('local', {
-    successRedirect: '/pages',
-    failureRedirect: '/login'
-  }));*/
-app.post('/login_process', async (req, res) => {
+app.post('/login_process', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) { return next(err); }
+    if (!user) {
+      // 로그인 실패 시 JSON 응답과 함께 리다이렉트
+      return res.status(401).json({ success: false, error: '로그인 실패!' });
+    }
+    
+    // 로그인 성공 시 JSON 응답과 함께 리다이렉트
+    return res.json({ success: true, message: '로그인 성공!' });
+  })(req, res, next);
+});
+
+/*app.post('/login_process', async (req, res) => {
   console.log('req.body', req.body);
   res.redirect(`/pages`);
   return;
-});
+});*/
 
 passport.use(new LocalStrategy(
   {
@@ -226,7 +234,7 @@ app.post('/login_process', function (req, res) {
 
 app.get('/logout', (req, res) => {
   req.logout(() => {
-    res.redirect('/pages');
+    res.redirect('/login');
   });
 });
 
@@ -452,7 +460,7 @@ app.get('/test3', async (req, res) => {
   }
 });
 
-app.get('/add_project', function (req, res) {
+app.get('/add_project1', function (req, res) {
   res.setHeader('Content-Security-Policy', "form-action 'self' *");
   /*if (req.user !== undefined) {
     res.redirect(`/pages`);
