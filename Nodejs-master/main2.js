@@ -125,7 +125,7 @@ app.get('/login', function (req, res) {
   //return;
   const secondPostData = { message: 'Hello from server!' };
 
-  fetch('/login_process', {
+  fetch('http://localhost:3000/second-post', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
