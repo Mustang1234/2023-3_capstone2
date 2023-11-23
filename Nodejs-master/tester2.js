@@ -36,6 +36,7 @@ passport.deserializeUser(function (Student_id, done) {
 // Middleware to generate and sign a token after successful login
 function generateToken(req, res, next) {
   passport.authenticate('local', { session: false }, (err, user, info) => {
+    console.log(Student_id, Student_pw. user)
     if (err) { return next(err); }
     if (!user) {
       return res.json({ success: false, message: 'login failed' });
