@@ -140,15 +140,20 @@ module.exports = {
             res.status(500).send('오류 발생');
         }
     },
-    get_student_table: async (Student_id, Student_pw, student_name, student_number, department) => {
+    get_student_table: async (Student_id) => {
         try {
             const _get_student_table = await new Promise((resolve, reject) => {
-                db.query(`SELECT * FROM StudentTable where Student_id = ?`, [Student_id], (error) => {
+                db.query(`SELECT * FROM StudentTable where Student_id = ?`, [Student_id], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
                     } else {
-                        resolve(true);
+                        const j = rows.length;
+                        var result = [];
+                        for (let i = 0; i < j; i++) {
+                            result.push(rows[i]);
+                        }
+                        resolve(result);
                     }
                 });
             });
