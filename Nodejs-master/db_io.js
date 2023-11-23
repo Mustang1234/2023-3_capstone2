@@ -148,12 +148,7 @@ module.exports = {
                         console.error(error);
                         reject(error);
                     } else {
-                        const j = rows.length;
-                        var result = [];
-                        for (let i = 0; i < j; i++) {
-                            result.push(rows[i]);
-                        }
-                        resolve(result);
+                        resolve(rows);
                     }
                 });
             });
