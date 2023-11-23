@@ -157,7 +157,7 @@ module.exports = {
                     }
                 });
             });
-            return _get_student_table;
+            return JSON.stringify(_get_student_table);
         } catch (error) {
             console.error('오류 발생:', error);
             throw new Error('오류 발생');
