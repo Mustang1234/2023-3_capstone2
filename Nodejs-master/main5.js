@@ -323,14 +323,16 @@ app.get('/main_page', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.query.Student_id;
     const year_semester = req.query.year_semester;
-    var returnJson = { Student_id: Student_id, retCode: false, student_name: '', student_number: '',
-      department: '', speed: 0, timeTable: [], schedule: [], photo: {}
+    var returnJson = { Student_id: Student_id, retCode: false, Student_name: '', Student_number: '',
+      department: '', Speed: 0, timeTable: [], schedule: [], ProfilePhoto: {}
     }
     const student_info = JSON.parse(await DB_IO.get_student_table(Student_id));
-    returnJson.student_name = student_info.Student_name;
-    returnJson.student_number = student_info.student_number;
+    console.log(student_info);
+    returnJson.Student_name = student_info.Student_name;
+    returnJson.Student_number = student_info.Student_number;
     returnJson.department = student_info.department;
-    returnJson.speed = student_info.speed;
+    returnJson.Speed = student_info.Speed;
+    returnJson.ProfilePhoto = student_info.ProfilePhoto;
     const timetable = JSON.parse(await DB_IO.db_to_timetable(Student_id, year_semester));
     returnJson.timeTable = timetable;
     const schedule = JSON.parse(await DB_IO.get_schedule(Student_id));
@@ -347,7 +349,7 @@ app.get('/my_page', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.query.Student_id;
     var returnJson = { Student_id: Student_id, retCode: false, Student_name: '', Student_number: '',
-      department: '', speed: 0, ProfilePhoto: {}
+      department: '', Speed: 0, ProfilePhoto: {}
     }
     const student_info = JSON.parse(await DB_IO.get_student_table(Student_id));
     console.log(student_info);
