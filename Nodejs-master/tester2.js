@@ -14,6 +14,7 @@ passport.use(new LocalStrategy(
   },
   function verify(Student_id, Student_pw, cb) {
     FindUser.findByIdPw(Student_id, Student_pw, function (user) {
+        console.log(Student_id, Student_pw. user)
       if (user !== false) return cb(null, user);
       return cb(null, false, { message: 'no' });
     });
