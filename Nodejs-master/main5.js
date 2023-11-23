@@ -351,8 +351,8 @@ app.get('/my_page', authenticateToken, async (req, res) => {
     }
     const student_info = JSON.parse(await DB_IO.get_student_table(Student_id));
     console.log(student_info);
-    returnJson.student_name = student_info.Student_name;
-    returnJson.student_number = student_info.student_number;
+    returnJson.Student_name = student_info.Student_name;
+    returnJson.Student_number = student_info.Student_number;
     returnJson.department = student_info.department;
     returnJson.speed = student_info.speed;
     returnJson.retCode = true;
