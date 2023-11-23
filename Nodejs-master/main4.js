@@ -105,7 +105,6 @@ app.post('/signup', async (req, res) => {
       try {
         var jsonInfo = {};
         while (true) {
-          i = i + 1;
           try {
             jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_id, portal_pw));
             if (jsonInfo.timeTable.length !== 0) break;
@@ -125,7 +124,7 @@ app.post('/signup', async (req, res) => {
         console.error('오류 발생:', error);
         res.status(500).send('오류 발생');
       }
-      return res.status(400).json({ message: 'sign up success', status: result });
+      return res.status(400).json({ message: 'sign up success', status: true });
     }
     else {
       return res.status(400).json({ message: 'username already exists' });
