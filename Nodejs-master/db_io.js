@@ -148,7 +148,7 @@ module.exports = {
                         console.error(error);
                         reject(error);
                     } else {
-                        resolve(rows);
+                        resolve(rows[0]);
                     }
                 });
             });
