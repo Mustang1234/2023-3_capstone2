@@ -173,6 +173,20 @@ app.post('/signup_process', async (req, res) => {
   );
   res.send(html);
 });*/
+app.get('/login', function (req, res) {
+  var title = 'login';
+  var list = template.list(req.list);
+  var html = template.HTML(title, list,
+    `<form action="login" method="post">
+    <p><input type="text" name="Student_id" placeholder="Student_id"></p>
+    <p><input type="password" name="Student_pw" placeholder="Student_pw"></p>
+    <p><input type="submit"></p>
+    </form>`,
+    `<a href="/page_create">create</a>`,
+    req.session.isLogedin
+  );
+  res.send(html);
+});
 
 app.post('/login', express.json(), generateToken);
 
