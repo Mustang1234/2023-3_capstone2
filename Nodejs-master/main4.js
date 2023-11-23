@@ -334,15 +334,11 @@ app.get('/main_page', async (req, res) => {
   try {
     const Student_id = req.query.studStudent_ident_id;
     const year_semester = req.query.year_semester;
-    /*const _result = await Eclass.Eclass_Timetable('StudentID', 'Student_id', 'Student_pw');
-    const result = JSON.parse(_result);
-    console.log(result);
-    res.json(result);*/
-
     var returnJson = { Student_id: Student_id, retCode: false, student_name: '', student_number: '',
       department: '', speed: 0,
       timeTable: [], schedule: [], photo: {}
     }
+    console.log(Student_id, year_semester);
     const _student_info = await DB_IO.get_student_table(Student_id);
     const student_info = JSON.parse(_student_info);
     console.log(student_info);
@@ -350,7 +346,7 @@ app.get('/main_page', async (req, res) => {
     returnJson.student_number = student_info.student_number;
     returnJson.department = student_info.department;
     returnJson.speed = student_info.speed;
-    const _timetable = await DB_IO.db_to_timetable(Student_id, year_semester );
+    const _timetable = await DB_IO.db_to_timetable(Student_id, year_semester);
     const timetable = JSON.parse(_timetable);
     console.log(timetable);
     returnJson.timeTable = timetable;
