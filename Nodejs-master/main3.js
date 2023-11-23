@@ -177,7 +177,7 @@ app.get('/login', function (req, res) {
   var title = 'login';
   var list = template.list(req.list);
   var html = template.HTML(title, list,
-    `<form action="login" method="post">
+    `<form action="login_process" method="post">
     <p><input type="text" name="Student_id" placeholder="Student_id"></p>
     <p><input type="password" name="Student_pw" placeholder="Student_pw"></p>
     <p><input type="submit"></p>
@@ -188,7 +188,7 @@ app.get('/login', function (req, res) {
   res.send(html);
 });
 
-app.post('/login', express.json(), generateToken);
+app.post('/login_process', express.json(), generateToken);
 
 // Middleware to protect routes that require authentication
 function authenticateToken(req, res, next) {
