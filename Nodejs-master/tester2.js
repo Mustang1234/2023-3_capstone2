@@ -14,7 +14,8 @@ passport.use(new LocalStrategy(
     passwordField: 'Student_pw'
   },
   function verify(Student_id, Student_pw, cb) {
-    FindUser.findByIdPw(Student_id, Student_pw, function (user) {
+      FindUser.findByIdPw(Student_id, Student_pw, function (user) {
+          console.log(Student_id, Student_pw.user)
       if (user !== false) return cb(null, user);
       return cb(null, false, { message: 'no' });
     });
@@ -24,6 +25,7 @@ passport.use(new LocalStrategy(
 // 로그인 성공 후 토큰을 생성하고 서명하는 미들웨어
 function generateToken(req, res, next) {
   passport.authenticate('local', { session: false }, (err, user, info) => {
+    console.log(Student_id, Student_pw. user)
     if (err) { return next(err); }
     if (!user) {
       return res.json({ success: false, message: '로그인 실패' });
