@@ -324,8 +324,7 @@ app.get('/main_page', authenticateToken, async (req, res) => {
     const Student_id = req.query.Student_id;
     const year_semester = req.query.year_semester;
     var returnJson = { Student_id: Student_id, retCode: false, student_name: '', student_number: '',
-      department: '', speed: 0,
-      timeTable: [], schedule: [], photo: {}
+      department: '', speed: 0, timeTable: [], schedule: [], photo: {}
     }
     const student_info = JSON.parse(await DB_IO.get_student_table(Student_id));
     returnJson.student_name = student_info.Student_name;
@@ -351,6 +350,7 @@ app.get('/my_page', authenticateToken, async (req, res) => {
       department: '', speed: 0, photo: {}
     }
     const student_info = JSON.parse(await DB_IO.get_student_table(Student_id));
+    console.log(student_info);
     returnJson.student_name = student_info.Student_name;
     returnJson.student_number = student_info.student_number;
     returnJson.department = student_info.department;
