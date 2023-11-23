@@ -73,6 +73,6 @@ app.get('/protected', authenticateToken, (req, res) => {
 
 // Your other routes go here
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+app.listen(1234, () => {
+  console.log('Server is running on port 1234');
 });
