@@ -313,25 +313,25 @@ app.post('/page_delete_process', function (req, res) {
 
 app.get('/main_page', async (req, res) => {
   try {
-    const student_id = req.query.student_id;
+    const Student_id = req.query.studStudent_ident_id;
     const year_semester = req.query.year_semester;
     /*const _result = await Eclass.Eclass_Timetable('StudentID', 'Student_id', 'Student_pw');
     const result = JSON.parse(_result);
     console.log(result);
     res.json(result);*/
 
-    var returnJson = { student_id: student_id, retCode: false, student_name: '', student_number: '',
+    var returnJson = { Student_id: Student_id, retCode: false, student_name: '', student_number: '',
       department: '',
       timeTable: [], schedule: [], photo: {}
     }
-    const _timetable = await DB_IO.db_to_timetable(student_id, year_semester );
+    const _timetable = await DB_IO.db_to_timetable(Student_id, year_semester );
     const timetable = JSON.parse(_timetable);
     returnJson.timeTable = timetable;
-    const _schedule = await DB_IO.get_schedule(student_id);
+    const _schedule = await DB_IO.get_schedule(Student_id);
     const schedule = JSON.parse(_schedule);
     returnJson.schedule = schedule;
     console.log(returnJson);
-    return;
+    res.json(returnJson);
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
