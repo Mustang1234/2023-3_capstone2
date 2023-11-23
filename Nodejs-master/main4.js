@@ -355,6 +355,25 @@ app.get('/main_page', async (req, res) => {
   }
 });
 
+app.get('/my_page', async (req, res) => {
+  try {
+    const Student_id = req.query.Student_id;
+    var returnJson = { Student_id: Student_id, retCode: false, student_name: '', student_number: '',
+      department: '', speed: 0, photo: {}
+    }
+    const student_info = JSON.parse(await DB_IO.get_student_table(Student_id));
+    returnJson.student_name = student_info.Student_name;
+    returnJson.student_number = student_info.student_number;
+    returnJson.department = student_info.department;
+    returnJson.speed = student_info.speed;
+    returnJson.retCode = true;
+    res.json(returnJson);
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
 app.get('/get_timetable_from_portal', async (req, res) => {
   try {
     const _result = await Eclass.Eclass_Timetable('StudentID', 'Student_id', 'Student_pw');
