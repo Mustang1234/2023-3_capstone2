@@ -3,6 +3,7 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const LocalStrategy = require('passport-local').Strategy;
 const jwt = require('jsonwebtoken');
+const FindUser = require('./FindUser.js');
 
 const app = express();
 
