@@ -11,18 +11,18 @@ app.use(passport.initialize());
 // 사용자 인증 로직인 FindUser.findByIdPw를 여기에 추가하세요.
 
 passport.use(new LocalStrategy(
-    {
-      usernameField: 'Student_id',
-      passwordField: 'Student_pw'
-    },
-    function verify(Student_id, Student_pw, cb) {
-      console.log(Student_id, Student_pw)
-      FindUser.findByIdPw(Student_id, Student_pw, function (user) {
-        if (user !== false) return cb(null, user);
-        return cb(null, false, { message: 'no' });
-      });
-    }
-  ));
+  {
+    usernameField: 'Student_id',
+    passwordField: 'Student_pw'
+  },
+  function verify(Student_id, Student_pw, cb) {
+    console.log(Student_id, Student_pw)
+    FindUser.findByIdPw(Student_id, Student_pw, function (user) {
+      if (user !== false) return cb(null, user);
+      return cb(null, false, { message: 'no' });
+    });
+  }
+));
 
 // Serialize user information to store in the token
 passport.serializeUser(function (user, done) {
@@ -51,14 +51,7 @@ function generateToken(req, res, next) {
 }
 
 // Route for login
-app.post('/login', 
-  passport.authenticate('local', { session: false }), 
-  (req, res) => {
-    // 이 부분은 토큰 발급 후의 로직입니다.
-    const token = generateToken(req.user);
-    res.json({ success: true, message: 'login success', token });
-  }
-);
+app.post('/login', generateToken);
 
 // Your other routes go here
 

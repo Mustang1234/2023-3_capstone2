@@ -1,6 +1,7 @@
 const db = require('./db');
 module.exports = {
     findByIdPw: function (Student_id, Student_pw, callback) {
+        console.log(Student_id, Student_pw);
         db.query(`SELECT * from StudentTable where Student_id = ? and Student_pw = ?`, [Student_id, Student_pw], (error, rows) => {
             if (error || rows.length == 0) {
                 callback(false);
