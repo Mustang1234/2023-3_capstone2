@@ -346,15 +346,16 @@ app.get('/main_page', authenticateToken, async (req, res) => {
 app.get('/my_page', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.query.Student_id;
-    var returnJson = { Student_id: Student_id, retCode: false, student_name: '', student_number: '',
-      department: '', speed: 0, photo: {}
+    var returnJson = { Student_id: Student_id, retCode: false, Student_name: '', Student_number: '',
+      department: '', speed: 0, ProfilePhoto: {}
     }
     const student_info = JSON.parse(await DB_IO.get_student_table(Student_id));
     console.log(student_info);
     returnJson.Student_name = student_info.Student_name;
     returnJson.Student_number = student_info.Student_number;
     returnJson.department = student_info.department;
-    returnJson.speed = student_info.speed;
+    returnJson.Speed = student_info.Speed;
+    returnJson.ProfilePhoto = student_info.ProfilePhoto;
     returnJson.retCode = true;
     res.json(returnJson);
   } catch (error) {
