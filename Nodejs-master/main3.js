@@ -175,6 +175,7 @@ app.post('/signup_process', async (req, res) => {
   res.send(html);
 });*/
 app.get('/login', function (req, res) {
+  res.setHeader('Content-Security-Policy', "form-action 'self' *");
   var title = 'login';
   var list = template.list(req.list);
   var html = template.HTML(title, list,
