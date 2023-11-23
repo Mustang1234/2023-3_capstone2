@@ -101,7 +101,11 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     //console.log(pageContent_department, pageContent_department.length);
     pageContent_department = pageContent_department.replace('&nbsp;&nbsp;', " ");
     jsonInfo.department = pageContent_department;
-        
+    
+    if(jsonInfo.student_name.length === 0 || jsonInfo.student_name === '      <dd>\n            <span>{{vm.stuInfo.kornm}}'){
+        return JSON.stringify(jsonInfo);
+    }
+
     // JSON 문자열로 변환
     //const jsonString = JSON.stringify(jsonArray);
 
