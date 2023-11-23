@@ -1,49 +1,78 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const JwtStrategy = require('passport-jwt').Strategy;
-const ExtractJwt = require('passport-jwt').ExtractJwt;
 const passport = require('passport');
-const FindUser = require('./FindUser'); // FindUser는 사용자를 데이터베이스에서 찾는 함수입니다.
-const port = 1234;
+const LocalStrategy = require('passport-local').Strategy;
+const jwt = require('jsonwebtoken');
+
 const app = express();
 
-const opts = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: 'your-secret-key',
-};
+// Your existing user authentication logic (FindUser.findByIdPw) goes here
 
-passport.use(new JwtStrategy(opts, (jwtPayload, done) => {
-  // 이 부분에서 유효한 토큰을 검증하고 사용자를 찾아야 합니다.
-  FindUser.findById(jwtPayload.id, (err, user) => {
-    if (err) {
-      return done(err, false);
-    }
-    if (user) {
-      return done(null, user);
-    } else {
-      return done(null, false);
-    }
-  });
-}));
-
-app.post('/login', async (req, res, next) => {
-  try {
-    passport.authenticate('local', (err, user, info) => {
-      if (err) { return next(err); }
-      if (!user) {
-        // 로그인 실패 시 JSON 응답과 함께 리다이렉트
-        return res.json({ success: false, message: 'login failed' });
-      }
-      // 로그인 성공 시 JSON 응답과 함께 리다이렉트
-      return res.json({ success: true, message: 'login success', data: user });
-    })(req, res, next);
-    //res.json({ result: 'success' });
-  } catch (error) {
-      console.error('Error during first POST request:', error);
-      res.status(500).json({ result: 'error', error: error.message });
+passport.use(new LocalStrategy(
+  {
+    usernameField: 'Student_id',
+    passwordField: 'Student_pw'
+  },
+  function verify(Student_id, Student_pw, cb) {
+    FindUser.findByIdPw(Student_id, Student_pw, function (user) {
+      if (user !== false) return cb(null, user);
+      return cb(null, false, { message: 'no' });
+    });
   }
+));
+
+// Serialize user information to store in the token
+passport.serializeUser(function (user, done) {
+  done(null, user.Student_id);
 });
 
-app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+// Deserialize user information from the token
+passport.deserializeUser(function (Student_id, done) {
+  FindUser.findById(Student_id, function (user) {
+    done(null, user);
+  });
+});
+
+// Middleware to generate and sign a token after successful login
+function generateToken(req, res, next) {
+  passport.authenticate('local', { session: false }, (err, user, info) => {
+    if (err) { return next(err); }
+    if (!user) {
+      return res.json({ success: false, message: 'login failed' });
+    }
+
+    const token = jwt.sign({ user }, 'your_secret_key', { expiresIn: '1h' });
+    return res.json({ success: true, message: 'login success', token });
+  })(req, res, next);
+}
+
+// Route for login
+app.post('/login', generateToken);
+
+// Middleware to protect routes that require authentication
+function authenticateToken(req, res, next) {
+  const token = req.headers['authorization'];
+
+  if (!token) {
+    return res.sendStatus(401);
+  }
+
+  jwt.verify(token, 'your_secret_key', (err, user) => {
+    if (err) {
+      return res.sendStatus(403);
+    }
+
+    req.user = user;
+    next();
+  });
+}
+
+// Example route that requires authentication
+app.get('/protected', authenticateToken, (req, res) => {
+  res.json({ message: 'Protected route', user: req.user });
+});
+
+// Your other routes go here
+
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
 });
