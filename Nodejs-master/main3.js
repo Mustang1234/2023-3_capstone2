@@ -183,7 +183,7 @@ app.get('/login', function (req, res) {
     <p><input type="submit"></p>
     </form>`,
     `<a href="/page_create">create</a>`,
-    req.session.isLogedin
+    ''
   );
   res.send(html);
 });
