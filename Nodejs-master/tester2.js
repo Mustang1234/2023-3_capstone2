@@ -73,6 +73,11 @@ app.get('/protected', authenticateToken, (req, res) => {
   res.json({ message: 'Protected route', user: req.user });
 });
 
+// Example route that requires authentication
+app.post('/protected2', authenticateToken, (req, res) => {
+  res.json({ message: 'Protected route', user: req.user });
+});
+
 // Your other routes go here
 
 app.listen(1234, () => {
