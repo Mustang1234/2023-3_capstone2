@@ -332,7 +332,7 @@ app.post('/page_delete_process', function (req, res) {
 
 app.get('/main_page', async (req, res) => {
   try {
-    const Student_id = req.query.studStudent_ident_id;
+    const Student_id = req.query.Student_id;
     const year_semester = req.query.year_semester;
     var returnJson = { Student_id: Student_id, retCode: false, student_name: '', student_number: '',
       department: '', speed: 0,
