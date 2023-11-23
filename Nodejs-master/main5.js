@@ -327,17 +327,14 @@ app.get('/main_page', authenticateToken, async (req, res) => {
       department: '', speed: 0,
       timeTable: [], schedule: [], photo: {}
     }
-    const _student_info = await DB_IO.get_student_table(Student_id);
-    const student_info = JSON.parse(_student_info);
+    const student_info = JSON.parse(await DB_IO.get_student_table(Student_id));
     returnJson.student_name = student_info.Student_name;
     returnJson.student_number = student_info.student_number;
     returnJson.department = student_info.department;
     returnJson.speed = student_info.speed;
-    const _timetable = await DB_IO.db_to_timetable(Student_id, year_semester);
-    const timetable = JSON.parse(_timetable);
+    const timetable = JSON.parse(await DB_IO.db_to_timetable(Student_id, year_semester));
     returnJson.timeTable = timetable;
-    const _schedule = await DB_IO.get_schedule(Student_id)
-    const schedule = JSON.parse(_schedule);
+    const schedule = JSON.parse(await DB_IO.get_schedule(Student_id));
     returnJson.schedule = schedule;
     returnJson.retCode = true;
     res.json(returnJson);
@@ -353,8 +350,7 @@ app.get('/my_page', authenticateToken, async (req, res) => {
     var returnJson = { Student_id: Student_id, retCode: false, student_name: '', student_number: '',
       department: '', speed: 0, photo: {}
     }
-    const _student_info = await DB_IO.get_student_table(Student_id);
-    const student_info = JSON.parse(_student_info);
+    const student_info = JSON.parse(await DB_IO.get_student_table(Student_id));
     returnJson.student_name = student_info.Student_name;
     returnJson.student_number = student_info.student_number;
     returnJson.department = student_info.department;
