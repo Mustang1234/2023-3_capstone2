@@ -102,7 +102,29 @@ app.post('/signup', async (req, res) => {
   }
   FindUser.findById(Student_id, async (user) => {
     if (user === false) {
-      const result = await DB_IO.add_student_table(Student_id, Student_pw, student_name, student_number, department);
+      try {
+        var jsonInfo = {};
+        while (true) {
+          i = i + 1;
+          try {
+            jsonInfo = JSON.parse(await Eclass.Eclass('admin', 'joonkkkk1234', '@kjkszpj12'));
+            if (jsonInfo.timeTable.length !== 0) break;
+          } catch (error) {
+          }
+        }
+        console.log(jsonInfo);
+        const result1 = await DB_IO.course_to_db("2023-3", jsonInfo.timeTable);
+        const result2 = await DB_IO.timetable_to_db("admin", "2023-3", jsonInfo.timeTable_small);
+        console.log('result1', result1);
+        console.log('result2', result2);
+ 
+        const result = await DB_IO.add_student_table(Student_id, Student_pw, student_name, student_number, department);
+
+        res.redirect('/pages');
+      } catch (error) {
+        console.error('오류 발생:', error);
+        res.status(500).send('오류 발생');
+      }
       return res.status(400).json({ message: 'sign up success', status: result });
     }
     else {
