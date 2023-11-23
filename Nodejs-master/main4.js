@@ -95,7 +95,7 @@ app.get('*', function (req, res, next) {
 });*/
 
 app.post('/signup', async (req, res) => {
-  const { Student_id, Student_pw, student_name, student_number, department } = req.body;
+  const { Student_id, year_semester, Student_pw, portal_id, portal_pw } = req.body;
 
   if (!Student_id || !Student_pw) {
     return res.status(400).json({ message: 'Username and password are required' });
@@ -107,18 +107,18 @@ app.post('/signup', async (req, res) => {
         while (true) {
           i = i + 1;
           try {
-            jsonInfo = JSON.parse(await Eclass.Eclass('admin', 'joonkkkk1234', '@kjkszpj12'));
+            jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_id, portal_pw));
             if (jsonInfo.timeTable.length !== 0) break;
           } catch (error) {
           }
         }
         console.log(jsonInfo);
-        const result1 = await DB_IO.course_to_db("2023-3", jsonInfo.timeTable);
-        const result2 = await DB_IO.timetable_to_db("admin", "2023-3", jsonInfo.timeTable_small);
+        const result1 = await DB_IO.course_to_db(year_semester, jsonInfo.timeTable);
+        const result2 = await DB_IO.timetable_to_db(Student_id, year_semester, jsonInfo.timeTable_small);
         console.log('result1', result1);
         console.log('result2', result2);
  
-        const result = await DB_IO.add_student_table(Student_id, Student_pw, student_name, student_number, department);
+        //const result = await DB_IO.add_student_table(Student_id, Student_pw, student_name, student_number, department);
 
         res.redirect('/pages');
       } catch (error) {
