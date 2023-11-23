@@ -2,6 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const jwt = require('jsonwebtoken');
+const FindUser = require('./FindUser.js');
 
 const app = express();
 
@@ -13,6 +14,7 @@ passport.use(new LocalStrategy(
     passwordField: 'Student_pw'
   },
   function verify(Student_id, Student_pw, cb) {
+    console.log(Student_id, Student_pw)
     FindUser.findByIdPw(Student_id, Student_pw, function (user) {
       if (user !== false) return cb(null, user);
       return cb(null, false, { message: 'no' });
@@ -36,6 +38,7 @@ passport.deserializeUser(function (Student_id, done) {
 function generateToken(req, res, next) {
   passport.authenticate('local', { session: false }, (err, user, info) => {
     if (err) { return next(err); }
+    console.log(user);
     if (!user) {
       return res.json({ success: false, message: '로그인 실패' });
     }
