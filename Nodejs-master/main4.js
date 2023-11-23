@@ -19,7 +19,7 @@ var passport = require('passport')
 
 //var db = require('./db');
 //const crypto = require('crypto')
-var FindUser = require('./FindUser.js');
+const FindUser = require('./FindUser.js');
 const { assert } = require('console');
 
 const Eclass = require('./Eclass.js');
