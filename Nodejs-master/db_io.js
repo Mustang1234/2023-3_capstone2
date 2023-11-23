@@ -178,6 +178,24 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
+    update_photo_student_table: async (Student_id, ProfilePhoto) => {
+        try {
+            const _update_photo_student_table = await new Promise((resolve, reject) => {
+                db.query(`UPDATE StudentTable SET ProfilePhoto = ? WHERE Student_id= ?;`, [ProfilePhoto, Student_id], (error) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
+                });
+            });
+            return _update_photo_student_table;
+        } catch (error) {
+            console.error('오류 발생:', error);
+            throw new Error('오류 발생');
+        }
+    },
     get_schedule: async (Student_id) => {
         try {
             const schedules = await new Promise((resolve, reject) => {

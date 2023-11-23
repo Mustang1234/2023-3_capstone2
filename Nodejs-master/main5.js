@@ -324,7 +324,7 @@ app.get('/main_page', authenticateToken, async (req, res) => {
     const Student_id = req.query.Student_id;
     const year_semester = req.query.year_semester;
     var returnJson = { Student_id: Student_id, retCode: false, Student_name: '', Student_number: '',
-      department: '', Speed: 0, timeTable: [], schedule: [], ProfilePhoto: {}
+      department: '', Speed: 0, timeTable: [], schedule: [], ProfilePhoto: null
     }
     const student_info = JSON.parse(await DB_IO.get_student_table(Student_id));
     console.log(student_info);
@@ -349,7 +349,7 @@ app.get('/my_page', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.query.Student_id;
     var returnJson = { Student_id: Student_id, retCode: false, Student_name: '', Student_number: '',
-      department: '', Speed: 0, ProfilePhoto: {}
+      department: '', Speed: 0, ProfilePhoto: null
     }
     const student_info = JSON.parse(await DB_IO.get_student_table(Student_id));
     console.log(student_info);
@@ -360,6 +360,19 @@ app.get('/my_page', authenticateToken, async (req, res) => {
     returnJson.ProfilePhoto = student_info.ProfilePhoto;
     returnJson.retCode = true;
     res.json(returnJson);
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
+app.post('/my_page_photo_upload', authenticateToken, async (req, res) => {
+  try {
+    const Student_id = req.query.Student_id;
+    //const ProfilePhoto = req.query.ProfilePhoto;
+    const ProfilePhoto = fs.readFileSync('image/hello.jpg');;
+    const result = JSON.parse(await DB_IO.update_photo_student_table(Student_id, ProfilePhoto));
+    res.json({ Student_id: Student_id, success: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
