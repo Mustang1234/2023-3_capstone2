@@ -13,13 +13,14 @@ const helmet = require('helmet');
 //const cookie = require('cookie');
 const session = require('express-session')
 const FileStore = require('session-file-store')(session)
-var passport = require('passport')
+const jwt = require('jsonwebtoken');
+const passport = require('passport')
   , LocalStrategy = require('passport-local')
     .Strategy;
 
 //var db = require('./db');
 //const crypto = require('crypto')
-var FindUser = require('./FindUser.js');
+const FindUser = require('./FindUser.js');
 const { assert } = require('console');
 
 const Eclass = require('./Eclass.js');
