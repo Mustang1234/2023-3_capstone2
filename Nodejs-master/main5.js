@@ -166,9 +166,10 @@ passport.use(new LocalStrategy(
     });
   }));
 
-app.get('/logout', authenticateToken, (req, res) => {
+app.get('/logout', (req, res) => {
   req.logout(() => {
-    res.redirect('/login');
+    //res.redirect('/login');
+    res.json({ success: true, message: 'log out' });
   });
 });
 
