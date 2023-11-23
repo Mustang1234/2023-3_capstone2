@@ -6,13 +6,13 @@ const path = require('path');
 //const qs = require('querystring');
 const sanitizeHtml = require('sanitize-html');
 const port = 1234;
-const ip = '20.39.186.138';
+//const ip = '20.39.186.138';
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const helmet = require('helmet');
 //const cookie = require('cookie');
 const session = require('express-session')
-const FileStore = require('session-file-store')(session)
+//const FileStore = require('session-file-store')(session)
 const jwt = require('jsonwebtoken');
 const passport = require('passport')
   , LocalStrategy = require('passport-local')
@@ -21,11 +21,11 @@ const passport = require('passport')
 //var db = require('./db');
 //const crypto = require('crypto')
 const FindUser = require('./FindUser.js');
-const { assert } = require('console');
+//const { assert } = require('console');
 
 const Eclass = require('./Eclass.js');
 const DB_IO = require('./db_io.js');
-const { post } = require('request');
+//const { post } = require('request');
 
 
 
@@ -34,6 +34,14 @@ app.use(bodyParser.json());
 app.use(compression());
 app.use(express.static('public'));
 app.use(helmet());
+
+
+app.get('*', function (req, res, next) {
+  fs.readdir('./data', function (error, filelist) {
+    req.list = filelist;
+    next();
+  });
+});
 
 passport.use(new LocalStrategy(
   {
@@ -68,17 +76,37 @@ function generateToken(req, res, next) {
       return res.json({ success: false, message: 'login failed' });
     }
 
-    const token = jwt.sign({ user }, 'your_secret_key', { expiresIn: '1h' });
+    const token = jwt.sign({ user }, 'your_secret_key', { expiresIn: '1w' });
     res.json({ success: true, message: 'login success', token });
   })(req, res, next);
 }
 
-app.get('*', function (req, res, next) {
-  fs.readdir('./data', function (error, filelist) {
-    req.list = filelist;
+// Middleware to protect routes that require authentication
+function authenticateToken(req, res, next) {
+  const token = req.headers['authorization'];
+
+  if (!token) {
+    return res.sendStatus(401);
+  }
+
+  jwt.verify(token, 'your_secret_key', (err, user) => {
+    if (err) {
+      return res.sendStatus(403);
+    }
+
+    req.user = user;
     next();
   });
-});
+}
+
+app.post('/login', express.json(), generateToken);
+
+/*app.get('/logout', (req, res) => {
+  req.logout(() => {
+    //res.redirect('/login');
+    res.json({ success: true, message: 'log out' });
+  });
+});*/
 
 app.post('/signup', async (req, res) => {
   const { Student_id, year_semester, Student_pw, portal_id, portal_pw } = req.body;
@@ -118,41 +146,6 @@ app.post('/signup', async (req, res) => {
   });
 });
 
-
-// Middleware to protect routes that require authentication
-function authenticateToken(req, res, next) {
-  const token = req.headers['authorization'];
-
-  if (!token) {
-    return res.sendStatus(401);
-  }
-
-  jwt.verify(token, 'your_secret_key', (err, user) => {
-    if (err) {
-      return res.sendStatus(403);
-    }
-
-    req.user = user;
-    next();
-  });
-}
-
-// Middleware to generate and sign a token after successful login
-function generateToken(req, res, next) {
-  passport.authenticate('local', { session: false }, (err, user, info) => {
-    if (err) { return next(err); }
-    if (!user) {
-      return res.json({ success: false, message: 'login failed' });
-    }
-
-    const token = jwt.sign({ user }, 'your_secret_key', { expiresIn: '1h' });
-    res.json({ success: true, message: 'login success', token });
-  })(req, res, next);
-}
-app.post('/login', express.json(), generateToken);
-
-
-
 passport.use(new LocalStrategy(
   {
     usernameField: 'Student_id',
@@ -165,13 +158,6 @@ passport.use(new LocalStrategy(
       return cb(null, false, { message: 'no' });
     });
   }));
-
-app.get('/logout', (req, res) => {
-  req.logout(() => {
-    //res.redirect('/login');
-    res.json({ success: true, message: 'log out' });
-  });
-});
 
 app.get('/pages', authenticateToken, function (req, res) {
   res.setHeader('Content-Security-Policy', "form-action 'self' *");
