@@ -15,8 +15,9 @@ passport.use(new LocalStrategy(
         passwordField: 'Student_pw'
     },
     function verify(Student_id, Student_pw, cb) {
+        console.log(Student_id, Student_pw)
         FindUser.findByIdPw(Student_id, Student_pw, function (user) {
-            console.log(Student_id, Student_pw, user)
+            console.log(user)
             if (user !== false) return cb(null, user);
             return cb(null, false, { message: 'no' });
         });
