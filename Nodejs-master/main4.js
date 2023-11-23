@@ -114,11 +114,11 @@ app.post('/signup', async (req, res) => {
         console.log(jsonInfo);
         const result1 = await DB_IO.course_to_db(year_semester, jsonInfo.timeTable);
         const result2 = await DB_IO.timetable_to_db(Student_id, year_semester, jsonInfo.timeTable_small);
-        console.log('result1', result1);
-        console.log('result2', result2);
+        //console.log('result1', result1);
+        //console.log('result2', result2);
  
         const result = await DB_IO.add_student_table(Student_id, Student_pw, jsonInfo.student_name, jsonInfo.student_number, jsonInfo.department);
-        console.log(result);
+        //console.log(result);
         return res.status(400).json({ message: 'sign up success', status: result });
       } catch (error) {
         console.error('오류 발생:', error);
@@ -220,8 +220,6 @@ app.get('/page/:pageId', function (req, res, next) {
     }
   });
 });
-
-
 
 app.get('/page_create', function (req, res) {
   res.setHeader('Content-Security-Policy', "form-action 'self' *");
@@ -342,9 +340,15 @@ app.get('/main_page', async (req, res) => {
     res.json(result);*/
 
     var returnJson = { Student_id: Student_id, retCode: false, student_name: '', student_number: '',
-      department: '',
+      department: '', speed: 0,
       timeTable: [], schedule: [], photo: {}
     }
+    const _student_info = await DB_IO.get_student_table(Student_id);
+    const student_info = JSON.parse(_student_info);
+    returnJson.student_name = student_info.Student_name;
+    returnJson.student_number = student_info.student_number;
+    returnJson.department = student_info.department;
+    returnJson.speed = student_info.speed;
     const _timetable = await DB_IO.db_to_timetable(Student_id, year_semester );
     const timetable = JSON.parse(_timetable);
     returnJson.timeTable = timetable;
@@ -352,6 +356,7 @@ app.get('/main_page', async (req, res) => {
     const schedule = JSON.parse(_schedule);
     returnJson.schedule = schedule;
     console.log(returnJson);
+    returnJson.retCode = true;
     res.json(returnJson);
   } catch (error) {
     console.error('오류 발생:', error);
