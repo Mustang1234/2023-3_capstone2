@@ -345,15 +345,18 @@ app.get('/main_page', async (req, res) => {
     }
     const _student_info = await DB_IO.get_student_table(Student_id);
     const student_info = JSON.parse(_student_info);
+    console.log(student_info);
     returnJson.student_name = student_info.Student_name;
     returnJson.student_number = student_info.student_number;
     returnJson.department = student_info.department;
     returnJson.speed = student_info.speed;
     const _timetable = await DB_IO.db_to_timetable(Student_id, year_semester );
     const timetable = JSON.parse(_timetable);
+    console.log(timetable);
     returnJson.timeTable = timetable;
     const _schedule = await DB_IO.get_schedule(Student_id);
     const schedule = JSON.parse(_schedule);
+    console.log(schedule);
     returnJson.schedule = schedule;
     console.log(returnJson);
     returnJson.retCode = true;
