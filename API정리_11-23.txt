@@ -1,6 +1,6 @@
 get signup
 	받아오는것 : urlinfo
-		{ Student_id: "admin", Student_pw:"fdsa", year_semester: '2023-3', portal_id: "fdsa4321", portal_pw:"rewqrewq"  }
+		{ studentID: "admin" , Student_pw:"fdsa", year_semester: '2023-3', portal_id: "fdsa4321", portal_pw:"rewqrewq"  }
 
 	보내는것: json
 		{ message: 'sign up success', status: result }
@@ -9,7 +9,7 @@ get signup
 
 post login
 	받아오는것 : json
-		{ id: "admin", pw: "fdsa" }
+		{ studentID: "admin" ,id: "admin", pw: "fdsa" }
 
 	보내는것: json
 		{ success: false, message: 'login failed' }
@@ -19,7 +19,7 @@ post login
 
 get main_page
 	받아오는것 : urlinfo
-		{ Student_id: "admin", year_semester: '2023-3' }
+		{ studentID: "admin" ,year_semester: '2023-3' }
 
 	보내는것: json
 		{
@@ -143,7 +143,7 @@ get create_team1
 
 
 get create_team2
-	받아오는것: json
+	받아오는것: urlinfo
 		{ studentID: "admin", Course_id: '2023-3월14:00인공지능' }
 
 	보내는것: json
@@ -159,7 +159,7 @@ get create_team2
 
 
 get create_team3
-	받아오는것: json
+	받아오는것: urlinfo
 		{ Project_id: 1, Team_name: 'Mango' }
 
 	보내는것: json
@@ -167,7 +167,7 @@ get create_team3
 
 
 get join_team1
-	받아오는것: json
+	받아오는것: urlinfo
 		{ year_semester: "2023-3", studentID: "admin" }
 
 	보내는것: json
@@ -178,7 +178,7 @@ get join_team1
 		]
 
 get join_team2
-	받아오는것: json
+	받아오는것: urlinfo
 		{ Course_id: '2023-3월14:00인공지능', studentID: "admin" }
 
 	보내는것: json
@@ -194,7 +194,7 @@ get join_team2
 
 
 get join_team3
-	받아오는것: json
+	받아오는것: urlinfo
 		{ Project_id: 1, studentID: "admin" }
 
 	보내는것: json
@@ -208,7 +208,7 @@ get join_team3
 
 
 get join_team4
-	받아오는것: json
+	받아오는것: urlinfo
 		{ Team_id: 1, studentID: "admin" }
 
 	보내는것: json
@@ -216,7 +216,7 @@ get join_team4
 
 
 get add_schedule1
-	받아오는것: json
+	받아오는것: urlinfo
 		{ year_semester: "2023-3", studentID: "admin" }
 
 	보내는것: json
@@ -232,7 +232,7 @@ get add_schedule1
 	
 	
 get add_schedule2
-	받아오는것: json
+	받아오는것: urlinfo
 		{ Team_id: 1, Deadline: '2023-12-25 23:59', description: '인공지능 구현', studentID: "admin" }
 
 	보내는것: json
@@ -269,6 +269,7 @@ post get_timetable_from_portal
 		        }, ...
 		    ]
 		}
+		{ returnCode: "portal_login_failed" }
 
 
 get chat // 아직 미완성, 추후 업데이트

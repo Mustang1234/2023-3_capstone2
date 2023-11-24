@@ -46,9 +46,10 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 
     if(cookies[0].name == 'prdct-NA'){
         console.log('no cookie');
-	await browser.close();
+	    await browser.close();
         return JSON.stringify(jsonInfo);
     }
+    jsonInfo.retCode = true;
 
     // 로그인 후 원하는 페이지로 이동 (예: 시간표 페이지)
     await page.setCookie(...cookies);
@@ -171,7 +172,6 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 
     jsonInfo.timeTable = timeTableArray;
     jsonInfo.timeTable_small = result;
-    jsonInfo.retCode = true;
 
     //console.log(jsonInfo);
     return JSON.stringify(jsonInfo);

@@ -382,9 +382,8 @@ app.get('/my_page', authenticateToken, async (req, res) => {
 app.post('/my_page_photo_upload', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    //const ProfilePhoto = req.body.ProfilePhoto;
-    const ProfilePhoto = fs.readFileSync('hello.jpg');
-    console.log(ProfilePhoto);
+    const ProfilePhoto = req.body.ProfilePhoto;
+    //const ProfilePhoto = fs.readFileSync('hello.jpg');
     const result = JSON.parse(await DB_IO.update_photo_student_table(Student_id, ProfilePhoto));
     res.json({ Student_id: Student_id, success: result });
   } catch (error) {
@@ -418,6 +417,7 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
       try {
         jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_id, portal_pw));
         if (jsonInfo.timeTable.length !== 0) break;
+        if (jsonInfo.retCode === false) res.json({ returnCode: "portal_login_failed" });
       } catch (error) {
       }
     }
