@@ -430,6 +430,7 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
           return;
         }
       } catch (error) {
+        console.log(error);
         res.json({ returnCode: "Error", error: error });
         return;
       }
