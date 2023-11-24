@@ -110,7 +110,8 @@ app.post('/login', express.json(), generateToken);
 });*/
 
 app.post('/signup', async (req, res) => {
-  const { Student_id, year_semester, Student_pw, portal_id, portal_pw } = req.body;
+  const Student_id = req.user.user.Student_id;
+  const { year_semester, Student_pw, portal_id, portal_pw } = req.body;
 
   if (!Student_id || !Student_pw) {
     return res.status(400).json({ message: 'Username and password are required' });
