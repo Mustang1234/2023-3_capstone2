@@ -457,6 +457,25 @@ app.get('/create_team2', authenticateToken, async (req, res) => {
     return false;
   }*/
   try {
+    //const Student_id = req.query.Student_id;
+    const Course_id = req.query.Course_id;
+    const _result = await DB_IO.list_project(Course_id);
+    const result = JSON.parse(_result);
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
+app.get('/create_team3', authenticateToken, async (req, res) => {
+  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
+  /*if (req.user !== undefined) {
+    res.redirect(`/pages`);
+    return false;
+  }*/
+  try {
     //const Student_id = req.query.Student_id
     const Project_id  = req.query.Project_id
     const Team_name = req.query.Team_name
