@@ -163,7 +163,7 @@ module.exports = {
             const _add_student_table = await new Promise((resolve, reject) => {
                 db.query(`INSERT INTO StudentTable
                 (Student_id, Student_pw, Student_name, Student_number, Speed, department)
-                VALUES (?, ?, ?, ?, ?, ?, ?)`, [Student_id, Student_pw, student_name, student_number, 100, department], (error) => {
+                VALUES (?, ?, ?, ?, ?, ?)`, [Student_id, Student_pw, student_name, student_number, 100, department], (error) => {
                     if (error) {
                         console.error(error);
                         reject(error);
@@ -174,7 +174,7 @@ module.exports = {
             });
             const _add_student_photo_table = await new Promise((resolve, reject) => {
                 db.query(`INSERT INTO StudentPhotoTable
-                (Student_id, ProfilePhoto) VALUES (?, ?, ?, ?, ?, ?, ?)`, [Student_id, null], (error) => {
+                (Student_id, ProfilePhoto) VALUES (?, ?)`, [Student_id, null], (error) => {
                     if (error) {
                         console.error(error);
                         reject(error);
