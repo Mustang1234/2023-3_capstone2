@@ -545,7 +545,7 @@ app.get('/join_team4', authenticateToken, async (req, res) => {
   }
 });
 
-app.get('/add_schedule1', authenticateToken, function (req, res) {
+app.get('/add_schedule1', authenticateToken, async (req, res) => {
   //res.setHeader('Content-Security-Policy', "form-action 'self' *");
   /*if (req.user !== undefined) {
     res.redirect(`/pages`);
@@ -564,7 +564,7 @@ app.get('/add_schedule1', authenticateToken, function (req, res) {
   }
 });
 
-app.get('/add_schedule2', authenticateToken, function (req, res) {
+app.get('/add_schedule2', authenticateToken, async (req, res) => {
   //res.setHeader('Content-Security-Policy', "form-action 'self' *");
   /*if (req.user !== undefined) {
     res.redirect(`/pages`);
