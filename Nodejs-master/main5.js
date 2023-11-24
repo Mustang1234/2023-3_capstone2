@@ -116,6 +116,9 @@ app.post('/signup', async (req, res) => {
   if (!Student_id || !Student_pw) {
     return res.status(400).json({ message: 'Username and password are required' });
   }
+  if (portal_id === undefined || portal_pw === undefined) {
+    return res.status(400).json({ message: 'portal_login_failed' });
+  }
   FindUser.findById(Student_id, async (user) => {
     if (user === false) {
       try {
@@ -124,10 +127,7 @@ app.post('/signup', async (req, res) => {
           try {
             jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_id, portal_pw));
             if (jsonInfo.timeTable.length !== 0) break;
-            if (jsonInfo.retCode === false) {
-              res.json({ returnCode: "portal_login_failed" });
-              return
-            }
+            if (jsonInfo.retCode === false) return res.status(400).json({ message: 'portal_login_failed' });
           } catch (error) {
             res.json({ returnCode: "Error", error: error });
             return;
@@ -418,23 +418,15 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const { year_semester, portal_id, portal_pw } = req.body;
     if (portal_id === undefined || portal_pw === undefined) {
-      res.json({ returnCode: "portal_login_failed" });
-      return;
+      return res.status(400).json({ message: 'portal_login_failed' });
     }
     console.log(Student_id, year_semester, portal_id, portal_pw);
     var jsonInfo = {};
     while (true) {
       try {
-        const fdsa = await Eclass.Eclass(Student_id, portal_id, portal_pw)
-        console.log(fdsa)
-        jsonInfo = JSON.parse(fdsa);
-        console.log("jsonInfo");
-        console.log(jsonInfo);
+        jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_id, portal_pw));
         if (jsonInfo.timeTable.length !== 0) break;
-        if (jsonInfo.retCode === false) {
-          res.json({ returnCode: "portal_login_failed" });
-          return;
-        }
+        if (jsonInfo.retCode === false) return res.status(400).json({ message: 'portal_login_failed' });
       } catch (error) {
         console.log(error);
         res.json({ returnCode: "Error", error: error });
