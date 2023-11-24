@@ -6,23 +6,9 @@ get signup
 		{ permision: "accepted"/ "already exists"/ "protal login fail" /* "accepted" : 가능, others : 재시도 필요 */}
 
 
-get login
-	받아오는것 : urlinfo
-		{ type: "login", id: "admin", pw: "fdsa"}
-
-	보내는것: json
-		{ redirectTo: '/login_process', data: {
-    		  Student_id: "admin",
-    		  Student_pw: "fdsa"
-  		} }
-
-
-post login_process
+post login
 	받아오는것 : json
-		{ type: "login_process", data: {
-    		  Student_id: "admin",
-    		  Student_pw: "fdsa"
-  		 }}
+		{ id: "admin", pw: "fdsa" }
 
 	보내는것: redirect
 		{ redirectTo: '/pages' or '/login' }
@@ -141,7 +127,7 @@ get add_project1
 get add_project2
 	받아오는것: urlinfo
 		{ type: "add_project2", Course_id: '2023-3월14:00인공지능',
-		  start_time: 'yyyy-mm-dd HH:MM', finish_time: 'yyyy-mm-dd HH:MM', description: 'fdsafdsa' }
+		  start_time: 'yyyy-mm-dd HH:MM', finish_time: 'yyyy-mm-dd HH:MM', description: 'fdsafdsa', studentID: "admin"  }
 
 	보내는것: json
 		{

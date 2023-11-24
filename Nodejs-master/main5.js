@@ -369,8 +369,8 @@ app.get('/my_page', authenticateToken, async (req, res) => {
 app.post('/my_page_photo_upload', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.body.Student_id;
-    //const ProfilePhoto = req.query.ProfilePhoto;
-    const ProfilePhoto = fs.readFileSync('hello.jpg');;
+    const ProfilePhoto = req.body.ProfilePhoto;
+    //const ProfilePhoto = fs.readFileSync('hello.jpg');;
     const result = JSON.parse(await DB_IO.update_photo_student_table(Student_id, ProfilePhoto));
     res.json({ Student_id: Student_id, success: result });
   } catch (error) {
@@ -383,6 +383,197 @@ app.get('/get_timetable_from_portal', authenticateToken, async (req, res) => {
   try {
     const _result = await Eclass.Eclass_Timetable('StudentID', 'Student_id', 'Student_pw');
     const result = JSON.parse(_result);
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
+app.get('/add_project1', authenticateToken, async (req, res) => {
+  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
+  /*if (req.user !== undefined) {
+    res.redirect(`/pages`);
+    return false;
+  }*/
+  try {
+    const Student_id = req.query.Student_id;
+    const year_semester = req.query.year_semester;
+    const _result = await Eclass.db_to_timetable_small(Student_id, year_semester);
+    const result = JSON.parse(_result);
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
+app.get('/add_project2', authenticateToken, async (req, res) => {
+  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
+  /*if (req.user !== undefined) {
+    res.redirect(`/pages`);
+    return false;
+  }*/
+  try {
+    const Course_id = req.query.Course_id
+    const start_time = req.query.start_time
+    const finish_time = req.query.finish_time
+    const description = req.query.description
+    const result = add_project(Course_id, start_time, finish_time, description);
+    console.log(result);
+    res.json({ success: true, message: 'success' });
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
+app.get('/create_team1', authenticateToken, async (req, res) => {
+  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
+  /*if (req.user !== undefined) {
+    res.redirect(`/pages`);
+    return false;
+  }*/
+  try {
+    const Student_id = req.query.Student_id;
+    const year_semester = req.query.year_semester;
+    const _result = await Eclass.db_to_timetable_small(Student_id, year_semester);
+    const result = JSON.parse(_result);
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
+app.get('/create_team2', authenticateToken, async (req, res) => {
+  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
+  /*if (req.user !== undefined) {
+    res.redirect(`/pages`);
+    return false;
+  }*/
+  try {
+    //const Student_id = req.query.Student_id
+    const Project_id  = req.query.Project_id
+    const Team_name = req.query.Team_name
+    const result = create_team(Project_id, Team_name);
+    console.log(result);
+    res.json({ success: result });
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
+app.get('/join_team1', authenticateToken, async (req, res) => {
+  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
+  /*if (req.user !== undefined) {
+    res.redirect(`/pages`);
+    return false;
+  }*/
+  try {
+    const Student_id = req.query.Student_id;
+    const year_semester = req.query.year_semester;
+    const _result = await Eclass.db_to_timetable_small(Student_id, year_semester);
+    const result = JSON.parse(_result);
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
+app.get('/join_team2', authenticateToken, async (req, res) => {
+  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
+  /*if (req.user !== undefined) {
+    res.redirect(`/pages`);
+    return false;
+  }*/
+  try {
+    //const Student_id = req.query.Student_id
+    const Course_id  = req.query.Course_id
+    //const Team_name = req.query.Team_name
+    const result = DB_IO.list_project(Course_id);
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
+app.get('/join_team3', authenticateToken, async (req, res) => {
+  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
+  /*if (req.user !== undefined) {
+    res.redirect(`/pages`);
+    return false;
+  }*/
+  try {
+    //const Student_id = req.query.Student_id
+    const Project_id  = req.query.Project_id
+    //const Team_name = req.query.Team_name
+    const result = DB_IO.list_team(Project_id);
+    console.log(result);
+    res.json({ success: result });
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
+app.get('/join_team4', authenticateToken, async (req, res) => {
+  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
+  /*if (req.user !== undefined) {
+    res.redirect(`/pages`);
+    return false;
+  }*/
+  try {
+    const Student_id = req.query.Student_id
+    const Team_id  = req.query.Team_id
+    //const Team_name = req.query.Team_name
+    const result = DB_IO.join_team(Team_id, Student_id);
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
+app.get('/add_schedule1', authenticateToken, function (req, res) {
+  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
+  /*if (req.user !== undefined) {
+    res.redirect(`/pages`);
+    return false;
+  }*/
+  try {
+    const Student_id = req.query.Student_id
+    const year_semester  = req.query.year_semester
+    //const Team_name = req.query.Team_name
+    const result = DB_IO.list_my_project(Student_id, year_semester);
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
+app.get('/add_schedule2', authenticateToken, function (req, res) {
+  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
+  /*if (req.user !== undefined) {
+    res.redirect(`/pages`);
+    return false;
+  }*/
+  try {
+    const Student_id = req.query.Student_id
+    const year_semester  = req.query.year_semester
+    //const Team_name = req.query.Team_name
+    const result = DB_IO.list_my_project(Student_id, year_semester);
     console.log(result);
     res.json(result);
   } catch (error) {
@@ -439,7 +630,7 @@ app.get('/test3', authenticateToken, async (req, res) => {
   }
 });
 
-app.get('/add_project1', authenticateToken, function (req, res) {
+app.get('/add_project', authenticateToken, function (req, res) {
   res.setHeader('Content-Security-Policy', "form-action 'self' *");
   /*if (req.user !== undefined) {
     res.redirect(`/pages`);
@@ -478,7 +669,7 @@ app.post('/add_project_process', authenticateToken, async (req, res) => {
   }
 });
 
-app.get('/list_project', authenticateToken, function (req, res) {
+app.get('/list_project1234', authenticateToken, function (req, res) {
   res.setHeader('Content-Security-Policy', "form-action 'self' *");
   /*if (req.user !== undefined) {
     res.redirect(`/pages`);
@@ -505,7 +696,7 @@ app.post('/list_project_process', authenticateToken, async (req, res) => {
   }*/
   try {
     const { Student_id, year_semester } = req.body;
-    const _result = await DB_IO.list_project(Student_id, year_semester);
+    const _result = await DB_IO.list_my_project(Student_id, year_semester);
     const result = JSON.parse(_result);
     console.log(result);
     res.redirect(`/pages`);
@@ -516,7 +707,7 @@ app.post('/list_project_process', authenticateToken, async (req, res) => {
   }
 });
 
-app.get('/create_team', authenticateToken, function (req, res) {
+app.get('/create_team1234', authenticateToken, function (req, res) {
   res.setHeader('Content-Security-Policy', "form-action 'self' *");
   /*if (req.user !== undefined) {
     res.redirect(`/pages`);
@@ -553,7 +744,7 @@ app.post('/create_team_process', authenticateToken, async (req, res) => {
   }
 });
 
-app.get('/list_team', authenticateToken, function (req, res) {
+app.get('/list_team1234', authenticateToken, function (req, res) {
   res.setHeader('Content-Security-Policy', "form-action 'self' *");
   /*if (req.user !== undefined) {
     res.redirect(`/pages`);
@@ -589,27 +780,6 @@ app.post('/list_team_process', authenticateToken, async (req, res) => {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
   }
-});
-
-app.get('/add_schedule', authenticateToken, function (req, res) {
-  res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  /*if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }*/
-  var title = 'add_schedule';
-  var list = template.list(req.list);
-  var html = template.HTML(title, list,
-    `<form action="/add_schedule_process" method="post">
-     <p><input type="text" name="Team_id" placeholder="Team_id"></p>
-     <p><input type="text" name="Deadline" placeholder="Deadline"></p>
-     <p><input type="text" name="description" placeholder="description"></p>
-     <p><input type="submit"></p>
-     </form>`,
-    ``,
-    req.session.isLogedin
-  );
-  res.send(html);
 });
 
 app.post('/add_schedule_process', authenticateToken, async (req, res) => {

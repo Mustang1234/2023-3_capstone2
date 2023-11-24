@@ -241,7 +241,7 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    add_project: async (Course_id, start_time, Finish_time, description) => {
+    add_project: async (Course_id, start_time, finish_time, description) => {
         try {
             const _add_project = await new Promise((resolve, reject) => {
                 db.query(`INSERT INTO ProjectTable (Course_id, start_time, finish_time, description)
@@ -261,7 +261,31 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    list_project: async (Student_id, year_semester) => {
+    list_project: async (Course_id) => {
+        try {
+            const projects = await new Promise((resolve, reject) => {
+                db.query(`SELECT * FROM ProjectTable WHERE Course_id = ?;`, [Course_id], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        const j = rows.length;
+                        var result = [];
+                        for (let i = 0; i < j; i++) {
+                            result.push(rows[i]);
+                        }
+                        resolve(result);
+                    }
+                });
+            });
+            return JSON.stringify(projects);
+        } catch (error) {
+            console.error('오류 발생:', error);
+            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
+            throw new Error('오류 발생');
+        }
+    },
+    list_my_project: async (Student_id, year_semester) => {
         try {
             const projects = await new Promise((resolve, reject) => {
                 db.query(`SELECT DISTINCT B.Project_id, B.Course_id, B.start_time, B.finish_time, B.description
