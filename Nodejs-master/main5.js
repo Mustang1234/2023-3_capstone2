@@ -25,6 +25,7 @@ const FindUser = require('./FindUser.js');
 
 const Eclass = require('./Eclass.js');
 const DB_IO = require('./db_io.js');
+const db_io = require('./db_io.js');
 //const { post } = require('request');
 
 
@@ -400,7 +401,7 @@ app.get('/add_project1', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.query.Student_id;
     const year_semester = req.query.year_semester;
-    const _result = await Eclass.db_to_timetable_small(Student_id, year_semester);
+    const _result = await DB_IO.db_to_timetable_small(Student_id, year_semester);
     const result = JSON.parse(_result);
     console.log(result);
     res.json(result);
@@ -421,7 +422,7 @@ app.get('/add_project2', authenticateToken, async (req, res) => {
     const start_time = req.query.start_time
     const finish_time = req.query.finish_time
     const description = req.query.description
-    const result = add_project(Course_id, start_time, finish_time, description);
+    const result = DB_IO.add_project(Course_id, start_time, finish_time, description);
     console.log(result);
     res.json({ success: true, message: 'success' });
   } catch (error) {
@@ -439,7 +440,7 @@ app.get('/create_team1', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.query.Student_id;
     const year_semester = req.query.year_semester;
-    const _result = await Eclass.db_to_timetable_small(Student_id, year_semester);
+    const _result = await DB_IO.db_to_timetable_small(Student_id, year_semester);
     const result = JSON.parse(_result);
     console.log(result);
     res.json(result);
@@ -459,7 +460,7 @@ app.get('/create_team2', authenticateToken, async (req, res) => {
     //const Student_id = req.query.Student_id
     const Project_id  = req.query.Project_id
     const Team_name = req.query.Team_name
-    const result = create_team(Project_id, Team_name);
+    const result = DB_IO.create_team(Project_id, Team_name);
     console.log(result);
     res.json({ success: result });
   } catch (error) {
@@ -477,7 +478,7 @@ app.get('/join_team1', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.query.Student_id;
     const year_semester = req.query.year_semester;
-    const _result = await Eclass.db_to_timetable_small(Student_id, year_semester);
+    const _result = await DB_IO.db_to_timetable_small(Student_id, year_semester);
     const result = JSON.parse(_result);
     console.log(result);
     res.json(result);
