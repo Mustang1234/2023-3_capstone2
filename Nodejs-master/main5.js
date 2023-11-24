@@ -417,6 +417,10 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const { year_semester, portal_id, portal_pw } = req.body;
+    if (portal_id === undefined || portal_pw === undefined) {
+      res.json({ returnCode: "portal_login_failed" });
+      return;
+    }
     console.log(Student_id, year_semester, portal_id, portal_pw);
     var jsonInfo = {};
     while (true) {
