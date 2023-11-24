@@ -477,8 +477,8 @@ app.get('/create_team3', authenticateToken, async (req, res) => {
   }*/
   try {
     //const Student_id = req.query.Student_id
-    const Project_id  = req.query.Project_id
-    const Team_name = req.query.Team_name
+    const Project_id  = req.query.Project_id;
+    const Team_name = req.query.Team_name;
     const result = await DB_IO.create_team(Project_id, Team_name);
     console.log(result);
     res.json({ success: result });
@@ -515,9 +515,10 @@ app.get('/join_team2', authenticateToken, async (req, res) => {
   }*/
   try {
     //const Student_id = req.query.Student_id
-    const Course_id  = req.query.Course_id
+    const Course_id  = req.query.Course_id;
     //const Team_name = req.query.Team_name
-    const result = await DB_IO.list_project(Course_id);
+    const _result = await DB_IO.list_project(Course_id);
+    const result = JSON.parse(_result);
     console.log(result);
     res.json(result);
   } catch (error) {
@@ -534,11 +535,12 @@ app.get('/join_team3', authenticateToken, async (req, res) => {
   }*/
   try {
     //const Student_id = req.query.Student_id
-    const Project_id  = req.query.Project_id
+    const Project_id  = req.query.Project_id;
     //const Team_name = req.query.Team_name
-    const result = await DB_IO.list_team(Project_id);
+    const _result = await DB_IO.list_team(Project_id);
+    const result = JSON.parse(_result);
     console.log(result);
-    res.json({ success: result });
+    res.json(result);
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
@@ -552,12 +554,12 @@ app.get('/join_team4', authenticateToken, async (req, res) => {
     return false;
   }*/
   try {
-    const Student_id = req.query.Student_id
-    const Team_id  = req.query.Team_id
+    const Student_id = req.query.Student_id;
+    const Team_id  = req.query.Team_id;
     //const Team_name = req.query.Team_name
     const result = await DB_IO.join_team(Team_id, Student_id);
     console.log(result);
-    res.json(result);
+    res.json({ success: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
@@ -571,10 +573,11 @@ app.get('/add_schedule1', authenticateToken, async (req, res) => {
     return false;
   }*/
   try {
-    const Student_id = req.query.Student_id
-    const year_semester  = req.query.year_semester
+    const Student_id = req.query.Student_id;
+    const year_semester  = req.query.year_semester;
     //const Team_name = req.query.Team_name
-    const result = await DB_IO.list_my_project(Student_id, year_semester);
+    const _result = await DB_IO.list_my_project(Student_id, year_semester);
+    const result = JSON.parse(_result);
     console.log(result);
     res.json(result);
   } catch (error) {
@@ -590,12 +593,13 @@ app.get('/add_schedule2', authenticateToken, async (req, res) => {
     return false;
   }*/
   try {
-    const Student_id = req.query.Student_id
-    const year_semester  = req.query.year_semester
+    const Team_id = req.query.Team_id;
+    const Deadline  = req.query.Deadline;
+    const description  = req.query.description;
     //const Team_name = req.query.Team_name
-    const result = await DB_IO.list_my_project(Student_id, year_semester);
+    const _result = await DB_IO.add_schedule(Team_id, Deadline, description);
     console.log(result);
-    res.json(result);
+    res.json({ success: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
