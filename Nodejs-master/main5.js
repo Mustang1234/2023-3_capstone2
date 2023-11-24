@@ -322,7 +322,7 @@ app.post('/page_delete_process', authenticateToken, function (req, res) {
 
 app.get('/main_page', authenticateToken, async (req, res) => {
   try {
-    const Student_id = req.query.Student_id;
+    const Student_id = req.user.Student_id;
     const year_semester = req.query.year_semester;
     var returnJson = { Student_id: Student_id, retCode: false, Student_name: '', Student_number: '',
       department: '', Speed: 0, timeTable: [], schedule: [], ProfilePhoto: null
@@ -347,7 +347,7 @@ app.get('/main_page', authenticateToken, async (req, res) => {
   }
 });
 
-// Example route that requires authentication
+/*// Example route that requires authentication
 app.get('/protected', authenticateToken, (req, res) => {
   res.json({ message: 'Protected route', user: req.user });
 });
@@ -355,11 +355,11 @@ app.get('/protected', authenticateToken, (req, res) => {
 // Example route that requires authentication
 app.post('/protected2', authenticateToken, (req, res) => {
   res.json({ message: 'Protected route2', user: req.user });
-});
+});*/
 
 app.get('/my_page', authenticateToken, async (req, res) => {
   try {
-    const Student_id = req.query.Student_id;
+    const Student_id = req.user.Student_id;
     var returnJson = { Student_id: Student_id, retCode: false, Student_name: '', Student_number: '',
       department: '', Speed: 0, ProfilePhoto: null
     }
@@ -381,7 +381,7 @@ app.get('/my_page', authenticateToken, async (req, res) => {
 
 app.post('/my_page_photo_upload', authenticateToken, async (req, res) => {
   try {
-    const Student_id = req.body.Student_id;
+    const Student_id = req.user.Student_id;
     const ProfilePhoto = req.body.ProfilePhoto;
     //const ProfilePhoto = fs.readFileSync('hello.jpg');;
     const result = JSON.parse(await DB_IO.update_photo_student_table(Student_id, ProfilePhoto));
@@ -394,7 +394,8 @@ app.post('/my_page_photo_upload', authenticateToken, async (req, res) => {
 
 app.post('/get_timetable_from_db', authenticateToken, async (req, res) => {
   try {
-    const { Student_id, year_semester } = req.body;
+    const Student_id = req.user.Student_id;
+    const { year_semester } = req.body;
     const _result = await DB_IO.db_to_timetable(Student_id, year_semester);
     const result = JSON.parse(_result);
     console.log(result)
@@ -407,7 +408,8 @@ app.post('/get_timetable_from_db', authenticateToken, async (req, res) => {
 
 app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
   try {
-    const { Student_id, year_semester, portal_id, portal_pw } = req.body;
+    const Student_id = req.user.Student_id;
+    const { year_semester, portal_id, portal_pw } = req.body;
     var i = 0;
     var jsonInfo = {};
     while (true) {
@@ -433,7 +435,7 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
 app.get('/list_my_project', authenticateToken, async (req, res) => {
   //res.setHeader('Content-Security-Policy', "form-action 'self' *");
   try {
-    const Student_id = req.query.Student_id;
+    const Student_id = req.user.Student_id;
     const year_semester = req.query.year_semester;
     const _result = await DB_IO.list_my_project(Student_id, year_semester);
     const result = JSON.parse(_result);
@@ -452,7 +454,7 @@ app.get('/add_project1', authenticateToken, async (req, res) => {
     return false;
   }*/
   try {
-    const Student_id = req.query.Student_id;
+    const Student_id = req.user.Student_id;
     const year_semester = req.query.year_semester;
     const _result = await DB_IO.db_to_timetable_small(Student_id, year_semester);
     const result = JSON.parse(_result);
@@ -491,7 +493,7 @@ app.get('/create_team1', authenticateToken, async (req, res) => {
     return false;
   }*/
   try {
-    const Student_id = req.query.Student_id;
+    const Student_id = req.user.Student_id;
     const year_semester = req.query.year_semester;
     const _result = await DB_IO.db_to_timetable_small(Student_id, year_semester);
     const result = JSON.parse(_result);
@@ -510,7 +512,7 @@ app.get('/create_team2', authenticateToken, async (req, res) => {
     return false;
   }*/
   try {
-    //const Student_id = req.query.Student_id;
+    //const Student_id = req.user.Student_id;
     const Course_id = req.query.Course_id;
     const _result = await DB_IO.list_project(Course_id);
     const result = JSON.parse(_result);
@@ -529,7 +531,7 @@ app.get('/create_team3', authenticateToken, async (req, res) => {
     return false;
   }*/
   try {
-    //const Student_id = req.query.Student_id
+    //const Student_id = req.user.Student_id;
     const Project_id  = req.query.Project_id;
     const Team_name = req.query.Team_name;
     const result = await DB_IO.create_team(Project_id, Team_name);
@@ -548,7 +550,7 @@ app.get('/join_team1', authenticateToken, async (req, res) => {
     return false;
   }*/
   try {
-    const Student_id = req.query.Student_id;
+    const Student_id = req.user.Student_id;
     const year_semester = req.query.year_semester;
     const _result = await DB_IO.db_to_timetable_small(Student_id, year_semester);
     const result = JSON.parse(_result);
@@ -567,7 +569,7 @@ app.get('/join_team2', authenticateToken, async (req, res) => {
     return false;
   }*/
   try {
-    //const Student_id = req.query.Student_id
+    //const Student_id = req.user.Student_id;
     const Course_id  = req.query.Course_id;
     //const Team_name = req.query.Team_name
     const _result = await DB_IO.list_project(Course_id);
@@ -587,7 +589,7 @@ app.get('/join_team3', authenticateToken, async (req, res) => {
     return false;
   }*/
   try {
-    //const Student_id = req.query.Student_id
+    //const Student_id = req.user.Student_id;
     const Project_id  = req.query.Project_id;
     //const Team_name = req.query.Team_name
     const _result = await DB_IO.list_team(Project_id);
@@ -607,7 +609,7 @@ app.get('/join_team4', authenticateToken, async (req, res) => {
     return false;
   }*/
   try {
-    const Student_id = req.query.Student_id;
+    const Student_id = req.user.Student_id;
     const Team_id  = req.query.Team_id;
     //const Team_name = req.query.Team_name
     const result = await DB_IO.join_team(Team_id, Student_id);
@@ -626,7 +628,7 @@ app.get('/add_schedule1', authenticateToken, async (req, res) => {
     return false;
   }*/
   try {
-    const Student_id = req.query.Student_id;
+    const Student_id = req.user.Student_id;
     const year_semester  = req.query.year_semester;
     //const Team_name = req.query.Team_name
     const _result = await DB_IO.list_my_project(Student_id, year_semester);
