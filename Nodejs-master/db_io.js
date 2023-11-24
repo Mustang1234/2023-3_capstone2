@@ -176,6 +176,24 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
+    update_photo_student_table: async (Student_id, ProfilePhoto) => {
+        try {
+            const _update_photo_student_table = await new Promise((resolve, reject) => {
+                db.query(`UPDATE StudentPhotoTable SET ProfilePhoto = ? WHERE Student_id= ?;`, [ProfilePhoto, Student_id], (error) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
+                });
+            });
+            return _update_photo_student_table;
+        } catch (error) {
+            console.error('오류 발생:', error);
+            throw new Error('오류 발생');
+        }
+    },
     add_student_table: async (Student_id, Student_pw, student_name, student_number, department) => {
         try {
             const _add_student_table = await new Promise((resolve, reject) => {
@@ -202,24 +220,6 @@ module.exports = {
                 });
             });
             return _add_student_table && _add_student_photo_table;
-        } catch (error) {
-            console.error('오류 발생:', error);
-            throw new Error('오류 발생');
-        }
-    },
-    update_photo_student_table: async (Student_id, ProfilePhoto) => {
-        try {
-            const _update_photo_student_table = await new Promise((resolve, reject) => {
-                db.query(`UPDATE StudentPhotoTable SET ProfilePhoto = ? WHERE Student_id= ?;`, [ProfilePhoto, Student_id], (error) => {
-                    if (error) {
-                        console.error(error);
-                        reject(error);
-                    } else {
-                        resolve(true);
-                    }
-                });
-            });
-            return _update_photo_student_table;
         } catch (error) {
             console.error('오류 발생:', error);
             throw new Error('오류 발생');
