@@ -323,7 +323,7 @@ app.post('/page_delete_process', authenticateToken, function (req, res) {
 app.get('/main_page', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.Student_id;
-    console.log(Student_id)
+    console.log(req.user)
     const year_semester = req.query.year_semester;
     var returnJson = { Student_id: Student_id, retCode: false, Student_name: '', Student_number: '',
       department: '', Speed: 0, timeTable: [], schedule: [], ProfilePhoto: null
