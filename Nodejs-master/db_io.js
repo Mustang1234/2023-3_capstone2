@@ -162,8 +162,8 @@ module.exports = {
         try {
             const _add_student_table = await new Promise((resolve, reject) => {
                 db.query(`INSERT INTO StudentTable
-                (Student_id, Student_pw, Student_name, Student_number, ProfilePhoto, Speed, department)
-                VALUES (?, ?, ?, ?, ?, ?, ?)`, [Student_id, Student_pw, student_name, student_number, null, 100, department], (error) => {
+                (Student_id, Student_pw, Student_name, Student_number, Speed, department)
+                VALUES (?, ?, ?, ?, ?, ?, ?)`, [Student_id, Student_pw, student_name, student_number, 100, department], (error) => {
                     if (error) {
                         console.error(error);
                         reject(error);
@@ -172,7 +172,18 @@ module.exports = {
                     }
                 });
             });
-            return _add_student_table;
+            const _add_student_photo_table = await new Promise((resolve, reject) => {
+                db.query(`INSERT INTO StudentPhotoTable
+                (Student_id, ProfilePhoto) VALUES (?, ?, ?, ?, ?, ?, ?)`, [Student_id, null], (error) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
+                });
+            });
+            return _add_student_table && _add_student_photo_table;
         } catch (error) {
             console.error('오류 발생:', error);
             throw new Error('오류 발생');
@@ -181,7 +192,7 @@ module.exports = {
     update_photo_student_table: async (Student_id, ProfilePhoto) => {
         try {
             const _update_photo_student_table = await new Promise((resolve, reject) => {
-                db.query(`UPDATE StudentTable SET ProfilePhoto = ? WHERE Student_id= ?;`, [ProfilePhoto, Student_id], (error) => {
+                db.query(`UPDATE StudentPhotoTable SET ProfilePhoto = ? WHERE Student_id= ?;`, [ProfilePhoto, Student_id], (error) => {
                     if (error) {
                         console.error(error);
                         reject(error);
