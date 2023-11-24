@@ -422,7 +422,7 @@ app.get('/add_project2', authenticateToken, async (req, res) => {
     const start_time = req.query.start_time
     const finish_time = req.query.finish_time
     const description = req.query.description
-    const result = DB_IO.add_project(Course_id, start_time, finish_time, description);
+    const result = await DB_IO.add_project(Course_id, start_time, finish_time, description);
     console.log(result);
     res.json({ success: result });
   } catch (error) {
@@ -460,7 +460,7 @@ app.get('/create_team2', authenticateToken, async (req, res) => {
     //const Student_id = req.query.Student_id
     const Project_id  = req.query.Project_id
     const Team_name = req.query.Team_name
-    const result = DB_IO.create_team(Project_id, Team_name);
+    const result = await DB_IO.create_team(Project_id, Team_name);
     console.log(result);
     res.json({ success: result });
   } catch (error) {
@@ -498,7 +498,7 @@ app.get('/join_team2', authenticateToken, async (req, res) => {
     //const Student_id = req.query.Student_id
     const Course_id  = req.query.Course_id
     //const Team_name = req.query.Team_name
-    const result = DB_IO.list_project(Course_id);
+    const result = await DB_IO.list_project(Course_id);
     console.log(result);
     res.json(result);
   } catch (error) {
@@ -517,7 +517,7 @@ app.get('/join_team3', authenticateToken, async (req, res) => {
     //const Student_id = req.query.Student_id
     const Project_id  = req.query.Project_id
     //const Team_name = req.query.Team_name
-    const result = DB_IO.list_team(Project_id);
+    const result = await DB_IO.list_team(Project_id);
     console.log(result);
     res.json({ success: result });
   } catch (error) {
@@ -536,7 +536,7 @@ app.get('/join_team4', authenticateToken, async (req, res) => {
     const Student_id = req.query.Student_id
     const Team_id  = req.query.Team_id
     //const Team_name = req.query.Team_name
-    const result = DB_IO.join_team(Team_id, Student_id);
+    const result = await DB_IO.join_team(Team_id, Student_id);
     console.log(result);
     res.json(result);
   } catch (error) {
@@ -555,7 +555,7 @@ app.get('/add_schedule1', authenticateToken, function (req, res) {
     const Student_id = req.query.Student_id
     const year_semester  = req.query.year_semester
     //const Team_name = req.query.Team_name
-    const result = DB_IO.list_my_project(Student_id, year_semester);
+    const result = await DB_IO.list_my_project(Student_id, year_semester);
     console.log(result);
     res.json(result);
   } catch (error) {
@@ -574,7 +574,7 @@ app.get('/add_schedule2', authenticateToken, function (req, res) {
     const Student_id = req.query.Student_id
     const year_semester  = req.query.year_semester
     //const Team_name = req.query.Team_name
-    const result = DB_IO.list_my_project(Student_id, year_semester);
+    const result = await DB_IO.list_my_project(Student_id, year_semester);
     console.log(result);
     res.json(result);
   } catch (error) {
