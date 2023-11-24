@@ -423,7 +423,7 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
         console.log("jsonInfo");
         console.log(jsonInfo);
         if (jsonInfo.timeTable.length !== 0) break;
-        if (jsonInfo.retCode == false) {
+        if (jsonInfo.retCode === false || portal_id === undefined || portal_pw === undefined) {
           res.json({ returnCode: "portal_login_failed" });
           return;
         }
