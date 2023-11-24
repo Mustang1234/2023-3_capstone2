@@ -346,6 +346,16 @@ app.get('/main_page', authenticateToken, async (req, res) => {
   }
 });
 
+// Example route that requires authentication
+app.get('/protected', authenticateToken, (req, res) => {
+  res.json({ message: 'Protected route', user: req.user });
+});
+
+// Example route that requires authentication
+app.post('/protected2', authenticateToken, (req, res) => {
+  res.json({ message: 'Protected route2', user: req.user });
+});
+
 app.get('/my_page', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.query.Student_id;
