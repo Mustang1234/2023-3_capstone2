@@ -102,7 +102,9 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     pageContent_department = pageContent_department.replace('&nbsp;&nbsp;', " ");
     jsonInfo.department = pageContent_department;
     
-    if(jsonInfo.student_name.length === 0 || jsonInfo.student_name === '      <dd>\n            <span>{{vm.stuInfo.kornm}}'){
+    if(jsonInfo.student_name.length === 0
+        || jsonInfo.student_name === '      <dd>\n            <span>{{vm.stuInfo.kornm}}'
+        || jsonInfo.student_name === "<!DOCTYPE html><html><he'"){
         return JSON.stringify(jsonInfo);
     }
 

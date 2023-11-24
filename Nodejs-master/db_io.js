@@ -158,6 +158,24 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
+    get_student_photo_table: async (Student_id) => {
+        try {
+            const _get_student_photo_table = await new Promise((resolve, reject) => {
+                db.query(`SELECT * FROM StudentPhotoTable where Student_id = ?`, [Student_id], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(rows[0]);
+                    }
+                });
+            });
+            return JSON.stringify(_get_student_photo_table);
+        } catch (error) {
+            console.error('오류 발생:', error);
+            throw new Error('오류 발생');
+        }
+    },
     add_student_table: async (Student_id, Student_pw, student_name, student_number, department) => {
         try {
             const _add_student_table = await new Promise((resolve, reject) => {

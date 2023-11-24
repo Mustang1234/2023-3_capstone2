@@ -333,7 +333,8 @@ app.get('/main_page', authenticateToken, async (req, res) => {
     returnJson.Student_number = student_info.Student_number;
     returnJson.department = student_info.department;
     returnJson.Speed = student_info.Speed;
-    returnJson.ProfilePhoto = student_info.ProfilePhoto;
+    const student_photo_info = JSON.parse(await DB_IO.get_student_photo_table(Student_id));
+    returnJson.ProfilePhoto = student_photo_info.ProfilePhoto;
     const timetable = JSON.parse(await DB_IO.db_to_timetable(Student_id, year_semester));
     returnJson.timeTable = timetable;
     const schedule = JSON.parse(await DB_IO.get_schedule(Student_id));
@@ -368,7 +369,8 @@ app.get('/my_page', authenticateToken, async (req, res) => {
     returnJson.Student_number = student_info.Student_number;
     returnJson.department = student_info.department;
     returnJson.Speed = student_info.Speed;
-    returnJson.ProfilePhoto = student_info.ProfilePhoto;
+    const student_photo_info = JSON.parse(await DB_IO.get_student_photo_table(Student_id));
+    returnJson.ProfilePhoto = student_photo_info.ProfilePhoto;
     returnJson.retCode = true;
     res.json(returnJson);
   } catch (error) {
