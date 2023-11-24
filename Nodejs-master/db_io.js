@@ -245,7 +245,7 @@ module.exports = {
         try {
             const _add_project = await new Promise((resolve, reject) => {
                 db.query(`INSERT INTO ProjectTable (Course_id, start_time, finish_time, description)
-                VALUES (?, ?, ?, ?);`, [Course_id, start_time, Finish_time, description], (error) => {
+                VALUES (?, ?, ?, ?);`, [Course_id, start_time, finish_time, description], (error) => {
                     if (error) {
                         console.error(error);
                         reject(error);

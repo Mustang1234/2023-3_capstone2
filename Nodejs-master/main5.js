@@ -424,7 +424,7 @@ app.get('/add_project2', authenticateToken, async (req, res) => {
     const description = req.query.description
     const result = DB_IO.add_project(Course_id, start_time, finish_time, description);
     console.log(result);
-    res.json({ success: true, message: 'success' });
+    res.json({ success: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
