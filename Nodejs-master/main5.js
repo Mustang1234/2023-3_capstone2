@@ -597,7 +597,7 @@ app.get('/add_schedule2', authenticateToken, async (req, res) => {
     const Deadline  = req.query.Deadline;
     const description  = req.query.description;
     //const Team_name = req.query.Team_name
-    const _result = await DB_IO.add_schedule(Team_id, Deadline, description);
+    const result = await DB_IO.add_schedule(Team_id, Deadline, description);
     console.log(result);
     res.json({ success: result });
   } catch (error) {
