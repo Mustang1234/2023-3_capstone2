@@ -21,7 +21,15 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     await page.evaluate(() => {
         document.querySelector('a.btn-login').click();
     });
-    await page.waitForNavigation();
+    try {
+        await page.waitForNavigation({ timeout : 2000 });
+    } catch (error) {
+        if (error instanceof puppeteer.errors.TimeoutError) {
+            //console.error('Navigation timed out');
+        } else {
+            throw error;
+        }
+    }
     /*try {
         await page.waitForNavigation({ timeout : 2000 });
     } catch (error) {
