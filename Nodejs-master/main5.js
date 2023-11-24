@@ -421,11 +421,11 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
       i = i + 1;
       try {
         jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_id, portal_pw));
-        console.log(jsonInfo);
+        console.log("jsonInfo", jsonInfo);
         if (jsonInfo.timeTable.length !== 0) break;
         if (jsonInfo.retCode === false) {
           res.json({ returnCode: "portal_login_failed" });
-          return
+          return;
         }
       } catch (error) {
       }
