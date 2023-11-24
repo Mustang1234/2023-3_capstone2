@@ -380,12 +380,38 @@ app.post('/my_page_photo_upload', authenticateToken, async (req, res) => {
   }
 });
 
-app.get('/get_timetable_from_portal', authenticateToken, async (req, res) => {
+app.post('/get_timetable_from_db', authenticateToken, async (req, res) => {
   try {
-    const _result = await Eclass.Eclass_Timetable('StudentID', 'Student_id', 'Student_pw');
+    const { Student_id, year_semester } = req.body;
+    const _result = await DB_IO.db_to_timetable(Student_id, year_semester);
     const result = JSON.parse(_result);
-    console.log(result);
-    res.json(result);
+    console.log(result)
+    res.json({ timetable: result });
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
+app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
+  try {
+    const { Student_id, year_semester, portal_id, portal_pw } = req.body;
+    var i = 0;
+    var jsonInfo = {};
+    while (true) {
+      i = i + 1;
+      try {
+        jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_id, portal_pw));
+        if (jsonInfo.timeTable.length !== 0) break;
+      } catch (error) {
+      }
+    }
+    console.log(jsonInfo);
+    const result1 = await DB_IO.course_to_db(year_semester, jsonInfo.timeTable);
+    const result2 = await DB_IO.timetable_to_db(Student_id, year_semester, jsonInfo.timeTable_small);
+    console.log(result1);
+    console.log(result2);
+    res.json({ timetable: jsonInfo.timeTable });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
