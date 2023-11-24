@@ -123,6 +123,7 @@ app.post('/signup', async (req, res) => {
           try {
             jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_id, portal_pw));
             if (jsonInfo.timeTable.length !== 0) break;
+            if (jsonInfo.retCode === false) res.json({ returnCode: "portal_login_failed" });
           } catch (error) {
           }
         }
