@@ -680,63 +680,19 @@ app.get('/test3', authenticateToken, async (req, res) => {
   }
 });
 
-app.get('/add_project', authenticateToken, function (req, res) {
-  res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  /*if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }*/
-  var title = 'add_project';
-  var list = template.list(req.list);
-  var html = template.HTML(title, list,
-    `<form action="/add_project_process" method="post">
-    <p><input type="text" name="Course_id" placeholder="course id"></p>
-    <p><input type="text" name="start_time" placeholder="yyyy-mm-dd HH:MM"></p>
-    <p><input type="text" name="Finish_time" placeholder="yyyy-mm-dd HH:MM"></p>
-    <p><input type="text" name="description" placeholder="description"></p>
-    <p><input type="submit"></p>
-    </form>`,
-    ``,
-    req.session.isLogedin
-  );
-  res.send(html);
-});
-
-app.post('/add_project_process', authenticateToken, async (req, res) => {
-  /*if (req.user === undefined) {
-    res.redirect(`/login`);
-    return false;
-  }*/
+app.get('/list_my_project', authenticateToken, async (req, res) => {
+  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
   try {
-    const { Course_id, start_time, Finish_time, description } = req.body;
-    const result = await DB_IO.add_project(Course_id, start_time, Finish_time, description);
-    console.log(result);
-    res.redirect(`/pages`);
-    res.end();
+    const Student_id = req.query.Student_id;
+    const year_semester = req.query.year_semester;
+    const _result = await DB_IO.list_my_project(Student_id, year_semester);
+    const result = JSON.parse(_result);
+    console.log({ projects: result });
+    res.json(result);
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
   }
-});
-
-app.get('/list_project1234', authenticateToken, function (req, res) {
-  res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  /*if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }*/
-  var title = 'list_project';
-  var list = template.list(req.list);
-  var html = template.HTML(title, list,
-    `<form action="/list_project_process" method="post">
-    <p><input type="text" name="Student_id" placeholder="Student_id"></p>
-    <p><input type="text" name="year_semester" placeholder="year_semester"></p>
-    <p><input type="submit"></p>
-    </form>`,
-    ``,
-    req.session.isLogedin
-  );
-  res.send(html);
 });
 
 app.post('/list_project_process', authenticateToken, async (req, res) => {

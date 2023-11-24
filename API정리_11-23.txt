@@ -1,63 +1,85 @@
 get signup
 	받아오는것 : urlinfo
-		{ type: "signup_process1", Student_id: "admin", Student_pw:"fdsa", year_semester: '2023-3', portal_id: "fdsa4321", portal_pw:"rewqrewq"  }
+		{ Student_id: "admin", Student_pw:"fdsa", year_semester: '2023-3', portal_id: "fdsa4321", portal_pw:"rewqrewq"  }
 
 	보내는것: json
-		{ permision: "accepted"/ "already exists"/ "protal login fail" /* "accepted" : 가능, others : 재시도 필요 */}
+		{ message: 'sign up success', status: result }
+		{ message: 'username already exists' }	
 
 
 post login
 	받아오는것 : json
 		{ id: "admin", pw: "fdsa" }
 
-	보내는것: redirect
-		{ redirectTo: '/pages' or '/login' }
+	보내는것: json
+		{ success: false, message: 'login failed' }
+		{ success: true, message: 'login success', token }
 	
-
-get logout
-	받아오는것 : urlinfo
-		{ type: "logout", Student_id: "admin" }
-
-	보내는것: redirect
-		{ redirectTo: '/login' }
 	
 
 get main_page
 	받아오는것 : urlinfo
-		{ type: "main_page", Student_id: "admin", year_semester: '2023-3' }
+		{ Student_id: "admin", year_semester: '2023-3' }
 
 	보내는것: json
-		{ studentID: 'admin', retCode: true, student_name: "홍길동", student_number: '20211234',
-		  department: "소프트웨어대학 소프트웨어학부",
-		  timeTable: [
-		    { day: '월', time: '14:00', name: '인공지능' },
-		    { day: '월', time: '14:30', name: '인공지능' } ...
-		  ], timeTable_small: [
-	    	    { day: '월', time: '14:00', name: '인공지능' },
-		    { day: '월', time: '17:00', name: '리눅스 시스템 응용 설계' }, ...
-		  ], schedule: [
-		    {
-			deadline: "2023-11-05 23:59",
-			subject: "인공지능",
-			description: '1차 목표',
-			groupName": "orange"
-		    }, ...
-		  ], photo: {사진}
+		{
+		    "Student_id": "admin",
+		    "retCode": true,
+		    "Student_name": "김효준",
+		    "Student_number": "20210800",
+		    "department": "소프트웨어대학 소프트웨어학부",
+		    "Speed": 100,
+		    "timeTable": [
+		        {
+		            "day": "월",
+		            "time": "14:00",
+		            "Course_name": "인공지능"
+		        },
+		        {
+		            "day": "월",
+		            "time": "14:30",
+		            "Course_name": "인공지능"
+		        }, ...
+		    ],
+		    "schedule": [
+		        {
+		            "Course_name": "인공지능",
+		            "Team_name": "teamname",
+		            "Deadline": "2023-12-25 23:59",
+		            "description": "fdsa"
+		        }, ...
+		    ],
+		    "ProfilePhoto": {
+		        "type": "Buffer",
+		        "data": [
+		            255,
+  		          216,
+  		          255, ...
+		        ]
+		    }
 		}
 
 
 get my_page
 	받아오는것 : urlinfo
-		{ type: "my_page", studentID: "admin"  }
+		{ studentID: "admin"  }
 
 	보내는것: json
 		{
-		  studentID: 'admin',
-		  retCode: true/false,
-		  student_name: '홍길동',
-		  student_number: '20211234',
-		  department: '소프트웨어대학 소프트웨어학부',
-		  photo: {사진}
+		    "Student_id": "admin",
+		    "retCode": true,
+		    "Student_name": "김효준",
+		    "Student_number": "20210800",
+		    "department": "소프트웨어대학 소프트웨어학부",
+		    "Speed": 100,
+		    "ProfilePhoto": {
+		        "type": "Buffer",
+		        "data": [
+		            255,
+  		          216,
+  		          255, ...
+		        ]
+		    }
 		}
 
 
@@ -81,17 +103,17 @@ get my_page_load_new_portal
 		}
 
 
-get my_page_photo_upload
+post my_page_photo_upload
 	받아오는것 : urlinfo
-		{ type: "my_page_photo_upload", studentID: "admin", photo: {사진} }
+		{ studentID: "admin", ProfilePhoto{사진} }
 
 	보내는것: json
-		{ retCode: true/false, photo: {사진} }
+		{ Student_id: Student_id, success: true }
 
 
-get list_project
+get list_my_project
 	받아오는것: urlinfo
-		{ type: "list_project", year_semester: "2023-3", studentID: "admin" }
+		{ studentID: "admin", year_semester: "2023-3" }
 
 	보내는것: json
 		{
