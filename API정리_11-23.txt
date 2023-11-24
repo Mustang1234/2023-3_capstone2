@@ -83,26 +83,6 @@ get my_page
 		}
 
 
-
-get my_page_load_new_portal
-	받아오는것 : urlinfo
-		{ type: "my_page_load_new_portal", studentID: "admin",
-		   year_semester: '2023-3', portal_id: "fdsa4321", portal_pw:"rewqrewq" }
-
-	보내는것: json
-		{
-		  studentID: 'admin',
-		  retCode: true/false,
-		  student_name: '홍길동',
-		  student_number: '20211234',
-		  department: '소프트웨어대학 소프트웨어학부',
-		  timeTable: [
-		    { day: '월', time: '14:00', name: '인공지능' },
-		    { day: '월', time: '14:30', name: '인공지능' }, ...
-		  ]
-		}
-
-
 post my_page_photo_upload
 	받아오는것 : urlinfo
 		{ studentID: "admin", ProfilePhoto{사진} }
@@ -117,162 +97,178 @@ get list_my_project
 
 	보내는것: json
 		{
-		  studentID: "admin",
-		  retCode: true/false,
-		  projects:[
-		   {
-		     Project_id: 1,
-		     Course_id: '2023-3월14:00인공지능',
-		     start_time: '2023-10-25 00:00',
-		     finish_time: '2023-12-25 23:59',
-		     description: '인공지능 구현'
+		  projects: [
+		    {
+		      Project_id: 1,
+		      Course_id: '2023-3월14:00인공지능',
+		      start_time: '2023-10-25 00:00',
+		      finish_time: '2023-12-25 23:59',
+		      description: '인공지능 구현'
 		    }, ...
-		   ]
-		 }
+		  ]
+		}
 
 
 get add_project1
 	받아오는것: urlinfo
-		{ type: "add_project1", year_semester: "2023-3", studentID: "admin" }
+		{ studentID: "admin", year_semester: "2023-3" }
 
 	보내는것: json
-		{
-		  studentID: "admin",
-		  retCode: true/false,
-		  CourseTable: [
-		   { Course_id: '2023-3월14:00인공지능' },
-		   { Course_id: '2023-3월17:00리눅스 시스템 응용 설계' }, ...
-		  ]
-		}
+		[
+		    {
+		        "Course_id": "2023-3월14:00인공지능"
+		    }, ...
+		]
 
 
 get add_project2
 	받아오는것: urlinfo
-		{ type: "add_project2", Course_id: '2023-3월14:00인공지능',
+		{ Course_id: '2023-3월14:00인공지능',
 		  start_time: 'yyyy-mm-dd HH:MM', finish_time: 'yyyy-mm-dd HH:MM', description: 'fdsafdsa', studentID: "admin"  }
 
 	보내는것: json
-		{
-		  studentID: "admin",
-		  retCode: true/false
-		}
+		{ success: true/false}
 
 
 get create_team1
 	받아오는것: urlinfo
-		{ type: "create_team1", year_semester: "2023-3", studentID: "admin" }
+		{ studentID: "admin", year_semester: "2023-3" }
 
 	보내는것: json
-		{
-		  studentID: "admin",
-		  retCode: true/false,
-		  projects:[
-		   {
-		     Project_id: 1,
-		     Course_id: '2023-3월14:00인공지능',
-		     start_time: '2023-10-25 00:00',
-		     finish_time: '2023-12-25 23:59',
-		     description: '인공지능 구현'
+		[
+		    {
+		        "Course_id": "2023-3월14:00인공지능"
 		    }, ...
-		   ]
-		 }
+		]
 
 
 get create_team2
 	받아오는것: json
-		{ type: "create_team2", studentID: "admin", Project_id: 1, Team_name: 'Orange' }
+		{ studentID: "admin", Course_id: '2023-3월14:00인공지능' }
 
 	보내는것: json
-		{
-		  studentID: "admin",
-		  retCode: true/false
-		 }
+		[
+		    {
+		        "Project_id": 1,
+		        "Course_id": "2023-3월14:00인공지능",
+		        "start_time": "2023-10-25 00:00",
+		        "finish_time": "2023-12-25 23:59",
+		        "description": "인공지능 구현"
+		    }, ...
+		]
+
+
+get create_team3
+	받아오는것: json
+		{ Project_id: 1, Team_name: 'Mango' }
+
+	보내는것: json
+		{ success: true/false }
 
 
 get join_team1
 	받아오는것: json
-		{ type: "join_team1", year_semester: "2023-3", studentID: "admin" }
+		{ year_semester: "2023-3", studentID: "admin" }
 
 	보내는것: json
-		{
-		  studentID: "admin",
-		  retCode: true/false,
-		  CourseTable: [
-		   { Course_id: '2023-3월14:00인공지능' },
-		   { Course_id: '2023-3월17:00리눅스 시스템 응용 설계' }, ...
-		  ]
-		}
-
+		[
+		    {
+		        "Course_id": "2023-3월14:00인공지능"
+		    }, ...
+		]
 
 get join_team2
 	받아오는것: json
-		{ type: "join_team2", Course_id: '2023-3월14:00인공지능', studentID: "admin" }
+		{ Course_id: '2023-3월14:00인공지능', studentID: "admin" }
 
 	보내는것: json
-		{
-		  studentID: "admin",
-		  retCode: true/false,
-		  projects:[
-		   {
-		     Project_id: 1,
-		     Course_id: '2023-3월14:00인공지능',
-		     start_time: '2023-10-25 00:00',
-		     finish_time: '2023-12-25 23:59',
-		     description: '인공지능 구현'
+		[
+		    {
+		        "Project_id": 1,
+		        "Course_id": "2023-3월14:00인공지능",
+ 		       "start_time": "2023-10-25 00:00",
+		        "finish_time": "2023-12-25 23:59",
+		        "description": "인공지능 구현"
 		    }, ...
-		   ]
-		}
+		]
 
 
 get join_team3
 	받아오는것: json
-		{ type: "join_team3", Project_id: 1, studentID: "admin" }
+		{ Project_id: 1, studentID: "admin" }
 
 	보내는것: json
-		{
-		  studentID: "admin",
-		  retCode: true/false,
-		  teams:[
-		   { Project_id: 1, Team_id: 1, Team_name: 'Mango' }, ...
-		  ]
-		}
+		[
+		    {
+		        "Project_id": 10,
+		        "Team_id": 4,
+		        "Team_name": "teamname"
+		    }, ...
+		]
 
 
 get join_team4
 	받아오는것: json
-		{ type: "join_team4", Team_id: 1, studentID: "admin" }
+		{ Team_id: 1, studentID: "admin" }
 
 	보내는것: json
-		{
-		  studentID: "admin",
-		  retCode: true/false
-		}
+		{ success: true/false }
 
 
 get add_schedule1
 	받아오는것: json
-		{ type: "add_schedule1", year_semester: "2023-3", studentID: "admin" }
+		{ year_semester: "2023-3", studentID: "admin" }
 
 	보내는것: json
-		{
-		  studentID: "admin",
-		  retCode: true/false,
-		  my_teams:[
-		   { Project_id: 1, Team_id: 1, Team_name: 'Mango' }, ...
-		  ]
-		 }
+		[
+		    {
+		        "Project_id": 1,
+		        "Course_id": "2023-3월14:00인공지능",
+		        "start_time": "2023-10-25 00:00",
+		        "finish_time": "2023-12-25 23:59",
+		        "description": "인공지능 구현"
+		    }, ...
+		]
 	
 	
 get add_schedule2
 	받아오는것: json
-		{ type: "add_schedule2", Team_id: 1, Deadline: '2023-12-25 23:59',
-		     description: '인공지능 구현', studentID: "admin" }
+		{ Team_id: 1, Deadline: '2023-12-25 23:59', description: '인공지능 구현', studentID: "admin" }
+
+	보내는것: json
+		{ success: true/false }
+	
+	
+post get_timetable_from_db
+	받아오는것: json
+		{ year_semester: "2023-3", studentID: "admin" }
 
 	보내는것: json
 		{
-		  studentID: "admin",
-		  retCode: true/false
-		 }
+		    "timetable": [
+		        {
+		            "day": "월",
+		            "time": "14:00",
+		            "Course_name": "인공지능"
+		        }, ...
+		   ]
+		}
+	
+	
+post get_timetable_from_portal
+	받아오는것: json
+		{ "Student_id": "admin", "year_semester": "2023-3", "portal_id": "portal_id", "portal_pw": "portal_pw" }
+
+	보내는것: json
+		{
+		    "timetable": [
+		        {
+		            "day": "월",
+		            "time": "14:00",
+		            "name": "인공지능"
+		        }, ...
+		    ]
+		}
 
 
 get chat // 아직 미완성, 추후 업데이트

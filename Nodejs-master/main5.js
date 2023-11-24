@@ -409,9 +409,24 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
     console.log(jsonInfo);
     const result1 = await DB_IO.course_to_db(year_semester, jsonInfo.timeTable);
     const result2 = await DB_IO.timetable_to_db(Student_id, year_semester, jsonInfo.timeTable_small);
-    console.log(result1);
-    console.log(result2);
+    //console.log(result1);
+    //console.log(result2);
     res.json({ timetable: jsonInfo.timeTable });
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
+app.get('/list_my_project', authenticateToken, async (req, res) => {
+  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
+  try {
+    const Student_id = req.query.Student_id;
+    const year_semester = req.query.year_semester;
+    const _result = await DB_IO.list_my_project(Student_id, year_semester);
+    const result = JSON.parse(_result);
+    console.log(result);
+    res.json({ projects: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
@@ -674,170 +689,6 @@ app.get('/test3', authenticateToken, async (req, res) => {
     const result = JSON.parse(_result);
     console.log(result);
     res.redirect('/pages');
-  } catch (error) {
-    console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
-  }
-});
-
-app.get('/list_my_project', authenticateToken, async (req, res) => {
-  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  try {
-    const Student_id = req.query.Student_id;
-    const year_semester = req.query.year_semester;
-    const _result = await DB_IO.list_my_project(Student_id, year_semester);
-    const result = JSON.parse(_result);
-    console.log({ projects: result });
-    res.json(result);
-  } catch (error) {
-    console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
-  }
-});
-
-app.post('/list_project_process', authenticateToken, async (req, res) => {
-  /*if (req.user === undefined) {
-    res.redirect(`/login`);
-    return false;
-  }*/
-  try {
-    const { Student_id, year_semester } = req.body;
-    const _result = await DB_IO.list_my_project(Student_id, year_semester);
-    const result = JSON.parse(_result);
-    console.log(result);
-    res.redirect(`/pages`);
-    res.end();
-  } catch (error) {
-    console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
-  }
-});
-
-app.get('/create_team1234', authenticateToken, function (req, res) {
-  res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  /*if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }*/
-  var title = 'create_team';
-  var list = template.list(req.list);
-  var html = template.HTML(title, list,
-    `<form action="/create_team_process" method="post">
-    <p><input type="text" name="Project_id" placeholder="Project_id"></p>
-    <p><input type="text" name="Team_name" placeholder="Team_name"></p>
-    <p><input type="submit"></p>
-    </form>`,
-    ``,
-    req.session.isLogedin
-  );
-  res.send(html);
-});
-
-app.post('/create_team_process', authenticateToken, async (req, res) => {
-  /*if (req.user === undefined) {
-    res.redirect(`/login`);
-    return false;
-  }*/
-  try {
-    const { Project_id, Team_name } = req.body;
-    const result = await DB_IO.create_team(parseInt(Project_id, 10), Team_name);
-    console.log(result);
-    res.redirect(`/pages`);
-    res.end();
-  } catch (error) {
-    console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
-  }
-});
-
-app.get('/list_team1234', authenticateToken, function (req, res) {
-  res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  /*if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }*/
-  var title = 'list_team';
-  var list = template.list(req.list);
-  var html = template.HTML(title, list,
-    `<form action="/list_team_process" method="post">
-    <p><input type="text" name="Project_id" placeholder="Project_id"></p>
-    <p><input type="submit"></p>
-    </form>`,
-    ``,
-    req.session.isLogedin
-  );
-  res.send(html);
-});
-
-app.post('/list_team_process', authenticateToken, async (req, res) => {
-  /*if (req.user === undefined) {
-    res.redirect(`/login`);
-    return false;
-  }*/
-  try {
-    var post = req.body;
-    Project_id = post.Project_id;
-    const _result = await DB_IO.list_team(Project_id);
-    const result = JSON.parse(_result);
-    console.log(result);
-    res.redirect(`/pages`);
-    res.end();
-  } catch (error) {
-    console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
-  }
-});
-
-app.post('/add_schedule_process', authenticateToken, async (req, res) => {
-  /*if (req.user === undefined) {
-    res.redirect(`/login`);
-    return false;
-  }*/
-  try {
-    const { Team_id, Deadline, description } = req.body;
-    const _result = await DB_IO.add_schedule(Team_id, Deadline, description);
-    const result = JSON.parse(_result);
-    console.log(result);
-    res.redirect(`/pages`);
-    res.end();
-  } catch (error) {
-    console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
-  }
-});
-
-app.get('/join_team', authenticateToken, function (req, res) {
-  res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  /*if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }*/
-  var title = 'join_team';
-  var list = template.list(req.list);
-  var html = template.HTML(title, list,
-    `<form action="/join_team_process" method="post">
-    <p><input type="text" name="Team_id" placeholder="Team_id"></p>
-    <p><input type="text" name="Student_id" placeholder="Student_id"></p>
-    <p><input type="submit"></p>
-    </form>`,
-    ``,
-    req.session.isLogedin
-  );
-  res.send(html);
-});
-
-app.post('/join_team_process', authenticateToken, async (req, res) => {
-  /*if (req.user === undefined) {
-    res.redirect(`/login`);
-    return false;
-  }*/
-  try {
-    const { Team_id, Student_id } = req.body;
-    const _result = await DB_IO.join_team(Team_id, Student_id);
-    const result = JSON.parse(_result);
-    console.log(result);
-    res.redirect(`/pages`);
-    res.end();
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
