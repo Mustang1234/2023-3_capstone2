@@ -466,7 +466,7 @@ app.get('/test', async (req, res) => {
     while (true) {
       i = i + 1;
       try {
-        jsonInfo = JSON.parse(await Eclass.Eclass('admin', 'joonkkkk1234', '@kjkszpj12'));
+        jsonInfo = JSON.parse(await Eclass.Eclass('admin'));
         if (jsonInfo.timeTable.length !== 0) break;
       } catch (error) {
       }
