@@ -258,10 +258,7 @@ module.exports = {
                         for (let i = 0; i < j; i++) {
                             const scheduleTime = rows[i].Deadline;
                             const currentTime = getCurrentDateTime();
-                            console.log(scheduleTime);
-                            console.log(currentTime);
                             if(scheduleTime > currentTime){
-                                console.log('yes');
                                 result.push(rows[i]);
                             }
                         }
@@ -326,7 +323,11 @@ module.exports = {
                         const j = rows.length;
                         var result = [];
                         for (let i = 0; i < j; i++) {
-                            result.push(rows[i]);
+                            const scheduleTime = rows[i].finish_time;
+                            const currentTime = getCurrentDateTime();
+                            if(scheduleTime > currentTime){
+                                result.push(rows[i]);
+                            }
                         }
                         resolve(result);
                     }
@@ -352,7 +353,11 @@ module.exports = {
                         const j = rows.length;
                         var result = [];
                         for (let i = 0; i < j; i++) {
-                            result.push(rows[i]);
+                            const scheduleTime = rows[i].finish_time;
+                            const currentTime = getCurrentDateTime();
+                            if(scheduleTime > currentTime){
+                                result.push(rows[i]);
+                            }
                         }
                         resolve(result);
                     }
@@ -406,7 +411,9 @@ module.exports = {
     list_team: async (Project_id) => {
         try {
             const teams = await new Promise((resolve, reject) => {
-                db.query(`SELECT * FROM TeamTable where Project_id = ?`, [Project_id], (error, rows) => {
+                db.query(`SELECT DISTINCT A.Project_id, A.Team_id, A.Team_name, B.finish_time
+                FROM TeamTable as A INNER JOIN ProjectTable as B
+                ON B.Project_id = ?`, [Project_id], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
@@ -414,7 +421,11 @@ module.exports = {
                         const j = rows.length;
                         var result = [];
                         for (let i = 0; i < j; i++) {
-                            result.push(rows[i]);
+                            const scheduleTime = rows[i].finish_time;
+                            const currentTime = getCurrentDateTime();
+                            if(scheduleTime > currentTime){
+                                result.push(rows[i]);
+                            }
                         }
                         resolve(result);
                     }
