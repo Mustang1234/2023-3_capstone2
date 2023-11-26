@@ -459,6 +459,21 @@ app.get('/list_my_project', authenticateToken, async (req, res) => {
   }
 });
 
+app.get('/vote_my_project', authenticateToken, async (req, res) => {
+  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
+  try {
+    const Student_id = req.user.user.Student_id;
+    const year_semester = req.query.year_semester;
+    const _result = await DB_IO.list_my_project(Student_id, year_semester);
+    const result = JSON.parse(_result);
+    console.log(result);
+    res.json({ projects: result });
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
 app.get('/add_project1', authenticateToken, async (req, res) => {
   //res.setHeader('Content-Security-Policy', "form-action 'self' *");
   /*if (req.user !== undefined) {

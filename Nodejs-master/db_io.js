@@ -238,6 +238,14 @@ module.exports = {
                         const j = rows.length;
                         var result = [];
                         for (let i = 0; i < j; i++) {
+                        const scheduleTimeString = rows[i].Deadline;
+                        const currentTimeString = new Date().toLocaleString().substring(0, -3);
+                        console.log(scheduleTimeString);
+                        console.log(currentTimeString);
+                        
+                        // Date 객체로 변환
+                        const date1 = new Date(timeString1);
+                        const date2 = new Date(timeString2);
                             result.push(rows[i]);
                         }
                         resolve(result);
@@ -273,8 +281,8 @@ module.exports = {
     add_project: async (Course_id, start_time, finish_time, description) => {
         try {
             const _add_project = await new Promise((resolve, reject) => {
-                db.query(`INSERT INTO ProjectTable (Course_id, start_time, finish_time, description)
-                VALUES (?, ?, ?, ?);`, [Course_id, start_time, finish_time, description], (error) => {
+                db.query(`INSERT INTO ProjectTable (Course_id, start_time, finish_time, description, voted)
+                VALUES (?, ?, ?, ?);`, [Course_id, start_time, finish_time, description, 0], (error) => {
                     if (error) {
                         console.error(error);
                         reject(error);
