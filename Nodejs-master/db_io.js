@@ -260,7 +260,10 @@ module.exports = {
                             const currentTime = getCurrentDateTime();
                             console.log(scheduleTime);
                             console.log(currentTime);
-                            result.push(rows[i]);
+                            if(scheduleTime < currentTime){
+                                console.log('yes');
+                                result.push(rows[i]);
+                            }
                         }
                         resolve(result);
                     }
