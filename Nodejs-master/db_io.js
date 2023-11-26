@@ -2,6 +2,24 @@ const db = require('./db');
 const lodash = require('lodash');
 //const Eclass = require('./Eclass');
 
+function getCurrentDateTime() {
+    const now = new Date();
+
+    // 날짜
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더하고 2자리로 맞춤
+    const day = String(now.getDate()).padStart(2, '0');
+
+    // 시간
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    // 현재 시간을 yyyy-mm-dd HH:MM 형식으로 반환
+    const currentDateTime = `${year}-${month}-${day} ${hours}:${minutes}`;
+
+    return currentDateTime;
+}
+
 module.exports = {
     course_to_db: async (year_semester, timetable) => {
         try {
@@ -16,7 +34,7 @@ module.exports = {
                 const time_table_index = timetable_result[i];
                 const CourseID = year_semester + time_table_index[0].day + time_table_index[0].time + time_table_index[0].name;
                 const answer = await new Promise((resolve, reject) => {
-                    db.query(`SELECT * FROM CourseTable WHERE Course_id = ?`,[CourseID], (error, rows) => {
+                    db.query(`SELECT * FROM CourseTable WHERE Course_id = ?`, [CourseID], (error, rows) => {
                         if (error) {
                             console.error(error);
                             reject(error);
@@ -25,20 +43,20 @@ module.exports = {
                         }
                     });
                 });
-                if(answer === 0){
+                if (answer === 0) {
                     const l = time_table_index.length;
                     for (let k = 0; k < l; k++) {
                         const time_table_index2 = time_table_index[k];
                         await new Promise((resolve, reject) => {
                             db.query(`INSERT INTO CourseTable (Course_id, Course_name, year_semester, day, time) VALUES (?, ?, ?, ?, ?)`,
-                            [CourseID, time_table_index2.name, year_semester, time_table_index2.day, time_table_index2.time], (error) => {
-                                if (error) {
-                                    console.error(error);
-                                    reject(error);
-                                } else {
-                                    resolve();
-                                }
-                            });
+                                [CourseID, time_table_index2.name, year_semester, time_table_index2.day, time_table_index2.time], (error) => {
+                                    if (error) {
+                                        console.error(error);
+                                        reject(error);
+                                    } else {
+                                        resolve();
+                                    }
+                                });
                         });
                     }
                 }
@@ -72,15 +90,15 @@ module.exports = {
             for (let i = 0; i < j; i++) {
                 const data = timetable_small[i];
                 await new Promise((resolve, reject) => {
-                    db.query(`INSERT INTO TimeTable (Student_id, Course_id, year_semester) VALUES (?, ?, ?)`, 
-                    [Student_id, year_semester+data.day+data.time+data.name, year_semester], (error) => {
-                        if (error) {
-                            console.error(error);
-                            reject(error);
-                        } else {
-                            resolve();
-                        }
-                    });
+                    db.query(`INSERT INTO TimeTable (Student_id, Course_id, year_semester) VALUES (?, ?, ?)`,
+                        [Student_id, year_semester + data.day + data.time + data.name, year_semester], (error) => {
+                            if (error) {
+                                console.error(error);
+                                reject(error);
+                            } else {
+                                resolve();
+                            }
+                        });
                 });
             }
 
@@ -238,14 +256,10 @@ module.exports = {
                         const j = rows.length;
                         var result = [];
                         for (let i = 0; i < j; i++) {
-                        const scheduleTimeString = rows[i].Deadline+':59';
-                        const currentTimeString = new Date().toLocaleString();
-                        console.log(scheduleTimeString);
-                        console.log(currentTimeString);
-                        const scheduleTime = new Date(scheduleTimeString);
-                        const currentTime = new Date(currentTimeString);
-                        console.log(scheduleTime);
-                        console.log(currentTime);
+                            const scheduleTime = rows[i].Deadline;
+                            const currentTime = getCurrentDateTime();
+                            console.log(scheduleTime);
+                            console.log(currentTime);
                             result.push(rows[i]);
                         }
                         resolve(result);
@@ -262,15 +276,15 @@ module.exports = {
     add_schedule: async (Team_id, Deadline, description) => {
         try {
             const _add_schedule = await new Promise((resolve, reject) => {
-            db.query(`INSERT INTO ScheduleTable (Team_id, Deadline, description)VALUES (?, ?, ?);`, [Team_id, Deadline, description], (error) => {
-                if (error) {
-                    console.error(error);
-                    reject(error);
-                } else {
-                    resolve(true);
-                }
+                db.query(`INSERT INTO ScheduleTable (Team_id, Deadline, description)VALUES (?, ?, ?);`, [Team_id, Deadline, description], (error) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
+                });
             });
-        });
             return _add_schedule;
         } catch (error) {
             console.error('오류 발생:', error);
