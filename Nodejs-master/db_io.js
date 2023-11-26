@@ -242,10 +242,10 @@ module.exports = {
                         const currentTimeString = new Date().toLocaleString().substring(0, -3);
                         console.log(scheduleTimeString);
                         console.log(currentTimeString);
-                        
-                        // Date 객체로 변환
-                        const date1 = new Date(timeString1);
-                        const date2 = new Date(timeString2);
+                        const scheduleTime = new Date(scheduleTimeString);
+                        const currentTime = new Date(currentTimeString);
+                        console.log(scheduleTime);
+                        console.log(currentTime);
                             result.push(rows[i]);
                         }
                         resolve(result);
