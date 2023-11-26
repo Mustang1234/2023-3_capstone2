@@ -482,7 +482,29 @@ app.get('/vote_my_project2', authenticateToken, async (req, res) => {
     const _result = await DB_IO.list_project_peole(Student_id, Project_id);
     const result = JSON.parse(_result);
     console.log(result);
-    res.json({ projects: result });
+    res.json({ people: result });
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
+app.get('/vote_my_project3', authenticateToken, async (req, res) => {
+  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
+  try {
+    const Student_id = req.user.user.Student_id;
+    const Student_id2 = req.query.Student_id2;
+    const _vote_value = req.query.vote_value;
+    var vote_value = 0;
+    if(_vote_value === 1) vote_value = 0.8;
+    else if(_vote_value === 2) vote_value = 0.9;
+    else if(_vote_value === 3) vote_value = 1.0;
+    else if(_vote_value === 4) vote_value = 1.1;
+    else if(_vote_value === 5) vote_value = 1.2;
+    const _result = await DB_IO.list_project_peole(Student_id2, vote_value);
+    const result = JSON.parse(_result);
+    console.log(result);
+    res.json({ people: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
