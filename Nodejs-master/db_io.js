@@ -370,6 +370,64 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
+    list_project_expired: async (Student_id, year_semester) => {
+        try {
+            const projects = await new Promise((resolve, reject) => {
+                db.query(`SELECT DISTINCT B.Project_id, B.Course_id, B.start_time, B.finish_time, B.description
+                FROM TimeTable as A INNER JOIN ProjectTable as B
+                ON A.Student_id = ? and A.year_semester = ? and A.Course_id = B.Course_id;`, [Student_id, year_semester], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        const j = rows.length;
+                        var result = [];
+                        for (let i = 0; i < j; i++) {
+                            const scheduleTime = rows[i].finish_time;
+                            const currentTime = getCurrentDateTime();
+                            if(scheduleTime <= currentTime){
+                                result.push(rows[i]);
+                            }
+                        }
+                        resolve(result);
+                    }
+                });
+            });
+            return JSON.stringify(projects);
+        } catch (error) {
+            console.error('오류 발생:', error);
+            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
+            throw new Error('오류 발생');
+        }
+    },
+    list_project_peole: async (Student_id, Project_id) => {
+        try {
+            const project_peole = await new Promise((resolve, reject) => {
+                db.query(`SELECT DISTINCT C.Student_id, C.Student_name
+                FROM TeamTable as A INNER JOIN TeamPeopleTable as B INNER JOIN StudentTable as C
+                ON A.Project_id = ? and A.Team_id = B.Team_id and B.Student_id = C.Student_id`, [Project_id], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        const j = rows.length;
+                        var result = [];
+                        for (let i = 0; i < j; i++) {
+                            if(rows[i].Student_id !== Student_id){
+                                result.push(rows[i]);
+                            }
+                        }
+                        resolve(result);
+                    }
+                });
+            });
+            return JSON.stringify(project_peole);
+        } catch (error) {
+            console.error('오류 발생:', error);
+            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
+            throw new Error('오류 발생');
+        }
+    },
     create_team: async (Project_id, Team_name) => {
         try {
             const _create_team = await new Promise((resolve, reject) => {
