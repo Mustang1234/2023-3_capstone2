@@ -413,7 +413,7 @@ module.exports = {
                         const j = rows.length;
                         var result = [];
                         for (let i = 0; i < j; i++) {
-                            if(rows[i].Student_id !== Student_id){
+                            if (rows[i].Student_id !== Student_id) {
                                 result.push(rows[i]);
                             }
                         }
@@ -441,7 +441,6 @@ module.exports = {
                         resolve(true);
                     }
                 });
-            return _vote_people;
             });
             return _vote_people;
         } catch (error) {
