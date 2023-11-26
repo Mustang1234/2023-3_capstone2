@@ -502,7 +502,10 @@ app.get('/vote_my_project3', authenticateToken, async (req, res) => {
     else if(_vote_value === '3') vote_value = 1.0;
     else if(_vote_value === '4') vote_value = 1.1;
     else if(_vote_value === '5') vote_value = 1.2;
-    else res.json({ success: false, message: 'unknown vote value' });
+    else {
+      res.json({ success: false, message: 'unknown vote value' });
+      return;
+    }
     const _result = await DB_IO.vote_peole(Student_id2, vote_value);
     const result = JSON.parse(_result);
     console.log(result);
