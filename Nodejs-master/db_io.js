@@ -430,7 +430,7 @@ module.exports = {
     },
     vote_peole: async (Student_id2, vote_value) => {
         try {
-            const _vote_peole = await new Promise((resolve, reject) => {
+            const _vote_people = await new Promise((resolve, reject) => {
                 db.query(`UPDATE StudentTable
                 SET speed = speed * ?
                 WHERE Student_id = ?;`, [vote_value, Student_id2], (error) => {
@@ -441,9 +441,9 @@ module.exports = {
                         resolve(true);
                     }
                 });
-            return _vote_peole;
+            return _vote_people;
             });
-            return _vote_peole;
+            return _vote_people;
         } catch (error) {
             console.error('오류 발생:', error);
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
