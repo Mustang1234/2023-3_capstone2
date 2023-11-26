@@ -438,6 +438,7 @@ module.exports = {
                         console.error(error);
                         reject(error);
                     } else {
+                        console.log(vote_value);
                         resolve(true);
                     }
                 });
