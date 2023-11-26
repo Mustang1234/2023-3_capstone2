@@ -495,13 +495,16 @@ app.get('/vote_my_project3', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const Student_id2 = req.query.Student_id2;
     const _vote_value = req.query.vote_value;
-    if(Student_id === Student_id2) res.json({ success: false, message: 'no vote for self' });
+    if (Student_id === Student_id2) {
+      res.json({ success: false, message: 'no vote for self' });
+      return;
+    }
     var vote_value = 0;
-    if(_vote_value === '1') vote_value = 0.8;
-    else if(_vote_value === '2') vote_value = 0.9;
-    else if(_vote_value === '3') vote_value = 1.0;
-    else if(_vote_value === '4') vote_value = 1.1;
-    else if(_vote_value === '5') vote_value = 1.2;
+    if (_vote_value === '1') vote_value = -15;
+    else if (_vote_value === '2') vote_value = -8;
+    else if (_vote_value === '3') vote_value = 0;
+    else if(_vote_value === '4') vote_value = 8;
+    else if(_vote_value === '5') vote_value = 15;
     else {
       res.json({ success: false, message: 'unknown vote value' });
       return;

@@ -432,7 +432,7 @@ module.exports = {
         try {
             const _vote_people = await new Promise((resolve, reject) => {
                 db.query(`UPDATE StudentTable
-                SET speed = speed * ?
+                SET speed = speed + ?
                 WHERE Student_id = ?;`, [vote_value, Student_id2], (error) => {
                     if (error) {
                         console.error(error);

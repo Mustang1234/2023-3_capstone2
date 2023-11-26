@@ -1,4 +1,4 @@
-get signup
+get http://20.39.186.138:1234/signup
 	받아오는것 : urlinfo
 		{ Student_id: "admin" , Student_pw:"fdsa", year_semester: '2023-3', portal_id: "fdsa4321", portal_pw:"rewqrewq"  }
 
@@ -7,7 +7,7 @@ get signup
 		{ message: 'username already exists' }	
 
 
-post login
+post http://20.39.186.138:1234/login
 	받아오는것 : json
 		{ Student_id: "admin", pw: "fdsa" }
 
@@ -17,7 +17,7 @@ post login
 	
 	
 
-get main_page
+get http://20.39.186.138:1234/main_page
 	받아오는것 : urlinfo
 		{ Student_id: "admin" ,year_semester: '2023-3' }
 
@@ -60,7 +60,7 @@ get main_page
 		}
 
 
-get my_page
+get http://20.39.186.138:1234/my_page
 	받아오는것 : urlinfo
 		{ Student_id: "admin"  }
 
@@ -83,7 +83,7 @@ get my_page
 		}
 
 
-post my_page_photo_upload
+post http://20.39.186.138:1234/my_page_photo_upload
 	받아오는것 : urlinfo
 		{ Student_id: "admin", ProfilePhoto{사진} }
 
@@ -91,7 +91,7 @@ post my_page_photo_upload
 		{ Student_id: Student_id, success: true }
 
 
-get list_my_project
+get http://20.39.186.138:1234/list_my_project
 	받아오는것: urlinfo
 		{ Student_id: "admin", year_semester: "2023-3" }
 
@@ -109,7 +109,7 @@ get list_my_project
 		}
 
 
-get add_project1
+get http://20.39.186.138:1234/add_project1
 	받아오는것: urlinfo
 		{ Student_id: "admin", year_semester: "2023-3" }
 
@@ -121,7 +121,7 @@ get add_project1
 		]
 
 
-get add_project2
+get http://20.39.186.138:1234/add_project2
 	받아오는것: urlinfo
 		{ Course_id: '2023-3월14:00인공지능',
 		  start_time: 'yyyy-mm-dd HH:MM', finish_time: 'yyyy-mm-dd HH:MM', description: 'fdsafdsa', Student_id: "admin"  }
@@ -130,7 +130,7 @@ get add_project2
 		{ success: true/false}
 
 
-get create_team1
+get http://20.39.186.138:1234/create_team1
 	받아오는것: urlinfo
 		{ Student_id: "admin", year_semester: "2023-3" }
 
@@ -142,7 +142,7 @@ get create_team1
 		]
 
 
-get create_team2
+get http://20.39.186.138:1234/create_team2
 	받아오는것: urlinfo
 		{ Student_id: "admin", Course_id: '2023-3월14:00인공지능' }
 
@@ -158,7 +158,7 @@ get create_team2
 		]
 
 
-get create_team3
+get http://20.39.186.138:1234/create_team3
 	받아오는것: urlinfo
 		{ Project_id: 1, Team_name: 'Mango' }
 
@@ -166,7 +166,7 @@ get create_team3
 		{ success: true/false }
 
 
-get join_team1
+get http://20.39.186.138:1234/join_team1
 	받아오는것: urlinfo
 		{ year_semester: "2023-3", studentID: "admin" }
 
@@ -177,7 +177,7 @@ get join_team1
 		    }, ...
 		]
 
-get join_team2
+get http://20.39.186.138:1234/join_team2
 	받아오는것: urlinfo
 		{ Course_id: '2023-3월14:00인공지능', studentID: "admin" }
 
@@ -193,7 +193,7 @@ get join_team2
 		]
 
 
-get join_team3
+get http://20.39.186.138:1234/join_team3
 	받아오는것: urlinfo
 		{ Project_id: 1, studentID: "admin" }
 
@@ -207,7 +207,7 @@ get join_team3
 		]
 
 
-get join_team4
+get http://20.39.186.138:1234/join_team4
 	받아오는것: urlinfo
 		{ Team_id: 1, studentID: "admin" }
 
@@ -215,7 +215,7 @@ get join_team4
 		{ success: true/false }
 
 
-get add_schedule1
+get http://20.39.186.138:1234/add_schedule1
 	받아오는것: urlinfo
 		{ year_semester: "2023-3", studentID: "admin" }
 
@@ -231,7 +231,7 @@ get add_schedule1
 		]
 	
 	
-get add_schedule2
+get http://20.39.186.138:1234/add_schedule2
 	받아오는것: urlinfo
 		{ Team_id: 1, Deadline: '2023-12-25 23:59', description: '인공지능 구현', studentID: "admin" }
 
@@ -239,7 +239,59 @@ get add_schedule2
 		{ success: true/false }
 	
 	
-post get_timetable_from_db
+get http://20.39.186.138:1234/vote_my_project1
+	받아오는것: urlinfo
+		{ tear_semester: '2023-3' }
+
+	보내는것: json
+		{
+		    "projects": [
+		        {
+		            "Project_id": 10,
+		            "Course_id": "2023-3월14:00인공지능",
+		            "start_time": "2023-11-11 12:00",
+		            "finish_time": "2023-11-11 12:01",
+		            "description": "fdsa"
+		        }, ...
+		    ]
+		}
+	
+	
+get http://20.39.186.138:1234/vote_my_project2
+	받아오는것: urlinfo
+		{ Project_id: 1 }
+
+	보내는것: json
+		{
+		    "people": [
+		        {
+		            "Student_id": "guest",
+		            "Student_name": "홍길동"
+		        } , ...
+		    ]
+		}
+	
+	
+get http://20.39.186.138:1234/vote_my_project3
+	받아오는것: urlinfo
+		{ Student_id2: "guest", vote_value: 1/2/3/4/5 }
+
+	보내는것: json
+		{
+		    "success": true,
+		    "message": "success"
+		}
+		{
+		    "success": false,
+		    "message": "unknown vote value" // 1,2,3,4,5중에 없을 때
+		}
+		{
+		    "success": false,
+		    "message": "no vote for self" // 자기투표
+		}
+	
+	
+post http://20.39.186.138:1234/get_timetable_from_db
 	받아오는것: json
 		{ year_semester: "2023-3", studentID: "admin" }
 
@@ -255,7 +307,7 @@ post get_timetable_from_db
 		}
 	
 	
-post get_timetable_from_portal
+post http://20.39.186.138:1234/get_timetable_from_portal
 	받아오는것: json
 		{ Student_id: "admin", "year_semester": "2023-3", "portal_id": "portal_id", "portal_pw": "portal_pw" }
 
@@ -272,7 +324,7 @@ post get_timetable_from_portal
 		{ returnCode: "portal_login_failed" }
 
 
-get chat // 아직 미완성, 추후 업데이트
+get http://20.39.186.138:1234/chat // 아직 미완성, 추후 업데이트
 	받아오는것: json
 		{ type: "chat", Student_id1: 'fdsa4321', Student_id2: 'fdsa1234' }
 
