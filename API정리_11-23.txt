@@ -1,6 +1,6 @@
 get signup
 	받아오는것 : urlinfo
-		{ studentID: "admin" , Student_pw:"fdsa", year_semester: '2023-3', portal_id: "fdsa4321", portal_pw:"rewqrewq"  }
+		{ Student_id: "admin" , Student_pw:"fdsa", year_semester: '2023-3', portal_id: "fdsa4321", portal_pw:"rewqrewq"  }
 
 	보내는것: json
 		{ message: 'sign up success', status: result }
@@ -9,7 +9,7 @@ get signup
 
 post login
 	받아오는것 : json
-		{ studentID: "admin" ,id: "admin", pw: "fdsa" }
+		{ Student_id: "admin", pw: "fdsa" }
 
 	보내는것: json
 		{ success: false, message: 'login failed' }
@@ -19,7 +19,7 @@ post login
 
 get main_page
 	받아오는것 : urlinfo
-		{ studentID: "admin" ,year_semester: '2023-3' }
+		{ Student_id: "admin" ,year_semester: '2023-3' }
 
 	보내는것: json
 		{
@@ -62,7 +62,7 @@ get main_page
 
 get my_page
 	받아오는것 : urlinfo
-		{ studentID: "admin"  }
+		{ Student_id: "admin"  }
 
 	보내는것: json
 		{
@@ -85,7 +85,7 @@ get my_page
 
 post my_page_photo_upload
 	받아오는것 : urlinfo
-		{ studentID: "admin", ProfilePhoto{사진} }
+		{ Student_id: "admin", ProfilePhoto{사진} }
 
 	보내는것: json
 		{ Student_id: Student_id, success: true }
@@ -93,7 +93,7 @@ post my_page_photo_upload
 
 get list_my_project
 	받아오는것: urlinfo
-		{ studentID: "admin", year_semester: "2023-3" }
+		{ Student_id: "admin", year_semester: "2023-3" }
 
 	보내는것: json
 		{
@@ -111,7 +111,7 @@ get list_my_project
 
 get add_project1
 	받아오는것: urlinfo
-		{ studentID: "admin", year_semester: "2023-3" }
+		{ Student_id: "admin", year_semester: "2023-3" }
 
 	보내는것: json
 		[
@@ -124,7 +124,7 @@ get add_project1
 get add_project2
 	받아오는것: urlinfo
 		{ Course_id: '2023-3월14:00인공지능',
-		  start_time: 'yyyy-mm-dd HH:MM', finish_time: 'yyyy-mm-dd HH:MM', description: 'fdsafdsa', studentID: "admin"  }
+		  start_time: 'yyyy-mm-dd HH:MM', finish_time: 'yyyy-mm-dd HH:MM', description: 'fdsafdsa', Student_id: "admin"  }
 
 	보내는것: json
 		{ success: true/false}
@@ -132,7 +132,7 @@ get add_project2
 
 get create_team1
 	받아오는것: urlinfo
-		{ studentID: "admin", year_semester: "2023-3" }
+		{ Student_id: "admin", year_semester: "2023-3" }
 
 	보내는것: json
 		[
@@ -144,7 +144,7 @@ get create_team1
 
 get create_team2
 	받아오는것: urlinfo
-		{ studentID: "admin", Course_id: '2023-3월14:00인공지능' }
+		{ Student_id: "admin", Course_id: '2023-3월14:00인공지능' }
 
 	보내는것: json
 		[
@@ -257,7 +257,7 @@ post get_timetable_from_db
 	
 post get_timetable_from_portal
 	받아오는것: json
-		{ "Student_id": "admin", "year_semester": "2023-3", "portal_id": "portal_id", "portal_pw": "portal_pw" }
+		{ Student_id: "admin", "year_semester": "2023-3", "portal_id": "portal_id", "portal_pw": "portal_pw" }
 
 	보내는것: json
 		{
@@ -274,7 +274,7 @@ post get_timetable_from_portal
 
 get chat // 아직 미완성, 추후 업데이트
 	받아오는것: json
-		{ type: "chat", StudentID1: 'fdsa4321', StudentID2: 'fdsa1234' }
+		{ type: "chat", Student_id1: 'fdsa4321', Student_id2: 'fdsa1234' }
 
 	보내는것: json
 		{

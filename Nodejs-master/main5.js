@@ -110,8 +110,7 @@ app.post('/login', express.json(), generateToken);
 });*/
 
 app.post('/signup', async (req, res) => {
-  const Student_id = req.user.user.Student_id;
-  const { year_semester, Student_pw, portal_id, portal_pw } = req.body;
+  const { Student_id, Student_pw, year_semester, portal_id, portal_pw } = req.body;
 
   if (!Student_id || !Student_pw) {
     return res.status(400).json({ message: 'Username and password are required' });
@@ -676,10 +675,8 @@ app.get('/add_schedule2', authenticateToken, async (req, res) => {
 
 app.get('/test', authenticateToken, async (req, res) => {
   try {
-    var i = 0;
     var jsonInfo = {};
     while (true) {
-      i = i + 1;
       try {
         jsonInfo = JSON.parse(await Eclass.Eclass('admin'));
         if (jsonInfo.timeTable.length !== 0) break;
@@ -722,12 +719,8 @@ app.get('/test3', authenticateToken, async (req, res) => {
   }
 });
 
-app.get('/tester', authenticateToken, function (req, res) {
+/*app.get('/tester', authenticateToken, function (req, res) {
   res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  /*if (req.user !== undefined) {
-      res.redirect(`/pages`);
-      return false;
-  }*/
   var title = 'list_team';
   var list = template.list(req.list);
   var html = template.HTML(title, list,
@@ -742,10 +735,6 @@ app.get('/tester', authenticateToken, function (req, res) {
 });
 
 app.post('/tester_process', authenticateToken, async (req, res) => {
-  /*if (req.user === undefined) {
-    res.redirect(`/login`);
-    return false;
-  }*/
   try {
     //var post = req.body;
     //Project_id = post.Project_id;
@@ -758,7 +747,7 @@ app.post('/tester_process', authenticateToken, async (req, res) => {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
   }
-});
+});*/
 
 /*
 INSERT INTO ProjectTable (Course_id, start_time, finish_time, description)
