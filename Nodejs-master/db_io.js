@@ -238,8 +238,8 @@ module.exports = {
                         const j = rows.length;
                         var result = [];
                         for (let i = 0; i < j; i++) {
-                        const scheduleTimeString = rows[i].Deadline;
-                        const currentTimeString = new Date().toLocaleString().substring(0, -3);
+                        const scheduleTimeString = rows[i].Deadline+':59';
+                        const currentTimeString = new Date().toLocaleString();
                         console.log(scheduleTimeString);
                         console.log(currentTimeString);
                         const scheduleTime = new Date(scheduleTimeString);
