@@ -25,7 +25,7 @@ const FindUser = require('./FindUser.js');
 
 const Eclass = require('./Eclass.js');
 const DB_IO = require('./db_io.js');
-const db_io = require('./db_io.js');
+const token_secret_key = require('./token_secret_key.js');
 //const { post } = require('request');
 
 
@@ -90,7 +90,7 @@ function authenticateToken(req, res, next) {
     return res.sendStatus(401);
   }
 
-  jwt.verify(token, 'your_secret_key', (err, user) => {
+  jwt.verify(token, token_secret_key.token_secret_key, (err, user) => {
     if (err) {
       return res.sendStatus(403);
     }
@@ -113,10 +113,10 @@ app.post('/signup', async (req, res) => {
   const { Student_id, Student_pw, year_semester, portal_id, portal_pw } = req.body;
 
   if (!Student_id || !Student_pw) {
-    return res.status(400).json({ message: 'Username and password are required' });
+    return res.status(400).json({success: false,  message: 'Username and password are required' });
   }
   if (portal_id === undefined || portal_pw === undefined) {
-    return res.status(400).json({ message: 'portal_login_failed' });
+    return res.status(400).json({success: false,  message: 'portal_login_failed' });
   }
   FindUser.findById(Student_id, async (user) => {
     if (user === false) {
@@ -126,9 +126,9 @@ app.post('/signup', async (req, res) => {
           try {
             jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_id, portal_pw));
             if (jsonInfo.timeTable.length !== 0) break;
-            if (jsonInfo.retCode === false) return res.status(400).json({ message: 'portal_login_failed' });
+            if (jsonInfo.retCode === false) return res.status(400).json({success: false,  message: 'portal_login_failed' });
           } catch (error) {
-            res.status(400).json({ returnCode: "Error", error: error });
+            res.status(400).json({success: false,  retCode: "Error", error: error });
             return;
           }
         }
@@ -140,7 +140,7 @@ app.post('/signup', async (req, res) => {
  
         const result = await DB_IO.add_student_table(Student_id, Student_pw, jsonInfo.student_name, jsonInfo.student_number, jsonInfo.department);
         //console.log(result);
-        return res.status(200).json({ message: 'sign up success', status: result });
+        return res.status(200).json({success: true, message: 'sign up success', status: result });
       } catch (error) {
         console.error('오류 발생:', error);
         res.status(500).send('오류 발생');
@@ -148,7 +148,7 @@ app.post('/signup', async (req, res) => {
       //return res.status(400).json({ message: 'sign up success', status: true });
     }
     else {
-      return res.status(400).json({ message: 'username already exists' });
+      return res.status(400).json({success: false, message: 'username already exists' });
     }
   });
 });

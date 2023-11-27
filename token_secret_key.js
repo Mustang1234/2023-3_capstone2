@@ -1,0 +1,1 @@
+module.exports = { token_secret_key: "jateJEA416Y#Q&#%REjajer%U#Qarjhe%J%5335%#KJ#%Kte"}
