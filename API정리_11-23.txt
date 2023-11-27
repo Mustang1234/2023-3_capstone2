@@ -259,10 +259,11 @@ get http://20.39.186.138:1234/vote_my_project1
 	
 get http://20.39.186.138:1234/vote_my_project2
 	받아오는것: urlinfo
-		{ Project_id: 1 }
+		{ Project_id: 10 }
 
 	보내는것: json
 		{
+		    "Project_id": 10
 		    "people": [
 		        {
 		            "Student_id": "guest",
@@ -272,9 +273,11 @@ get http://20.39.186.138:1234/vote_my_project2
 		}
 	
 	
-get http://20.39.186.138:1234/vote_my_project3
-	받아오는것: urlinfo
-		{ Student_id2: "guest", vote_value: 1/2/3/4/5 }
+post http://20.39.186.138:1234/vote_my_project3
+	받아오는것: json
+		{ Project_id: 10, votes: [
+		  {Student_id: "guest", vote_value: '1'/'2'/'3'/'4'/'5'}, ...
+		] }
 
 	보내는것: json
 		{

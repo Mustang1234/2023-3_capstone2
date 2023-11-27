@@ -482,7 +482,7 @@ app.get('/vote_my_project2', authenticateToken, async (req, res) => {
     const _result = await DB_IO.list_project_peole(Student_id, Project_id);
     const result = JSON.parse(_result);
     console.log(result);
-    res.status(200).json({ people: result });
+    res.status(200).json({ Project_id: Project_id, people: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
@@ -495,6 +495,11 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const Project_id = req.body.Project_id;
     const votes = req.body.votes;
+    const voted = await DB_IO.list_project_peole(Project_id);
+    if(voted){
+      res.status(400).json({ success: false, message: 'project already voted' });
+      return;
+    }
     const _list_peole = await DB_IO.list_project_peole(Student_id, Project_id);
     const list_peole = JSON.parse(_list_peole);
     if(list_peole.length !== votes.length){
@@ -503,11 +508,11 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
     }
     const j = votes.length;
     for (let i = 0; i < j; i++) {
-      if (list_peole[i].Student_id !== votes[i].Student_id2) {
+      if (list_peole[i].Student_id !== votes[i].Student_id) {
         res.status(400).json({ success: false, message: 'vote info incorrect' });
         return;
       }
-      if (Student_id === votes[i].Student_id2) {
+      if (Student_id === votes[i].Student_id) {
         res.status(400).json({ success: false, message: 'no vote for self' });
         return;
       }
@@ -524,8 +529,9 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
       else if (votes[i].vote_value === '3') vote_value = 0;
       else if (votes[i].vote_value === '4') vote_value = 8;
       else if (votes[i].vote_value === '5') vote_value = 15;
-      result = result && await DB_IO.vote_peole(votes[i].Student_id2, vote_value);
+      result = result && await DB_IO.vote_peole(votes[i].Student_id, vote_value);
     }
+    result = result && await DB_IO.project_vote(Project_id);
     res.status(200).json({ success: result, message: 'success' });
   } catch (error) {
     console.error('오류 발생:', error);

@@ -312,6 +312,45 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
+    project_voted: async (Project_id) => {
+        try {
+            const _project_voted = await new Promise((resolve, reject) => {
+                db.query(`SELECT * FROM ProjectTable WHERE Project_id= ?;`, [Project_id], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        if(rows[0].voted === 0) resolve(false);
+                        else if(rows[0].voted === 1) resolve(true);
+                    }
+                });
+            });
+            return _project_voted;
+        } catch (error) {
+            console.error('오류 발생:', error);
+            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
+            throw new Error('오류 발생');
+        }
+    },
+    project_vote: async (Project_id) => {
+        try {
+            const _project_vote = await new Promise((resolve, reject) => {
+                db.query(`UPDATE ProjectTable SET voted = 1 WHERE Project_id = ?`, [Project_id], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
+                });
+            });
+            return _project_vote;
+        } catch (error) {
+            console.error('오류 발생:', error);
+            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
+            throw new Error('오류 발생');
+        }
+    },
     list_project: async (Course_id) => {
         try {
             const projects = await new Promise((resolve, reject) => {
