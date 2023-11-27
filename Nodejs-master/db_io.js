@@ -444,6 +444,29 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
+    has_project_expired: async (Project_id) => {
+        try {
+            const _has_project_expired = await new Promise((resolve, reject) => {
+                db.query(`SELECT DISTINCT Project_id, finish_time
+                        FROM ProjectTable WHERE Project_id = ?;`, [Project_id], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        const scheduleTime = rows[0].finish_time;
+                        const currentTime = getCurrentDateTime();
+                        if(scheduleTime <= currentTime) resolve(true);
+                        else resolve(false);
+                    }
+                });
+            });
+            return _has_project_expired;
+        } catch (error) {
+            console.error('오류 발생:', error);
+            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
+            throw new Error('오류 발생');
+        }
+    },
     list_project_peole: async (Student_id, Project_id) => {
         try {
             const project_peole = await new Promise((resolve, reject) => {

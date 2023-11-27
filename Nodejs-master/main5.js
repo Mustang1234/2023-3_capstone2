@@ -476,6 +476,10 @@ app.get('/vote_my_project2', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const Project_id = req.query.Project_id;
+    if(!await DB_IO.has_project_expired(Project_id)){
+      res.status(400).json({ message: 'project not expired' });
+      return;
+    }
     const result = JSON.parse(await DB_IO.list_project_peole(Student_id, Project_id));
     console.log(result);
     res.status(200).json({ Project_id: Project_id, people: result });
@@ -490,6 +494,10 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const Project_id = req.body.Project_id;
+    if(!await DB_IO.has_project_expired(Project_id)){
+      res.status(400).json({ message: 'project not expired' });
+      return;
+    }
     const votes = req.body.votes;
     if(await DB_IO.project_voted(Project_id, Student_id)){
       res.status(400).json({ success: false, message: 'project already voted' });
