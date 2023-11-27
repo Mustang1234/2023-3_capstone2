@@ -495,7 +495,7 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const Project_id = req.body.Project_id;
     const votes = req.body.votes;
-    if(await DB_IO.project_voted(Project_id)){
+    if(await DB_IO.project_voted(Project_id, Student_id)){
       res.status(400).json({ success: false, message: 'project already voted' });
       return;
     }
@@ -530,7 +530,7 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
       else if (votes[i].vote_value === '5') vote_value = 15;
       result = result && await DB_IO.vote_peole(votes[i].Student_id, vote_value);
     }
-    result = result && await DB_IO.project_vote(Project_id);
+    result = result && await DB_IO.project_vote(Project_id, Student_id);
     res.status(200).json({ success: result, message: 'success' });
   } catch (error) {
     console.error('오류 발생:', error);

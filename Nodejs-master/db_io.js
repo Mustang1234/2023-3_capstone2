@@ -312,10 +312,12 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    project_voted: async (Project_id) => {
+    project_voted: async (Project_id, Student_id) => {
         try {
             const _project_voted = await new Promise((resolve, reject) => {
-                db.query(`SELECT * FROM ProjectTable WHERE Project_id= ?;`, [Project_id], (error, rows) => {
+                db.query(`SELECT DISTINCT Student_id, voted
+                FROM TeamTable as A INNER JOIN TeamPeopleTable as B
+                ON A.Project_id = ? and A.Team_id = B.Team_id and B.Student_id = ?;`, [Project_id, Student_id], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
@@ -332,10 +334,13 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    project_vote: async (Project_id) => {
+    project_vote: async (Project_id, Student_id) => {
         try {
             const _project_vote = await new Promise((resolve, reject) => {
-                db.query(`UPDATE ProjectTable SET voted = 1 WHERE Project_id = ?`, [Project_id], (error, rows) => {
+                db.query(`UPDATE TeamPeopleTable 
+                INNER JOIN TeamTable ON TeamTable.Project_id = ? and
+                TeamTable.Team_id = TeamPeopleTable.Team_id and TeamPeopleTable.Student_id = ?
+                SET TeamPeopleTable.voted = 1;`, [Project_id, Student_id], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
