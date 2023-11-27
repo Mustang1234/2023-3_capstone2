@@ -489,29 +489,32 @@ app.get('/vote_my_project2', authenticateToken, async (req, res) => {
   }
 });
 
-app.get('/vote_my_project3', authenticateToken, async (req, res) => {
+app.post('/vote_my_project3', authenticateToken, async (req, res) => {
   //res.setHeader('Content-Security-Policy', "form-action 'self' *");
   try {
     const Student_id = req.user.user.Student_id;
-    const Student_id2 = req.query.Student_id2;
-    const _vote_value = req.query.vote_value;
-    if (Student_id === Student_id2) {
-      res.status(400).json({ success: false, message: 'no vote for self' });
-      return;
+    const votes = req.body.votes;
+    const j = votes.length;
+    for (let i = 0; i < j; i++) {
+      if (Student_id === votes[i].Student_id2) {
+        res.status(400).json({ success: false, message: 'no vote for self' });
+        return;
+      }
+      if(!['1', '2', '3', '4', '5'].includes(votes[i].vote_value)) {
+        res.status(400).json({ success: false, message: 'unknown vote value' });
+        return;
+      }
     }
-    var vote_value = 0;
-    if (_vote_value === '1') vote_value = -15;
-    else if (_vote_value === '2') vote_value = -8;
-    else if (_vote_value === '3') vote_value = 0;
-    else if(_vote_value === '4') vote_value = 8;
-    else if(_vote_value === '5') vote_value = 15;
-    else {
-      res.status(400).json({ success: false, message: 'unknown vote value' });
-      return;
+    var result = true;
+    for (let i = 0; i < j; i++) {
+      var vote_value = 0;
+      if (votes[i].vote_value === '1') vote_value = -15;
+      else if (votes[i].vote_value === '2') vote_value = -8;
+      else if (votes[i].vote_value === '3') vote_value = 0;
+      else if (votes[i].vote_value === '4') vote_value = 8;
+      else if (votes[i].vote_value === '5') vote_value = 15;
+      result = result && await DB_IO.vote_peole(votes[i].Student_id2, vote_value);
     }
-    const _result = await DB_IO.vote_peole(Student_id2, vote_value);
-    const result = JSON.parse(_result);
-    console.log(result);
     res.status(200).json({ success: result, message: 'success' });
   } catch (error) {
     console.error('오류 발생:', error);
