@@ -24,7 +24,7 @@ module.exports = {
     course_to_db: async (year_semester, timetable) => {
         try {
             if (timetable.length === 0) {
-                console.log('no table');
+                //console.log('no table');
                 return false;
             }
             const groupedData = lodash.groupBy(timetable, 'name');
@@ -71,7 +71,7 @@ module.exports = {
     timetable_to_db: async (Student_id, year_semester, timetable_small) => {
         try {
             if (timetable_small.length === 0) {
-                console.log('no table');
+                //console.log('no table');
                 return false;
             }
             // 먼저 해당 학생 및 학기의 시간표 데이터를 모두 삭제

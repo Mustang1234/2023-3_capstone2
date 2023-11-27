@@ -11,7 +11,7 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 const helmet = require('helmet');
 //const cookie = require('cookie');
-const session = require('express-session')
+//const session = require('express-session')
 //const FileStore = require('session-file-store')(session)
 const jwt = require('jsonwebtoken');
 const passport = require('passport')
@@ -132,7 +132,7 @@ app.post('/signup', async (req, res) => {
             return;
           }
         }
-        console.log(jsonInfo);
+        //console.log(jsonInfo);
         const result1 = await DB_IO.course_to_db(year_semester, jsonInfo.timeTable);
         const result2 = await DB_IO.timetable_to_db(Student_id, year_semester, jsonInfo.timeTable_small);
         //console.log('result1', result1);
@@ -334,7 +334,7 @@ app.get('/main_page', authenticateToken, async (req, res) => {
       department: '', Speed: 0, timeTable: [], schedule: [], ProfilePhoto: null
     }
     const student_info = JSON.parse(await DB_IO.get_student_table(Student_id));
-    console.log(student_info);
+    //console.log(student_info);
     returnJson.Student_name = student_info.Student_name;
     returnJson.Student_number = student_info.Student_number;
     returnJson.department = student_info.department;
@@ -370,7 +370,7 @@ app.get('/my_page', authenticateToken, async (req, res) => {
       department: '', Speed: 0, ProfilePhoto: null
     }
     const student_info = JSON.parse(await DB_IO.get_student_table(Student_id));
-    console.log(student_info);
+    //console.log(student_info);
     returnJson.Student_name = student_info.Student_name;
     returnJson.Student_number = student_info.Student_number;
     returnJson.department = student_info.department;
@@ -403,7 +403,7 @@ app.post('/get_timetable_from_db', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const { year_semester } = req.body;
     const result = JSON.parse(await DB_IO.db_to_timetable(Student_id, year_semester));
-    console.log(result)
+    //console.log(result)
     res.status(200).json({ timetable: result });
   } catch (error) {
     console.error('오류 발생:', error);
@@ -418,7 +418,7 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
     if (portal_id === undefined || portal_pw === undefined) {
       return res.status(400).json({ message: 'portal_login_failed' });
     }
-    console.log(Student_id, year_semester, portal_id, portal_pw);
+    ///console.log(Student_id, year_semester, portal_id, portal_pw);
     var jsonInfo = {};
     while (true) {
       try {
@@ -426,12 +426,12 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
         if (jsonInfo.timeTable.length !== 0) break;
         if (jsonInfo.retCode === false) return res.status(400).json({ message: 'portal_login_failed' });
       } catch (error) {
-        console.log(error);
+        console.error('오류 발생:', error);
         res.status(400).json({ returnCode: "Error", error: error });
         return;
       }
     }
-    console.log(jsonInfo);
+    //console.log(jsonInfo);
     const result1 = await DB_IO.course_to_db(year_semester, jsonInfo.timeTable);
     const result2 = await DB_IO.timetable_to_db(Student_id, year_semester, jsonInfo.timeTable_small);
     //console.log(result1);
@@ -449,7 +449,7 @@ app.get('/list_my_project', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const year_semester = req.query.year_semester;
     const result = JSON.parse(await DB_IO.list_my_project(Student_id, year_semester));
-    console.log(result);
+    //console.log(result);
     res.status(200).json({ projects: result });
   } catch (error) {
     console.error('오류 발생:', error);
@@ -463,7 +463,7 @@ app.get('/vote_my_project1', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const year_semester = req.query.year_semester;
     const result = JSON.parse(await DB_IO.list_project_expired(Student_id, year_semester));
-    console.log(result);
+    //console.log(result);
     res.status(200).json({ projects: result });
   } catch (error) {
     console.error('오류 발생:', error);
@@ -481,7 +481,7 @@ app.get('/vote_my_project2', authenticateToken, async (req, res) => {
       return;
     }
     const result = JSON.parse(await DB_IO.list_project_peole(Student_id, Project_id));
-    console.log(result);
+    //console.log(result);
     res.status(200).json({ Project_id: Project_id, people: result });
   } catch (error) {
     console.error('오류 발생:', error);
@@ -546,7 +546,7 @@ app.get('/add_project1', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const year_semester = req.query.year_semester;
     const result = JSON.parse(await DB_IO.db_to_timetable_small(Student_id, year_semester));
-    console.log(result);
+    //console.log(result);
     res.status(200).json({timeTable: result});
   } catch (error) {
     console.error('오류 발생:', error);
@@ -561,7 +561,7 @@ app.get('/add_project2', authenticateToken, async (req, res) => {
     const finish_time = req.query.finish_time
     const description = req.query.description
     const result = await DB_IO.add_project(Course_id, start_time, finish_time, description);
-    console.log(result);
+    //console.log(result);
     res.status(200).json({ success: result });
   } catch (error) {
     console.error('오류 발생:', error);
@@ -574,7 +574,7 @@ app.get('/create_team1', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const year_semester = req.query.year_semester;
     const result = JSON.parse(await DB_IO.db_to_timetable_small(Student_id, year_semester));
-    console.log(result);
+    //console.log(result);
     res.status(200).json({timeTable: result});
   } catch (error) {
     console.error('오류 발생:', error);
@@ -587,7 +587,7 @@ app.get('/create_team2', authenticateToken, async (req, res) => {
     //const Student_id = req.user.user.Student_id;
     const Course_id = req.query.Course_id;
     const result = JSON.parse(await DB_IO.list_project(Course_id));
-    console.log(result);
+    //console.log(result);
     res.status(200).json({projects: result});
   } catch (error) {
     console.error('오류 발생:', error);
@@ -601,7 +601,7 @@ app.get('/create_team3', authenticateToken, async (req, res) => {
     const Project_id  = req.query.Project_id;
     const Team_name = req.query.Team_name;
     const result = await DB_IO.create_team(Project_id, Team_name);
-    console.log(result);
+    //console.log(result);
     res.status(200).json({ success: result });
   } catch (error) {
     console.error('오류 발생:', error);
@@ -614,7 +614,7 @@ app.get('/join_team1', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const year_semester = req.query.year_semester;
     const result = JSON.parse(await DB_IO.db_to_timetable_small(Student_id, year_semester))
-    console.log(result);
+    //console.log(result);
     res.status(200).json({timeTable: result});
   } catch (error) {
     console.error('오류 발생:', error);
@@ -627,7 +627,7 @@ app.get('/join_team2', authenticateToken, async (req, res) => {
     //const Student_id = req.user.user.Student_id;
     const Course_id  = req.query.Course_id;
     const result = JSON.parse(await DB_IO.list_project(Course_id));
-    console.log(result);
+    //console.log(result);
     res.status(200).json({projects: result});
   } catch (error) {
     console.error('오류 발생:', error);
@@ -640,7 +640,7 @@ app.get('/join_team3', authenticateToken, async (req, res) => {
     //const Student_id = req.user.user.Student_id;
     const Project_id  = req.query.Project_id;
     const result = JSON.parse(await DB_IO.list_team(Project_id));
-    console.log(result);
+    //console.log(result);
     res.status(200).json({teams: result});
   } catch (error) {
     console.error('오류 발생:', error);
@@ -654,7 +654,7 @@ app.get('/join_team4', authenticateToken, async (req, res) => {
     const Team_id  = req.query.Team_id;
     //const Team_name = req.query.Team_name
     const result = await DB_IO.join_team(Team_id, Student_id);
-    console.log(result);
+    //console.log(result);
     res.status(200).json({ success: result });
   } catch (error) {
     console.error('오류 발생:', error);
@@ -668,7 +668,7 @@ app.get('/add_schedule1', authenticateToken, async (req, res) => {
     const year_semester  = req.query.year_semester;
     //const Team_name = req.query.Team_name
     const result = JSON.parse(await DB_IO.list_my_project(Student_id, year_semester));
-    console.log(result);
+    //console.log(result);
     res.status(200).json({projects: result});
   } catch (error) {
     console.error('오류 발생:', error);
@@ -683,7 +683,7 @@ app.get('/add_schedule2', authenticateToken, async (req, res) => {
     const description  = req.query.description;
     //const Team_name = req.query.Team_name
     const result = await DB_IO.add_schedule(Team_id, Deadline, description);
-    console.log(result);
+    //console.log(result);
     res.status(200).json({ success: result });
   } catch (error) {
     console.error('오류 발생:', error);
@@ -701,11 +701,11 @@ app.get('/test', authenticateToken, async (req, res) => {
       } catch (error) {
       }
     }
-    console.log(jsonInfo);
+    //console.log(jsonInfo);
     const result1 = await DB_IO.course_to_db("2023-3", jsonInfo.timeTable);
     const result2 = await DB_IO.timetable_to_db("admin", "2023-3", jsonInfo.timeTable_small);
-    console.log(result1);
-    console.log(result2);
+    //console.log(result1);
+    //console.log(result2);
     res.redirect('/pages');
   } catch (error) {
     console.error('오류 발생:', error);
@@ -717,7 +717,7 @@ app.get('/test2', authenticateToken, async (req, res) => {
   try {
     const _result = await DB_IO.db_to_timetable("admin", "2023-3");
     const result = JSON.parse(_result);
-    console.log(result)
+    //console.log(result)
     res.redirect('/pages');
   } catch (error) {
     console.error('오류 발생:', error);
@@ -728,7 +728,7 @@ app.get('/test2', authenticateToken, async (req, res) => {
 app.get('/test3', authenticateToken, async (req, res) => {
   try {
     const result = JSON.parse(await DB_IO.get_schedule("admin"));
-    console.log(result);
+    //console.log(result);
     res.redirect('/pages');
   } catch (error) {
     console.error('오류 발생:', error);
