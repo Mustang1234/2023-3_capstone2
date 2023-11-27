@@ -495,8 +495,7 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const Project_id = req.body.Project_id;
     const votes = req.body.votes;
-    const voted = await DB_IO.list_project_peole(Project_id);
-    if(voted){
+    if(await DB_IO.project_voted(Project_id)){
       res.status(400).json({ success: false, message: 'project already voted' });
       return;
     }
