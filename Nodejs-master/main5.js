@@ -140,7 +140,7 @@ app.post('/signup', async (req, res) => {
  
         const result = await DB_IO.add_student_table(Student_id, Student_pw, jsonInfo.student_name, jsonInfo.student_number, jsonInfo.department);
         //console.log(result);
-        return res.status(400).json({ message: 'sign up success', status: result });
+        return res.status(200).json({ message: 'sign up success', status: result });
       } catch (error) {
         console.error('오류 발생:', error);
         res.status(500).send('오류 발생');
