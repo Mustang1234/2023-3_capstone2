@@ -19,7 +19,7 @@ post http://20.39.186.138:1234/login
 
 get http://20.39.186.138:1234/main_page
 	받아오는것 : urlinfo
-		{ Student_id: "admin" ,year_semester: '2023-3' }
+		{ year_semester: '2023-3' }
 
 	보내는것: json
 		{
@@ -62,7 +62,7 @@ get http://20.39.186.138:1234/main_page
 
 get http://20.39.186.138:1234/my_page
 	받아오는것 : urlinfo
-		{ Student_id: "admin"  }
+		{  }
 
 	보내는것: json
 		{
@@ -85,7 +85,7 @@ get http://20.39.186.138:1234/my_page
 
 post http://20.39.186.138:1234/my_page_photo_upload
 	받아오는것 : urlinfo
-		{ Student_id: "admin", ProfilePhoto{사진} }
+		{ ProfilePhoto{사진} }
 
 	보내는것: json
 		{ Student_id: Student_id, success: true }
