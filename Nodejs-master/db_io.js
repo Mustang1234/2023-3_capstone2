@@ -460,7 +460,6 @@ module.exports = {
                     }
                 });
             });
-            console.log(_has_project_expired);
             return _has_project_expired;
         } catch (error) {
             console.error('오류 발생:', error);
