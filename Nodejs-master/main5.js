@@ -493,9 +493,20 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
   //res.setHeader('Content-Security-Policy', "form-action 'self' *");
   try {
     const Student_id = req.user.user.Student_id;
+    const Project_id = req.body.Project_id;
     const votes = req.body.votes;
+    const _list_peole = await DB_IO.list_project_peole(Student_id, Project_id);
+    const list_peole = JSON.parse(_list_peole);
+    if(list_peole.length !== votes.length){
+      res.status(400).json({ success: false, message: 'vote info incorrect' });
+      return;
+    }
     const j = votes.length;
     for (let i = 0; i < j; i++) {
+      if (list_peole[i] !== votes[i].Student_id2) {
+        res.status(400).json({ success: false, message: 'vote info incorrect' });
+        return;
+      }
       if (Student_id === votes[i].Student_id2) {
         res.status(400).json({ success: false, message: 'no vote for self' });
         return;
