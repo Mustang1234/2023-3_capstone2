@@ -74,11 +74,11 @@ function generateToken(req, res, next) {
   passport.authenticate('local', { session: false }, (err, user, info) => {
     if (err) { return next(err); }
     if (!user) {
-      return res.json({ success: false, message: 'login failed' });
+      return res.status(400).json({ success: false, message: 'login failed' });
     }
 
     const token = jwt.sign({ user }, 'your_secret_key', { expiresIn: '1w' });
-    res.json({ success: true, message: 'login success', token });
+    res.status(200).json({ success: true, message: 'login success', token });
   })(req, res, next);
 }
 
@@ -128,7 +128,7 @@ app.post('/signup', async (req, res) => {
             if (jsonInfo.timeTable.length !== 0) break;
             if (jsonInfo.retCode === false) return res.status(400).json({ message: 'portal_login_failed' });
           } catch (error) {
-            res.json({ returnCode: "Error", error: error });
+            res.status(400).json({ returnCode: "Error", error: error });
             return;
           }
         }
