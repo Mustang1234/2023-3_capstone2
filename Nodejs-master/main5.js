@@ -77,7 +77,7 @@ function generateToken(req, res, next) {
       return res.status(400).json({ success: false, message: 'login failed' });
     }
 
-    const token = jwt.sign({ user }, 'your_secret_key', { expiresIn: '1w' });
+    const token = jwt.sign({ user }, token_secret_key.token_secret_key, { expiresIn: '1w' });
     res.status(200).json({ success: true, message: 'login success', token });
   })(req, res, next);
 }
