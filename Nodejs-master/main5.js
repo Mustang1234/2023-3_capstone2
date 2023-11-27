@@ -402,8 +402,7 @@ app.post('/get_timetable_from_db', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const { year_semester } = req.body;
-    const _result = await DB_IO.db_to_timetable(Student_id, year_semester);
-    const result = JSON.parse(_result);
+    const result = JSON.parse(await DB_IO.db_to_timetable(Student_id, year_semester));
     console.log(result)
     res.status(200).json({ timetable: result });
   } catch (error) {
@@ -449,8 +448,7 @@ app.get('/list_my_project', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const year_semester = req.query.year_semester;
-    const _result = await DB_IO.list_my_project(Student_id, year_semester);
-    const result = JSON.parse(_result);
+    const result = JSON.parse(await DB_IO.list_my_project(Student_id, year_semester));
     console.log(result);
     res.status(200).json({ projects: result });
   } catch (error) {
@@ -464,8 +462,7 @@ app.get('/vote_my_project1', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const year_semester = req.query.year_semester;
-    const _result = await DB_IO.list_project_expired(Student_id, year_semester);
-    const result = JSON.parse(_result);
+    const result = JSON.parse(await DB_IO.list_project_expired(Student_id, year_semester));
     console.log(result);
     res.status(200).json({ projects: result });
   } catch (error) {
@@ -479,8 +476,7 @@ app.get('/vote_my_project2', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const Project_id = req.query.Project_id;
-    const _result = await DB_IO.list_project_peole(Student_id, Project_id);
-    const result = JSON.parse(_result);
+    const result = JSON.parse(await DB_IO.list_project_peole(Student_id, Project_id));
     console.log(result);
     res.status(200).json({ Project_id: Project_id, people: result });
   } catch (error) {
@@ -499,8 +495,7 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
       res.status(400).json({ success: false, message: 'project already voted' });
       return;
     }
-    const _list_peole = await DB_IO.list_project_peole(Student_id, Project_id);
-    const list_peole = JSON.parse(_list_peole);
+    const list_peole = JSON.parse(await DB_IO.list_project_peole(Student_id, Project_id));
     if(list_peole.length !== votes.length){
       res.status(400).json({ success: false, message: 'vote info incorrect' });
       return;
@@ -539,16 +534,10 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
 });
 
 app.get('/add_project1', authenticateToken, async (req, res) => {
-  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  /*if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }*/
   try {
     const Student_id = req.user.user.Student_id;
     const year_semester = req.query.year_semester;
-    const _result = await DB_IO.db_to_timetable_small(Student_id, year_semester);
-    const result = JSON.parse(_result);
+    const result = JSON.parse(await DB_IO.db_to_timetable_small(Student_id, year_semester));
     console.log(result);
     res.status(200).json({timeTable: result});
   } catch (error) {
@@ -558,11 +547,6 @@ app.get('/add_project1', authenticateToken, async (req, res) => {
 });
 
 app.get('/add_project2', authenticateToken, async (req, res) => {
-  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  /*if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }*/
   try {
     const Course_id = req.query.Course_id
     const start_time = req.query.start_time
@@ -578,16 +562,10 @@ app.get('/add_project2', authenticateToken, async (req, res) => {
 });
 
 app.get('/create_team1', authenticateToken, async (req, res) => {
-  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  /*if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }*/
   try {
     const Student_id = req.user.user.Student_id;
     const year_semester = req.query.year_semester;
-    const _result = await DB_IO.db_to_timetable_small(Student_id, year_semester);
-    const result = JSON.parse(_result);
+    const result = JSON.parse(await DB_IO.db_to_timetable_small(Student_id, year_semester));
     console.log(result);
     res.status(200).json({timeTable: result});
   } catch (error) {
@@ -597,16 +575,10 @@ app.get('/create_team1', authenticateToken, async (req, res) => {
 });
 
 app.get('/create_team2', authenticateToken, async (req, res) => {
-  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  /*if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }*/
   try {
     //const Student_id = req.user.user.Student_id;
     const Course_id = req.query.Course_id;
-    const _result = await DB_IO.list_project(Course_id);
-    const result = JSON.parse(_result);
+    const result = JSON.parse(await DB_IO.list_project(Course_id));
     console.log(result);
     res.status(200).json({projects: result});
   } catch (error) {
@@ -616,11 +588,6 @@ app.get('/create_team2', authenticateToken, async (req, res) => {
 });
 
 app.get('/create_team3', authenticateToken, async (req, res) => {
-  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  /*if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }*/
   try {
     //const Student_id = req.user.user.Student_id;
     const Project_id  = req.query.Project_id;
@@ -635,16 +602,10 @@ app.get('/create_team3', authenticateToken, async (req, res) => {
 });
 
 app.get('/join_team1', authenticateToken, async (req, res) => {
-  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  /*if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }*/
   try {
     const Student_id = req.user.user.Student_id;
     const year_semester = req.query.year_semester;
-    const _result = await DB_IO.db_to_timetable_small(Student_id, year_semester);
-    const result = JSON.parse(_result);
+    const result = JSON.parse(await DB_IO.db_to_timetable_small(Student_id, year_semester))
     console.log(result);
     res.status(200).json({timeTable: result});
   } catch (error) {
@@ -654,17 +615,10 @@ app.get('/join_team1', authenticateToken, async (req, res) => {
 });
 
 app.get('/join_team2', authenticateToken, async (req, res) => {
-  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  /*if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }*/
   try {
     //const Student_id = req.user.user.Student_id;
     const Course_id  = req.query.Course_id;
-    //const Team_name = req.query.Team_name
-    const _result = await DB_IO.list_project(Course_id);
-    const result = JSON.parse(_result);
+    const result = JSON.parse(await DB_IO.list_project(Course_id));
     console.log(result);
     res.status(200).json({projects: result});
   } catch (error) {
@@ -674,17 +628,10 @@ app.get('/join_team2', authenticateToken, async (req, res) => {
 });
 
 app.get('/join_team3', authenticateToken, async (req, res) => {
-  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  /*if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }*/
   try {
     //const Student_id = req.user.user.Student_id;
     const Project_id  = req.query.Project_id;
-    //const Team_name = req.query.Team_name
-    const _result = await DB_IO.list_team(Project_id);
-    const result = JSON.parse(_result);
+    const result = JSON.parse(await DB_IO.list_team(Project_id));
     console.log(result);
     res.status(200).json({teams: result});
   } catch (error) {
@@ -694,11 +641,6 @@ app.get('/join_team3', authenticateToken, async (req, res) => {
 });
 
 app.get('/join_team4', authenticateToken, async (req, res) => {
-  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  /*if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }*/
   try {
     const Student_id = req.user.user.Student_id;
     const Team_id  = req.query.Team_id;
@@ -713,17 +655,11 @@ app.get('/join_team4', authenticateToken, async (req, res) => {
 });
 
 app.get('/add_schedule1', authenticateToken, async (req, res) => {
-  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  /*if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }*/
   try {
     const Student_id = req.user.user.Student_id;
     const year_semester  = req.query.year_semester;
     //const Team_name = req.query.Team_name
-    const _result = await DB_IO.list_my_project(Student_id, year_semester);
-    const result = JSON.parse(_result);
+    const result = JSON.parse(await DB_IO.list_my_project(Student_id, year_semester));
     console.log(result);
     res.status(200).json({projects: result});
   } catch (error) {
@@ -733,11 +669,6 @@ app.get('/add_schedule1', authenticateToken, async (req, res) => {
 });
 
 app.get('/add_schedule2', authenticateToken, async (req, res) => {
-  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  /*if (req.user !== undefined) {
-    res.redirect(`/pages`);
-    return false;
-  }*/
   try {
     const Team_id = req.query.Team_id;
     const Deadline  = req.query.Deadline;
@@ -788,8 +719,7 @@ app.get('/test2', authenticateToken, async (req, res) => {
 
 app.get('/test3', authenticateToken, async (req, res) => {
   try {
-    const _result = await DB_IO.get_schedule("admin");
-    const result = JSON.parse(_result);
+    const result = JSON.parse(await DB_IO.get_schedule("admin"));
     console.log(result);
     res.redirect('/pages');
   } catch (error) {
