@@ -114,11 +114,11 @@ get http://20.39.186.138:1234/add_project1
 		{ Student_id: "admin", year_semester: "2023-3" }
 
 	보내는것: json
-		[
+		{ timeTable: [
 		    {
 		        "Course_id": "2023-3월14:00인공지능"
 		    }, ...
-		]
+		]}
 
 
 get http://20.39.186.138:1234/add_project2
@@ -135,11 +135,11 @@ get http://20.39.186.138:1234/create_team1
 		{ Student_id: "admin", year_semester: "2023-3" }
 
 	보내는것: json
-		[
+		{timeTable: [
 		    {
 		        "Course_id": "2023-3월14:00인공지능"
 		    }, ...
-		]
+		]}
 
 
 get http://20.39.186.138:1234/create_team2
@@ -147,7 +147,7 @@ get http://20.39.186.138:1234/create_team2
 		{ Student_id: "admin", Course_id: '2023-3월14:00인공지능' }
 
 	보내는것: json
-		[
+		{projects: [
 		    {
 		        "Project_id": 1,
 		        "Course_id": "2023-3월14:00인공지능",
@@ -155,7 +155,7 @@ get http://20.39.186.138:1234/create_team2
 		        "finish_time": "2023-12-25 23:59",
 		        "description": "인공지능 구현"
 		    }, ...
-		]
+		]}
 
 
 get http://20.39.186.138:1234/create_team3
@@ -171,18 +171,19 @@ get http://20.39.186.138:1234/join_team1
 		{ year_semester: "2023-3", studentID: "admin" }
 
 	보내는것: json
-		[
+		{timeTable: 
+		  [
 		    {
 		        "Course_id": "2023-3월14:00인공지능"
 		    }, ...
-		]
+		]}
 
 get http://20.39.186.138:1234/join_team2
 	받아오는것: urlinfo
 		{ Course_id: '2023-3월14:00인공지능', studentID: "admin" }
 
 	보내는것: json
-		[
+		{projects: [
 		    {
 		        "Project_id": 1,
 		        "Course_id": "2023-3월14:00인공지능",
@@ -190,7 +191,7 @@ get http://20.39.186.138:1234/join_team2
 		        "finish_time": "2023-12-25 23:59",
 		        "description": "인공지능 구현"
 		    }, ...
-		]
+		]}
 
 
 get http://20.39.186.138:1234/join_team3
@@ -198,13 +199,13 @@ get http://20.39.186.138:1234/join_team3
 		{ Project_id: 1, studentID: "admin" }
 
 	보내는것: json
-		[
+		{teams: [
 		    {
 		        "Project_id": 10,
 		        "Team_id": 4,
 		        "Team_name": "teamname"
 		    }, ...
-		]
+		]}
 
 
 get http://20.39.186.138:1234/join_team4
@@ -220,7 +221,7 @@ get http://20.39.186.138:1234/add_schedule1
 		{ year_semester: "2023-3", studentID: "admin" }
 
 	보내는것: json
-		[
+		{projects: [
 		    {
 		        "Project_id": 1,
 		        "Course_id": "2023-3월14:00인공지능",
@@ -228,7 +229,7 @@ get http://20.39.186.138:1234/add_schedule1
 		        "finish_time": "2023-12-25 23:59",
 		        "description": "인공지능 구현"
 		    }, ...
-		]
+		]}
 	
 	
 get http://20.39.186.138:1234/add_schedule2
@@ -241,7 +242,7 @@ get http://20.39.186.138:1234/add_schedule2
 	
 get http://20.39.186.138:1234/vote_my_project1
 	받아오는것: urlinfo
-		{ tear_semester: '2023-3' }
+		{ year_semester: '2023-3' }
 
 	보내는것: json
 		{
@@ -277,7 +278,7 @@ post http://20.39.186.138:1234/vote_my_project3
 	받아오는것: json
 		{ Project_id: 10, votes: [
 		  {Student_id: "guest", vote_value: '1'/'2'/'3'/'4'/'5'}, ...
-		] }
+		] } // vote_my_project2에서 받은 Student_id 그대로 해야함!!! 중요 !!!
 
 	보내는것: json
 		{
@@ -292,6 +293,8 @@ post http://20.39.186.138:1234/vote_my_project3
 		    "success": false,
 		    "message": "no vote for self" // 자기투표
 		}
+		{ success: false, message: 'vote info incorrect' } //vote_my_project2에서 받은 Student_id 그대로 안했을때
+		{ success: false, message: 'project already voted' } // 이미 투표한 프로젝트일때
 	
 	
 post http://20.39.186.138:1234/get_timetable_from_db
