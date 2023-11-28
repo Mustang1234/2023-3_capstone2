@@ -389,8 +389,8 @@ app.post('/my_page_photo_upload', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const ProfilePhoto = req.body.ProfilePhoto;
-    const ProfilePhoto2 = fs.readFileSync('hello.jpg');
-    console.log(ProfilePhoto2);
+    //const ProfilePhoto2 = fs.readFileSync('hello.jpg');
+    //console.log(ProfilePhoto2);
     const result = JSON.parse(await DB_IO.update_photo_student_table(Student_id, ProfilePhoto));
     res.status(200).json({ Student_id: Student_id, success: result });
   } catch (error) {
