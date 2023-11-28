@@ -3,8 +3,12 @@ get http://20.39.186.138:1234/signup
 		{ Student_id: "admin" , Student_pw:"fdsa", year_semester: '2023-3', portal_id: "fdsa4321", portal_pw:"rewqrewq"  }
 
 	보내는것: json
-		{ message: 'sign up success', status: result }
-		{ message: 'username already exists' }	
+		{ success: true, message: 'sign up success', status: result }
+		{ success: false, message: 'Username and password are required' }
+		{ success: false, message: 'username already exists' }	
+		{ success: false, message: 'username already exists' }
+		{ success: false, message: 'portal_login_failed' }
+		{ success: false,  retCode: "Error", error: error }
 
 
 post http://20.39.186.138:1234/login
@@ -13,7 +17,7 @@ post http://20.39.186.138:1234/login
 
 	보내는것: json
 		{ success: false, message: 'login failed' }
-		{ success: true, message: 'login success', token }
+		{ success: false, message: 'portal_login_failed' }
 	
 	
 
@@ -229,7 +233,7 @@ get http://20.39.186.138:1234/add_schedule1
 		        "finish_time": "2023-12-25 23:59",
 		        "description": "인공지능 구현"
 		    }, ...
-		]}
+		]}	
 	
 	
 get http://20.39.186.138:1234/add_schedule2
@@ -272,6 +276,7 @@ get http://20.39.186.138:1234/vote_my_project2
 		        } , ...
 		    ]
 		}
+		{ success: false, message: 'project not expired' } // 안끝난 프로젝트 보냈을 때
 	
 	
 post http://20.39.186.138:1234/vote_my_project3
@@ -295,6 +300,7 @@ post http://20.39.186.138:1234/vote_my_project3
 		}
 		{ success: false, message: 'vote info incorrect' } //vote_my_project2에서 받은 Student_id 그대로 안했을때
 		{ success: false, message: 'project already voted' } // 이미 투표한 프로젝트일때
+		{ success: false, message: 'project not expired' } // 안끝난 프로젝트 보냈을 때
 	
 	
 post http://20.39.186.138:1234/get_timetable_from_db
