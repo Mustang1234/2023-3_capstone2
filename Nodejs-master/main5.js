@@ -375,10 +375,10 @@ app.get('/my_page', authenticateToken, async (req, res) => {
     returnJson.Student_number = student_info.Student_number;
     returnJson.department = student_info.department;
     returnJson.Speed = student_info.Speed;
-    const bufferData = JSON.parse(await DB_IO.get_student_photo_table(Student_id)).ProfilePhoto.data;
+    const bufferData = JSON.parse(await DB_IO.get_student_photo_table(Student_id)).ProfilePhoto;
     console.log(bufferData);
     const student_photo_info = bufferData.toString('base64');
-    //console.log(student_photo_info);
+    console.log(student_photo_info);
     returnJson.ProfilePhoto = student_photo_info;
     returnJson.retCode = true;
     res.status(200).json(returnJson);
@@ -398,7 +398,7 @@ app.post('/my_page_photo_upload', authenticateToken, async (req, res) => {
     const student_photo_info = ProfilePhoto.toString('base64');
     console.log(student_photo_info);
     //const result = await DB_IO.update_photo_student_table(Student_id, ProfilePhoto);
-    res.status(200).json({ Student_id: Student_id, success: result });
+    res.status(200).json({ Student_id: Student_id, success: true });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
