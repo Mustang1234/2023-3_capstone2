@@ -391,7 +391,7 @@ app.post('/my_page_photo_upload', authenticateToken, async (req, res) => {
     //const ProfilePhoto = req.body.ProfilePhoto;
     const ProfilePhoto = fs.readFileSync('hello.jpg');
     console.log(ProfilePhoto);
-    //const base64Image = ProfilePhoto.toString('base64');
+    const base64Image = ProfilePhoto.toString('base64');
     const bufferData = Buffer.from(base64Image, 'base64');
     console.log(bufferData);
     const result = await DB_IO.update_photo_student_table(Student_id, ProfilePhoto);
