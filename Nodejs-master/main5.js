@@ -375,7 +375,8 @@ app.get('/my_page', authenticateToken, async (req, res) => {
     returnJson.Student_number = student_info.Student_number;
     returnJson.department = student_info.department;
     returnJson.Speed = student_info.Speed;
-    const bufferData = JSON.parse(await DB_IO.get_student_photo_table(Student_id)).ProfilePhoto;
+    const _ProfilePhoto = JSON.parse(await DB_IO.get_student_photo_table(Student_id)).ProfilePhoto;
+    const bufferData = Buffer.from(_ProfilePhoto.data);
     console.log(bufferData);
     const student_photo_info = bufferData.toString('base64');
     console.log(student_photo_info);
