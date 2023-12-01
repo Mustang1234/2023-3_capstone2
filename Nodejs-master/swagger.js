@@ -1,22 +1,17 @@
+const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const swaggereJsdoc = require('swagger-jsdoc');
 
 const options = {
-    swaggerDefinition: {
-        info: {
-            title: 'Test API',
-            version: '1.0.0',
-            description: 'Test API with express',
-        },
-        host: 'localhost:1234',
-        basePath: '/'
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Your API Title',
+      version: '1.0.0',
     },
-    apis: ['./main5.js', './swagger/*']
+  },
+  apis: ['./tester.js'], // API 스펙이 작성된 파일 경로
 };
 
-const specs = swaggereJsdoc(options);
+const swaggerSpec = swaggerJSDoc(options);
 
-module.exports = {
-    swaggerUi,
-    specs
-};
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

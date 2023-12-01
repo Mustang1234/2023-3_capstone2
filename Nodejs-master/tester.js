@@ -1,51 +1,40 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: API for managing users
+ */
 
-const app = express();
-const port = 1234;
-const ip = '20.39.186.138';
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - username
+ *       properties:
+ *         username:
+ *           type: string
+ *           description: The user's username
+ */
 
-// body-parser middleware 설정
-app.use(bodyParser.json());
-
-// 첫 번째 POST 요청 처리
-app.post('/login', async (req, res) => {
-    try {
-        const requestData = req.body;
-        console.log('Received data from first POST request:', requestData);
-        const secondPostData = {
-            Student_id: requestData.Student_id,
-            Student_pw: requestData.Student_pw
-        };
-        const response = await fetch(`http://${ip}:${port}/login_process`, {
-            method: 'POST',
-            body: JSON.stringify(secondPostData),
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
-        if (!response.ok) {
-            throw new Error('Failed to fetch');
-        }
-
-        const data = await response.json();
-        console.log('Response from second POST request:', data);
-        res.json({ result: 'success', data });
-    } catch (error) {
-        console.error('Error during first POST request:', error);
-        res.status(500).json({ result: 'error', error: error.message });
-    }
-});
-
-app.post('/login_process', (req, res) => {
-    const requestData = req.body;
-    console.log('Received data from second POST request:', requestData);
-
-    // 두 번째 POST 요청에 응답
-    res.json({ result: 'success', data: requestData });
-});
-
-// 서버 시작
-app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
-});
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Returns a list of users
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: List of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ */
+app.get('/users', (req, res) => {
+    // Implementation here
+  });
