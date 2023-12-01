@@ -11,7 +11,7 @@ const options = {
         host: 'localhost:1234',
         basePath: '/'
     },
-    apis: ['./routes/*.js', './swagger/*']
+    apis: ['./main5.js', './swagger/*']
 };
 
 const specs = swaggereJsdoc(options);
