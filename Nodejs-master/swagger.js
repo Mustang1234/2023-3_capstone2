@@ -2,6 +2,7 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const express = require('express') 
 const app = express()
+const port = 1234;
 
 const options = {
   definition: {
