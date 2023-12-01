@@ -36,7 +36,7 @@ app.use(compression());
 app.use(express.static('public'));
 app.use(helmet());
 
-const { swaggerUi, specs } = require('./modules/swagger');
+const { swaggerUi, specs } = require('./swagger');
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
