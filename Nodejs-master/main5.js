@@ -419,8 +419,9 @@ app.post('/get_timetable_from_db', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const year_semester = _year_semester();
     const result = JSON.parse(await DB_IO.db_to_timetable(Student_id, year_semester));
+    const projects = JSON.parse(await DB_IO.list_whole_project(Student_id, year_semester));
     //console.log(result)
-    res.status(200).json({ timetable: result });
+    res.status(200).json({ timetable: result, projects: projects });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
