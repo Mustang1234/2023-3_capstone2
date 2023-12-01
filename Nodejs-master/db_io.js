@@ -246,7 +246,7 @@ module.exports = {
     get_schedule: async (Student_id) => {
         try {
             const schedules = await new Promise((resolve, reject) => {
-                db.query(`SELECT DISTINCT F.Course_name, A.Team_name, C.Deadline, C.description
+                db.query(`SELECT DISTINCT F.Course_name, D.Project_name, A.Team_name, C.Deadline, C.description
                 FROM TeamTable as A INNER JOIN  TeamPeopleTable as B INNER JOIN ScheduleTable as C INNER JOIN ProjectTable as D INNER JOIN TimeTable as E INNER JOIN CourseTable as F
                 ON A.Team_id = B.Team_id and B.Team_id = C.Team_id and A.Project_id = D.Project_id and D.Course_id = E.Course_id and E.Course_id = F.Course_id and E.Student_id = ?`, [Student_id], (error, rows) => {
                     if (error) {
@@ -292,11 +292,11 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    add_project: async (Course_id, start_time, finish_time, description) => {
+    add_project: async (Course_id, Project_name, start_time, finish_time, description) => {
         try {
             const _add_project = await new Promise((resolve, reject) => {
-                db.query(`INSERT INTO ProjectTable (Course_id, start_time, finish_time, description, voted)
-                VALUES (?, ?, ?, ?);`, [Course_id, start_time, finish_time, description, 0], (error) => {
+                db.query(`INSERT INTO ProjectTable (Course_id, Project_name, start_time, finish_time, description, voted)
+                VALUES (?, ?, ?, ?);`, [Course_id, Project_name, start_time, finish_time, description, 0], (error) => {
                     if (error) {
                         console.error(error);
                         reject(error);
@@ -359,7 +359,7 @@ module.exports = {
     list_my_project: async (Student_id, year_semester) => {
         try {
             const projects = await new Promise((resolve, reject) => {
-                db.query(`SELECT DISTINCT B.Project_id, B.Course_id, B.start_time, B.finish_time, B.description
+                db.query(`SELECT DISTINCT B.Project_id, B.Project_name, B.Course_id, B.start_time, B.finish_time, B.description
                 FROM TeamTable as A INNER JOIN  ProjectTable as B INNER JOIN TeamPeopleTable as C INNER JOIN TimeTable as D
                 ON C.Student_id = ? and C.Team_id = A.Team_id and A.Project_id = B.project_id and B.Course_id = D.Course_id and D.year_semester = ?`, [Student_id, year_semester], (error, rows) => {
                     if (error) {
@@ -389,7 +389,7 @@ module.exports = {
     list_whole_project: async (Student_id, year_semester) => {
         try {
             const projects = await new Promise((resolve, reject) => {
-                db.query(`SELECT DISTINCT B.Project_id, B.Course_id, B.start_time, B.finish_time, B.description
+                db.query(`SELECT DISTINCT B.Project_id, B.Project_name, B.Course_id, B.start_time, B.finish_time, B.description
                 FROM TimeTable as A INNER JOIN ProjectTable as B
                 ON A.Student_id = ? and A.year_semester = ? and A.Course_id = B.Course_id`, [Student_id, year_semester], (error, rows) => {
                     if (error) {
@@ -419,7 +419,7 @@ module.exports = {
     list_project_expired: async (Student_id, year_semester) => {
         try {
             const projects = await new Promise((resolve, reject) => {
-                db.query(`SELECT DISTINCT B.Project_id, B.Course_id, B.start_time, B.finish_time, B.description
+                db.query(`SELECT DISTINCT B.Project_id, B.Project_name, B.Course_id, B.start_time, B.finish_time, B.description
                 FROM TimeTable as A INNER JOIN ProjectTable as B
                 ON A.Student_id = ? and A.year_semester = ? and A.Course_id = B.Course_id;`, [Student_id, year_semester], (error, rows) => {
                     if (error) {
@@ -449,7 +449,7 @@ module.exports = {
     has_project_expired: async (Project_id) => {
         try {
             const _has_project_expired = await new Promise((resolve, reject) => {
-                db.query(`SELECT DISTINCT Project_id, finish_time
+                db.query(`SELECT DISTINCT Project_id, Project_name, finish_time
                         FROM ProjectTable WHERE Project_id = ?;`, [Project_id], (error, rows) => {
                     if (error) {
                         console.error(error);
@@ -559,7 +559,7 @@ module.exports = {
     list_team: async (Project_id) => {
         try {
             const teams = await new Promise((resolve, reject) => {
-                db.query(`SELECT DISTINCT A.Project_id, A.Team_id, A.Team_name, B.finish_time
+                db.query(`SELECT DISTINCT A.Project_id, B.Project_name, A.Team_id, A.Team_name, B.finish_time
                 FROM TeamTable as A INNER JOIN ProjectTable as B
                 ON B.Project_id = ?`, [Project_id], (error, rows) => {
                     if (error) {

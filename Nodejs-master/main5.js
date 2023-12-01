@@ -445,7 +445,7 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
         if (jsonInfo.retCode === false) return res.status(400).json({ message: 'portal_login_failed' });
       } catch (error) {
         console.error('오류 발생:', error);
-        res.status(400).json({ returnCode: "Error", error: error });
+        res.status(400).json({ returnCode: "Error", error: error });  
         return;
       }
     }
@@ -527,31 +527,31 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const Project_id = req.body.Project_id;
     if(!await DB_IO.has_project_expired(Project_id)){
-      res.status(400).json({ success: false, message: 'project not expired' });
+      res.status(401).json({ success: false, message: 'project not expired' });
       return;
     }
     const votes = req.body.votes;
     if(await DB_IO.project_voted(Project_id, Student_id)){
-      res.status(400).json({ success: false, message: 'project already voted' });
+      res.status(402).json({ success: false, message: 'project already voted' });
       return;
     }
     const list_peole = JSON.parse(await DB_IO.list_project_peole(Student_id, Project_id));
     if(list_peole.length !== votes.length){
-      res.status(400).json({ success: false, message: 'vote info incorrect' });
+      res.status(403).json({ success: false, message: 'vote info incorrect' });
       return;
     }
     const j = votes.length;
     for (let i = 0; i < j; i++) {
       if (list_peole[i].Student_id !== votes[i].Student_id) {
-        res.status(400).json({ success: false, message: 'vote info incorrect' });
+        res.status(403).json({ success: false, message: 'vote info incorrect' });
         return;
       }
       if (Student_id === votes[i].Student_id) {
-        res.status(400).json({ success: false, message: 'no vote for self' });
+        res.status(405).json({ success: false, message: 'no vote for self' });
         return;
       }
       if(!['1', '2', '3', '4', '5'].includes(votes[i].vote_value)) {
-        res.status(400).json({ success: false, message: 'unknown vote value' });
+        res.status(406).json({ success: false, message: 'unknown vote value' });
         return;
       }
     }
@@ -589,10 +589,11 @@ app.get('/add_project1', authenticateToken, async (req, res) => {
 app.get('/add_project2', authenticateToken, async (req, res) => {
   try {
     const Course_id = req.query.Course_id
+    const Project_name = req.query.Project_name
     const start_time = req.query.start_time
     const finish_time = req.query.finish_time
     const description = req.query.description
-    const result = await DB_IO.add_project(Course_id, start_time, finish_time, description);
+    const result = await DB_IO.add_project(Course_id, Project_name, start_time, finish_time, description);
     //console.log(result);
     res.status(200).json({ success: result });
   } catch (error) {
