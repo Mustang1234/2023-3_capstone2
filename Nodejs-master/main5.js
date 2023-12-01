@@ -455,11 +455,11 @@ app.get('/list_my_project', authenticateToken, async (req, res) => {
   }
 });
 
-app.get('/list_project', authenticateToken, async (req, res) => {
+app.get('/list_whole_project', authenticateToken, async (req, res) => {
   try {
     //const Student_id = req.user.user.Student_id;
     const Course_id  = req.query.Course_id;
-    const result = JSON.parse(await DB_IO.list_project(Course_id));
+    const result = JSON.parse(await DB_IO.list_whole_project(Course_id));
     //console.log(result);
     res.status(200).json({projects: result});
   } catch (error) {
