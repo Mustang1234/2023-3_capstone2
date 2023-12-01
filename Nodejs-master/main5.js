@@ -36,28 +36,10 @@ app.use(compression());
 app.use(express.static('public'));
 app.use(helmet());
 
-const swaggerUi = require('swagger-ui-express');
-const swaggereJsdoc = require('swagger-jsdoc');
+const { swaggerUi, specs } = require('./modules/swagger');
 
-const options = {
-    swaggerDefinition: {
-        info: {
-            title: 'Test API',
-            version: '1.0.0',
-            description: 'Test API with express',
-        },
-        host: 'localhost:3300',
-        basePath: '/'
-    },
-    apis: ['./routes/*.js', './swagger/*']
-};
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
-const specs = swaggereJsdoc(options);
-
-module.exports = {
-    swaggerUi,
-    specs
-};
 
 app.get('*', function (req, res, next) {
   fs.readdir('./data', function (error, filelist) {
