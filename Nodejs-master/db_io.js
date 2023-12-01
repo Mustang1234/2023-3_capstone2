@@ -356,10 +356,12 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    list_project: async (Course_id) => {
+    list_my_project: async (Student_id, year_semester) => {
         try {
             const projects = await new Promise((resolve, reject) => {
-                db.query(`SELECT * FROM ProjectTable WHERE Course_id = ?;`, [Course_id], (error, rows) => {
+                db.query(`SELECT DISTINCT B.Project_id, B.Course_id, B.start_time, B.finish_time, B.description
+                FROM TeamTable as A INNER JOIN  ProjectTable as B INNER JOIN TeamPeopleTable as C INNER JOIN TimeTable as D
+                ON C.Student_id = ? and C.Team_id = A.Team_id and A.Project_id = B.project_id and B.Course_id = D.Course_id and D.year_semester = ?`, [Student_id, year_semester], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
@@ -384,7 +386,7 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    list_my_project: async (Student_id, year_semester) => {
+    list_whole_project: async (Student_id, year_semester) => {
         try {
             const projects = await new Promise((resolve, reject) => {
                 db.query(`SELECT DISTINCT B.Project_id, B.Course_id, B.start_time, B.finish_time, B.description
