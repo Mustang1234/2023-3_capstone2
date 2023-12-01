@@ -43,6 +43,22 @@ app.get('*', function (req, res, next) {
   });
 });
 
+function _year_semester() {
+  const date = new Date();
+  const currentMonth = date.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줍니다.
+  const currentDay = date.getDate();
+
+  if ((currentMonth === 3 && currentDay >= 1) || (currentMonth > 3 && currentMonth < 6) || (currentMonth === 6 && currentDay <= 22)) {
+    return `${date.getFullYear()}-1`;
+  } else if ((currentMonth === 6 && currentDay >= 23) || (currentMonth > 6 && currentMonth < 9) || (currentMonth === 8 && currentDay <= 31)) {
+    return `${date.getFullYear()}-2`;
+  } else if ((currentMonth === 9 && currentDay >= 1) || (currentMonth > 9 && currentMonth < 12) || (currentMonth === 12 && currentDay <= 25)) {
+    return `${date.getFullYear()}-3`;
+  } else {
+    return `${date.getFullYear()}-4`;
+  }
+}
+
 passport.use(new LocalStrategy(
   {
     usernameField: 'Student_id',
@@ -109,7 +125,9 @@ app.post('/login', express.json(), generateToken);
 });*/
 
 app.post('/signup', async (req, res) => {
-  const { Student_id, Student_pw, year_semester, portal_id, portal_pw } = req.body;
+  const { Student_id, Student_pw, portal_id, portal_pw } = req.body;
+
+  const year_semester = _year_semester();
 
   if (!Student_id || !Student_pw) {
     return res.status(401).json({success: false,  message: 'Username and password are required' });
@@ -328,7 +346,7 @@ app.post('/page_delete_process', authenticateToken, function (req, res) {
 app.get('/main_page', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const year_semester = req.query.year_semester;
+    const year_semester = _year_semester();
     var returnJson = { Student_id: Student_id, retCode: false, Student_name: '', Student_number: '',
       department: '', Speed: 0, timeTable: [], schedule: [], ProfilePhoto: null
     }
@@ -399,7 +417,7 @@ app.post('/my_page_photo_upload', authenticateToken, async (req, res) => {
 app.post('/get_timetable_from_db', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const { year_semester } = req.body;
+    const year_semester = _year_semester();
     const result = JSON.parse(await DB_IO.db_to_timetable(Student_id, year_semester));
     //console.log(result)
     res.status(200).json({ timetable: result });
@@ -412,7 +430,8 @@ app.post('/get_timetable_from_db', authenticateToken, async (req, res) => {
 app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const { year_semester, portal_id, portal_pw } = req.body;
+    const { portal_id, portal_pw } = req.body;
+    const year_semester = _year_semester();
     if (portal_id === undefined || portal_pw === undefined) {
       return res.status(400).json({ message: 'portal_login_failed' });
     }
@@ -445,7 +464,7 @@ app.get('/list_my_project', authenticateToken, async (req, res) => {
   //res.setHeader('Content-Security-Policy', "form-action 'self' *");
   try {
     const Student_id = req.user.user.Student_id;
-    const year_semester = req.query.year_semester;
+    const year_semester = _year_semester();
     const result = JSON.parse(await DB_IO.list_my_project(Student_id, year_semester));
     //console.log(result);
     res.status(200).json({ projects: result });
@@ -458,7 +477,7 @@ app.get('/list_my_project', authenticateToken, async (req, res) => {
 app.get('/list_whole_project', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const year_semester = req.query.year_semester;
+    const year_semester = _year_semester();
     const result = JSON.parse(await DB_IO.list_whole_project(Student_id, year_semester));
     //console.log(result);
     res.status(200).json({projects: result});
@@ -472,7 +491,7 @@ app.get('/vote_my_project1', authenticateToken, async (req, res) => {
   //res.setHeader('Content-Security-Policy', "form-action 'self' *");
   try {
     const Student_id = req.user.user.Student_id;
-    const year_semester = req.query.year_semester;
+    const year_semester = _year_semester();
     const result = JSON.parse(await DB_IO.list_project_expired(Student_id, year_semester));
     //console.log(result);
     res.status(200).json({ projects: result });
@@ -555,7 +574,7 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
 app.get('/add_project1', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const year_semester = req.query.year_semester;
+    const year_semester = _year_semester();
     const result = JSON.parse(await DB_IO.db_to_timetable_small(Student_id, year_semester));
     //console.log(result);
     res.status(200).json({timeTable: result});
@@ -583,7 +602,7 @@ app.get('/add_project2', authenticateToken, async (req, res) => {
 app.get('/create_team1', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const year_semester = req.query.year_semester;
+    const year_semester = _year_semester();
     const result = JSON.parse(await DB_IO.db_to_timetable_small(Student_id, year_semester));
     //console.log(result);
     res.status(200).json({timeTable: result});
@@ -623,7 +642,7 @@ app.get('/create_team3', authenticateToken, async (req, res) => {
 app.get('/join_team1', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const year_semester = req.query.year_semester;
+    const year_semester = _year_semester();
     const result = JSON.parse(await DB_IO.db_to_timetable_small(Student_id, year_semester))
     //console.log(result);
     res.status(200).json({timeTable: result});
@@ -676,7 +695,7 @@ app.get('/join_team4', authenticateToken, async (req, res) => {
 app.get('/add_schedule1', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const year_semester  = req.query.year_semester;
+    const year_semester = _year_semester();
     //const Team_name = req.query.Team_name
     const result = JSON.parse(await DB_IO.list_my_project(Student_id, year_semester));
     //console.log(result);
