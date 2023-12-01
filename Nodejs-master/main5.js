@@ -73,7 +73,7 @@ function generateToken(req, res, next) {
   passport.authenticate('local', { session: false }, (err, user, info) => {
     if (err) { return next(err); }
     if (!user) {
-      return res.status(400).json({ success: false, message: 'login failed' });
+      return res.status(401).json({ success: false, message: 'login failed' });
     }
 
     const token = jwt.sign({ user }, token_secret_key.token_secret_key, { expiresIn: '1w' });
@@ -125,7 +125,7 @@ app.post('/signup', async (req, res) => {
           try {
             jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_id, portal_pw));
             if (jsonInfo.timeTable.length !== 0) break;
-            if (jsonInfo.retCode === false) return res.status(400).json({success: false,  message: 'portal_login_failed' });
+            if (jsonInfo.retCode === false) return res.status(402).json({success: false,  message: 'portal_login_failed' });
           } catch (error) {
             res.status(403).json({success: false,  retCode: "Error", error: error });
             return;
@@ -147,7 +147,7 @@ app.post('/signup', async (req, res) => {
       //return res.status(400).json({ message: 'sign up success', status: true });
     }
     else {
-      return res.status(405).json({success: false, message: 'username already exists' });
+      return res.status(406).json({success: false, message: 'username already exists' });
     }
   });
 });
@@ -561,6 +561,19 @@ app.get('/add_project2', authenticateToken, async (req, res) => {
     const result = await DB_IO.add_project(Course_id, start_time, finish_time, description);
     //console.log(result);
     res.status(200).json({ success: result });
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
+app.get('/list_project', authenticateToken, async (req, res) => {
+  try {
+    //const Student_id = req.user.user.Student_id;
+    const Course_id  = req.query.Course_id;
+    const result = JSON.parse(await DB_IO.list_project(Course_id));
+    //console.log(result);
+    res.status(200).json({projects: result});
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
