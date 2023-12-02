@@ -124,6 +124,18 @@ app.post('/login', express.json(), generateToken);
   });
 });*/
 
+app.get('/id_duplicate_check', async (req, res) => {
+  const Student_id = req.params.Student_id;
+  FindUser.findById(Student_id, async (user) => {
+    if (user === false) {
+      return res.status(200).json({ success: true, message: 'available id' });
+    }
+    else {
+      return res.status(401).json({success: false, message: 'username already exists' });
+    }
+  });
+});
+
 app.post('/signup', async (req, res) => {
   const { Student_id, Student_pw, portal_id, portal_pw } = req.body;
 
