@@ -715,12 +715,27 @@ module.exports = {
                             }
                         });
                     });
+                    const _leave_team4 = await new Promise((resolve, reject) => {
+                        db.query(`UPDATE TeamTable SET current_member = current_member - 1 WHERE Team_id = ?;`, [Team_id], (error, rows) => {
+                            if (error) {
+                                console.error(error);
+                                reject(error);
+                            } else {
+                                if(rows.length !== 0) {
+                                    resolve(rows[0].Student_id);
+                                }
+                                else {
+                                    resolve(false);
+                                }
+                            }
+                        });
+                    });
                 }
                 else{
                     this.delete_team(Team_id, _leave_team1);
                 }
             }
-            const _leave_team3 = await new Promise((resolve, reject) => {
+            const _leave_team5 = await new Promise((resolve, reject) => {
                 db.query(`DELETE FROM TeamPeopleTable WHERE Team_id = ? and Student_id = ?;`, [Team_id, Student_id], (error) => {
                     if (error) {
                         console.error(error);
@@ -730,7 +745,7 @@ module.exports = {
                     }
                 });
             });
-            return _leave_team3;
+            return _leave_team5;
         } catch (error) {
             console.error('오류 발생:', error);
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
