@@ -86,7 +86,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     //await page.setCookie(...cookies);
     //await page.setCookie(...cookies);
     //await page.waitForNavigation();
-    /*try {
+    try {
         await page.waitForNavigation({ timeout : 2000 });
     } catch (error) {
         if (error instanceof puppeteer.errors.TimeoutError) {
@@ -94,7 +94,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         } else {
             throw error;
         }
-    }*/
+    }
 
     const pageContent1 = await page.content();
     
