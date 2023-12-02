@@ -620,7 +620,7 @@ module.exports = {
     delete_team: async (Team_id, Student_id) => {
         try {
             const _delete_team1 = await new Promise((resolve, reject) => {
-                db.query(`SELECT * FROM TeamTable WHERE Team_id = ? and head = ?;`, [Team_id, Student_id], (error) => {
+                db.query(`SELECT * FROM TeamTable WHERE Team_id = ? and head = ?;`, [Team_id, Student_id], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
