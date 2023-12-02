@@ -578,10 +578,10 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    create_team: async (Project_id, Team_name) => {
+    create_team: async (Project_id, Team_name, max_member, Student_id) => {
         try {
-            const _create_team = await new Promise((resolve, reject) => {
-                db.query(`INSERT INTO TeamTable (Project_id, Team_name) VALUES (?, ?)`, [Project_id, Team_name], (error) => {
+            const _create_team1 = await new Promise((resolve, reject) => {
+                db.query(`INSERT INTO TeamTable (Project_id, Team_name, max_member, current_member, head) VALUES (?, ?, ?, 1, ?)`, [Project_id, Team_name, max_member, Student_id], (error) => {
                     if (error) {
                         console.error(error);
                         reject(error);
@@ -590,7 +590,27 @@ module.exports = {
                     }
                 });
             });
-            return _create_team;
+            const _create_team2 = await new Promise((resolve, reject) => {
+                db.query(`SELECT * FROM TeamTable ORDER BY Team_id DESC LIMIT 1;`, [], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(rows[0].Team_id);
+                    }
+                });
+            });
+            const _create_team3 = await new Promise((resolve, reject) => {
+                db.query(`INSERT INTO TeamPeopleTable (Team_id, Student_id, voted) VALUES (?, ?, 0)`, [_create_team2, Student_id], (error) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
+                });
+            });
+            return _create_team1 && _create_team3;
         } catch (error) {
             console.error('오류 발생:', error);
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
@@ -616,7 +636,7 @@ module.exports = {
             });
             if(_join_team1){
                 const _join_team2 = await new Promise((resolve, reject) => {
-                    db.query(`INSERT INTO TeamPeopleTable (Team_id, Student_id)VALUES (?, ?);`, [Team_id, Student_id], (error) => {
+                    db.query(`INSERT INTO TeamPeopleTable (Team_id, Student_id, voted)VALUES (?, ?, 0);`, [Team_id, Student_id], (error) => {
                         if (error) {
                             console.error(error);
                             reject(error);
