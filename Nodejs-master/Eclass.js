@@ -131,7 +131,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     await page.goto('https://mportal.cau.ac.kr/std/usk/sUskCap003/index.do');
     //await page2.setCookie(...cookies);
     //await page2.waitForNavigation();
-    await page.waitForNavigation();
+    //await page.waitForNavigation();
     const pageContent2 = await page.content();
     //console.log(pageContent2);
     await browser.close();
