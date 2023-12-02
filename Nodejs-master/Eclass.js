@@ -125,6 +125,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     if(jsonInfo.student_name.length === 0
         || jsonInfo.student_name.includes(' <dd>\n            <span>{{vm.stuInfo.kor')
         || jsonInfo.student_name.includes('<!DOCTYPE html><ht')){
+            console.log(jsonInfo)
         return JSON.stringify(jsonInfo);
     }
 
