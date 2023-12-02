@@ -732,17 +732,12 @@ module.exports = {
                     console.log(_leave_team3);
                     if(_leave_team3){
                         const _leave_team4 = await new Promise((resolve, reject) => {
-                            db.query(`UPDATE TeamTable SET head = ? WHERE Team_id = ?;`, [_leave_team3, Team_id], (error, rows) => {
+                            db.query(`UPDATE TeamTable SET head = ? WHERE Team_id = ?;`, [_leave_team3, Team_id], (error) => {
                                 if (error) {
                                     console.error(error);
                                     reject(error);
                                 } else {
-                                    if(rows.length !== 0) {
-                                        resolve(rows[0].Student_id);
-                                    }
-                                    else {
-                                        resolve(false);
-                                    }
+                                    resolve(true);
                                 }
                             });
                         });
