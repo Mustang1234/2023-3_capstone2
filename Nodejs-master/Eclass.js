@@ -34,6 +34,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 
         // 쿠키 획득
         const cookies = await driver.manage().getCookies();
+        console.log(cookies)
 
         if (!cookies || cookies.length === 0) {
             console.error('No cookies found after login');
