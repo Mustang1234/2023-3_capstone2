@@ -69,7 +69,6 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 	    await browser.close();
         return JSON.stringify(jsonInfo);
     }
-    jsonInfo.retCode = true;
 
     // 로그인 후 원하는 페이지로 이동 (예: 시간표 페이지)
     await page.setCookie(...cookies);
@@ -124,8 +123,8 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     jsonInfo.department = pageContent_department;
     
     if(jsonInfo.student_name.length === 0
-        || jsonInfo.student_name === '      <dd>\n            <span>{{vm.stuInfo.kornm}}'
-        || jsonInfo.student_name === "<!DOCTYPE html><html><he'"){
+        || jsonInfo.student_name.includes(' <dd>\n            <span>{{vm.stuInfo.kor')
+        || jsonInfo.student_name.includes('<!DOCTYPE html><ht')){
         return JSON.stringify(jsonInfo);
     }
 
@@ -193,6 +192,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     jsonInfo.timeTable = timeTableArray;
     jsonInfo.timeTable_small = result;
 
+    jsonInfo.retCode = true;
     console.log(jsonInfo);
     return JSON.stringify(jsonInfo);
 }
