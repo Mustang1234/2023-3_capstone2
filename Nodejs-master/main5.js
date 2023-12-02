@@ -145,7 +145,7 @@ app.post('/signup', async (req, res) => {
             if (jsonInfo.timeTable.length !== 0) break;
             if (jsonInfo.retCode === false) return res.status(402).json({success: false,  message: 'portal_login_failed' });
           } catch (error) {
-            res.status(403).json({success: false,  retCode: "Error", error: error });
+            res.status(403).json({success: false,  retCode: false, error: error });
             return;
           }
         }
@@ -446,7 +446,7 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
         if (jsonInfo.retCode === false) return res.status(400).json({ message: 'portal_login_failed' });
       } catch (error) {
         console.error('오류 발생:', error);
-        res.status(400).json({ returnCode: "Error", error: error });  
+        res.status(400).json({ returnCode: false, error: error });  
         return;
       }
     }
