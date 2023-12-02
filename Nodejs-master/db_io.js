@@ -618,7 +618,8 @@ module.exports = {
         }
     },
     delete_team: async (Team_id, Student_id) => {
-        try {
+        console.log("leave_team");
+        /*try {
             const _delete_team1 = await new Promise((resolve, reject) => {
                 db.query(`SELECT * FROM TeamTable WHERE Team_id = ? and head = ?;`, [Team_id, Student_id], (error) => {
                     if (error) {
@@ -664,7 +665,7 @@ module.exports = {
             console.error('오류 발생:', error);
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
             throw new Error('오류 발생');
-        }
+        }*/
     },
     leave_team: async (Team_id, Student_id) => {
         console.log("leave_team");
