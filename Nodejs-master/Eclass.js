@@ -74,6 +74,8 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 
     // 로그인 후 원하는 페이지로 이동 (예: 시간표 페이지)
     await page.setCookie(...cookies);
+    await page.setCookie(...cookies);
+    await page.setCookie(...cookies);
     /*try {
 	await page.waitForNavigation({ timeout : 2000 });
     } catch (error) {
