@@ -525,7 +525,7 @@ app.get('/delete_team', authenticateToken, async (req, res) => {
     const Team_id  = req.query.Team_id;
     const result = JSON.parse(await DB_IO.delete_team(Team_id, Student_id));
     //console.log(result);
-    res.status(200).json({teams: result});
+    res.status(200).json({retCode: result});
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
@@ -538,7 +538,7 @@ app.get('/leave_team', authenticateToken, async (req, res) => {
     const Team_id  = req.query.Team_id;
     const result = JSON.parse(await DB_IO.leave_team(Team_id, Student_id));
     //console.log(result);
-    res.status(200).json({teams: result});
+    res.status(200).json({retCode: result});
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
