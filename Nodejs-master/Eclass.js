@@ -52,7 +52,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         }
     }*/
 
-    const cookies = await page.cookies();
+    //const cookies = await page.cookies();
     console.log(1);
     /*try {
         await page.waitForNavigation({ timeout : 2000 });
@@ -139,7 +139,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     console.log(7);
     const page2 = await browser.newPage();
     console.log(8);
-    await page2.setCookie(...cookies);
+    //await page2.setCookie(...cookies);
     console.log(9);
     //await page2.setCookie(...cookies);
     /*try {
