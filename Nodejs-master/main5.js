@@ -519,6 +519,32 @@ app.get('/list_whole_team', authenticateToken, async (req, res) => {
   }
 });
 
+app.get('/delete_team', authenticateToken, async (req, res) => {
+  try {
+    const Student_id = req.user.user.Student_id;
+    const Team_id  = req.query.Team_id;
+    const result = JSON.parse(await DB_IO.delete_team(Team_id, Student_id));
+    //console.log(result);
+    res.status(200).json({teams: result});
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
+app.get('/leave_team', authenticateToken, async (req, res) => {
+  try {
+    const Student_id = req.user.user.Student_id;
+    const Team_id  = req.query.Team_id;
+    const result = JSON.parse(await DB_IO.leave_team(Team_id, Student_id));
+    //console.log(result);
+    res.status(200).json({teams: result});
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
 app.get('/vote_my_project1', authenticateToken, async (req, res) => {
   //res.setHeader('Content-Security-Policy', "form-action 'self' *");
   try {

@@ -617,6 +617,126 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
+    delete_team: async (Team_id, Student_id) => {
+        try {
+            const _delete_team1 = await new Promise((resolve, reject) => {
+                db.query(`SELECT * FROM TeamTable WHERE Team_id = ? and head = ?;`, [Team_id, Student_id], (error) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        if(rows.length !== 0) {
+                            resolve(true);
+                        }
+                        else {
+                            resolve(false);
+                        }
+                    }
+                });
+            });
+            if(_delete_team1){
+                const _delete_team2 = await new Promise((resolve, reject) => {
+                    db.query(`DELETE FROM TeamPeopleTable WHERE Team_id = ?;`, [Team_id], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                const _delete_team3 = await new Promise((resolve, reject) => {
+                    db.query(`DELETE FROM TeamTable WHERE Team_id = ?;`, [Team_id], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                return _delete_team2 && _delete_team3;
+            }
+            else{
+                return false;
+            }
+        } catch (error) {
+            console.error('오류 발생:', error);
+            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
+            throw new Error('오류 발생');
+        }
+    },
+    leave_team: async (Team_id, Student_id) => {
+        try {
+            const _leave_team1 = await new Promise((resolve, reject) => {
+                db.query(`SELECT * FROM TeamTable WHERE Team_id = ? and head = ?;`, [Team_id, Student_id], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        if(rows.length !== 0) {
+                            resolve(true);
+                        }
+                        else {
+                            resolve(false);
+                        }
+                    }
+                });
+            });
+            if(_leave_team1){
+                const _leave_team2 = await new Promise((resolve, reject) => {
+                    db.query(`SELECT * FROM TeamPeopleTable WHERE Team_id = ? and Student_id != ?;`, [Team_id, Student_id], (error, rows) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            if(rows.length !== 0) {
+                                resolve(rows[0].Student_id);
+                            }
+                            else {
+                                resolve(false);
+                            }
+                        }
+                    });
+                });
+                if(_leave_team2){
+                    const _leave_team3 = await new Promise((resolve, reject) => {
+                        db.query(`UPDATE TeamTable SET head = ? WHERE Team_id = ?;`, [_leave_team2, Team_id], (error, rows) => {
+                            if (error) {
+                                console.error(error);
+                                reject(error);
+                            } else {
+                                if(rows.length !== 0) {
+                                    resolve(rows[0].Student_id);
+                                }
+                                else {
+                                    resolve(false);
+                                }
+                            }
+                        });
+                    });
+                }
+                else{
+                    this.delete_team(Team_id, _leave_team1);
+                }
+            }
+            const _leave_team3 = await new Promise((resolve, reject) => {
+                db.query(`DELETE FROM TeamPeopleTable WHERE Team_id = ? and Student_id = ?;`, [Team_id, Student_id], (error) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
+                });
+            });
+            return _leave_team3;
+        } catch (error) {
+            console.error('오류 발생:', error);
+            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
+            throw new Error('오류 발생');
+        }
+    },
     join_team: async (Team_id, Student_id) => {
         try {
             const _join_team1 = await new Promise((resolve, reject) => {
