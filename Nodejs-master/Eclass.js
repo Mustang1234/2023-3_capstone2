@@ -43,7 +43,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
             return JSON.stringify(jsonInfo);
         }
 
-        if(cookies[0].name == 'prdct-NA'){
+        if(cookies[0].name == 'prdct-NA' || cookies[0].name == 'JSESSIONID'){
             console.log('no cookie');
             await driver.quit();
             return JSON.stringify(jsonInfo);
