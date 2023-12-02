@@ -599,17 +599,47 @@ module.exports = {
     },
     join_team: async (Team_id, Student_id) => {
         try {
-            const _join_team = await new Promise((resolve, reject) => {
-                db.query(`INSERT INTO TeamPeopleTable (Team_id, Student_id)VALUES (?, ?);`, [Team_id, Student_id], (error) => {
+            const _join_team1 = await new Promise((resolve, reject) => {
+                db.query(`select * from TeamTable where Team_id = ?;`, [Team_id], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
                     } else {
-                        resolve(true);
+                        if(rows[0].current_member < rows[0].max_member){
+                            resolve(true);
+                        }
+                        else{
+                            resolve(false);
+                        }
                     }
                 });
             });
-            return _join_team;
+            if(_join_team1){
+                const _join_team2 = await new Promise((resolve, reject) => {
+                    db.query(`INSERT INTO TeamPeopleTable (Team_id, Student_id)VALUES (?, ?);`, [Team_id, Student_id], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                const _join_team3 = await new Promise((resolve, reject) => {
+                    db.query(`UPDATE TeamTable SET current_member = current_member + 1 WHERE Team_id = ?;`, [Team_id], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                return {success: _join_team2 && _join_team3};
+            }
+            else{
+                return { success: false, message: "team full" };
+            }
         } catch (error) {
             console.error('오류 발생:', error);
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
