@@ -125,11 +125,9 @@ app.post('/login', express.json(), generateToken);
 });*/
 
 app.get('/id_duplicate_check', async (req, res) => {
-  const Student_id = req.params.Student_id;
-  console.log(Student_id)
+  const Student_id = req.query.Student_id;
   FindUser.findById(Student_id, async (user) => {
-    console.log(user)
-    if (user === undefined) {
+    if (user === false) {
       return res.status(200).json({ success: true, message: 'available id' });
     }
     else {
