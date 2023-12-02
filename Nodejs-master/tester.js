@@ -94,5 +94,5 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     }
 }
 
-
+console.log(4321)
 Eclass('fdsa', 'joonkkkk1234', '@kjkszpj1234')
