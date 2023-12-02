@@ -53,6 +53,9 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     }*/
 
     const cookies = await page.cookies();
+    const cookies2 = await page.cookies();
+    const cookies3 = await page.cookies();
+    const cookies4 = await page.cookies();
     //console.log(cookies);
     /*try {
         await page.waitForNavigation({ timeout : 2000 });
@@ -72,7 +75,10 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     jsonInfo.retCode = true;
 
     // 로그인 후 원하는 페이지로 이동 (예: 시간표 페이지)
-    await page.setCookie(cookies);
+    await page.setCookie(...cookies);
+    await page.setCookie(...cookies2);
+    await page.setCookie(...cookies3);
+    await page.setCookie(...cookies4);
     /*try {
 	await page.waitForNavigation({ timeout : 2000 });
     } catch (error) {
