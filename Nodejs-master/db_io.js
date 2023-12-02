@@ -757,7 +757,7 @@ module.exports = {
                     });
                 });
             }
-            return _leave_team5;
+            return true;
         } catch (error) {
             console.error('오류 발생:', error);
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
