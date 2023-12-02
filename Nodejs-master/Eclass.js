@@ -13,7 +13,17 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 
         // 로그인 페이지로 이동
         await driver.get('https://mportal.cau.ac.kr/common/auth/SSOlogin.do');
-        await driver.wait(until.elementLocated(By.name('userID')), 10000);
+        try {
+            await driver.wait(until.elementLocated(By.name('userID')), 10000);
+            // 아이디와 비밀번호 입력, 로그인 버튼 클릭 등의 로직을 여기에 추가
+        } catch (error) {
+            // 타임아웃 에러가 발생했을 때, 에러를 무시하고 넘어가도록 처리
+            if (error.name !== 'TimeoutError') {
+                // 타임아웃 에러가 아닌 다른 에러가 발생했을 때는 콘솔에 출력
+                console.error('Error:', error);
+            }
+            // 다른 에러가 아니더라도 특별한 처리가 필요한 경우, 이 부분에 추가
+        }
 
         // 아이디와 비밀번호 입력
         await driver.findElement(By.name('userID')).sendKeys(portal_id);
@@ -34,7 +44,17 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 
         // 로그인 후 페이지로 이동
         await driver.get('https://mportal.cau.ac.kr/std/uhs/sUhsPer001/index.do');
-        await driver.wait(until.urlIs('https://mportal.cau.ac.kr/std/uhs/sUhsPer001/index.do'), 10000);
+        try {
+            await driver.wait(until.urlIs('https://mportal.cau.ac.kr/std/uhs/sUhsPer001/index.do'), 10000);
+            // 아이디와 비밀번호 입력, 로그인 버튼 클릭 등의 로직을 여기에 추가
+        } catch (error) {
+            // 타임아웃 에러가 발생했을 때, 에러를 무시하고 넘어가도록 처리
+            if (error.name !== 'TimeoutError') {
+                // 타임아웃 에러가 아닌 다른 에러가 발생했을 때는 콘솔에 출력
+                console.error('Error:', error);
+            }
+            // 다른 에러가 아니더라도 특별한 처리가 필요한 경우, 이 부분에 추가
+        }
 
         // 학생 정보 추출
         const pageContent1 = await driver.getPageSource();
@@ -72,7 +92,17 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 
         // 시간표 페이지로 이동
         await driver.get('https://mportal.cau.ac.kr/std/usk/sUskCap003/index.do');
-        await driver.wait(until.urlIs('https://mportal.cau.ac.kr/std/usk/sUskCap003/index.do'), 10000);
+        try {
+            await driver.wait(until.urlIs('https://mportal.cau.ac.kr/std/usk/sUskCap003/index.do'), 10000);
+            // 아이디와 비밀번호 입력, 로그인 버튼 클릭 등의 로직을 여기에 추가
+        } catch (error) {
+            // 타임아웃 에러가 발생했을 때, 에러를 무시하고 넘어가도록 처리
+            if (error.name !== 'TimeoutError') {
+                // 타임아웃 에러가 아닌 다른 에러가 발생했을 때는 콘솔에 출력
+                console.error('Error:', error);
+            }
+            // 다른 에러가 아니더라도 특별한 처리가 필요한 경우, 이 부분에 추가
+        }
         const pageContent2 = await driver.getPageSource();
 
         var timeTableArray = []
