@@ -389,7 +389,7 @@ module.exports = {
     list_my_team: async (Student_id, year_semester) => {
         try {
             const _list_my_team = await new Promise((resolve, reject) => {
-                db.query(`SELECT DISTINCT A.Team_name, A.Team_id, C.Course_id, D.Course_name, A.max_member, A.current_member, C.finish_time, A.description
+                db.query(`SELECT DISTINCT A.Team_name, A.Team_id, A.head, C.Course_id, D.Course_name, A.max_member, A.current_member, C.finish_time, A.description
                 FROM TeamTable as A INNER JOIN TeamPeopleTable as B INNER JOIN ProjectTable as C INNER JOIN CourseTable as D
                 ON A.Team_id = B.Team_id and B.Student_id = ? and A.Project_id = C.Project_id and C.Course_id = D.Course_id and D.year_semester = ?;`, [Student_id, year_semester], (error, rows) => {
                     if (error) {
@@ -449,7 +449,7 @@ module.exports = {
     list_whole_team: async (Student_id, year_semester) => {
         try {
             const _list_whole_team = await new Promise((resolve, reject) => {
-                db.query(`SELECT DISTINCT A.Team_name, A.Team_id, C.Course_id, D.Course_name, A.max_member, A.current_member, C.finish_time, A.description
+                db.query(`SELECT DISTINCT A.Team_name, A.Team_id, A.head, C.Course_id, D.Course_name, A.max_member, A.current_member, C.finish_time, A.description
                 FROM TeamTable as A INNER JOIN TeamPeopleTable as B INNER JOIN ProjectTable as C INNER JOIN CourseTable as D INNER JOIN TimeTable as E
                 ON E.Student_id = ? and E.Course_id = D.Course_id and D.Course_id = C.Course_id and C.Project_id = A.Project_id and D.year_semester = ?;`, [Student_id, year_semester], (error, rows) => {
                     if (error) {
