@@ -2,7 +2,7 @@ const { Builder, By, Key, until } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 const lodash = require('lodash');
 
-async function Eclass(_studentID, portal_id, portal_pw)  {
+async function Eclass(_studentID, portal_id, portal_pw) {
     // JSON 배열에 항목 추가
     var jsonInfo = { studentID: _studentID, retCode: false, student_name: "", student_number: "", department: "", timeTable: [], timeTable_small: [] };
 
@@ -108,7 +108,7 @@ async function Eclass(_studentID, portal_id, portal_pw)  {
         jsonInfo.timeTable = timeTableArray;
         jsonInfo.timeTable_small = result;
 
-        //console.log(jsonInfo);
+        console.log(jsonInfo);
         return JSON.stringify(jsonInfo);
     } catch (error) {
         console.error('An error occurred:', error);

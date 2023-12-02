@@ -108,7 +108,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         jsonInfo.timeTable = timeTableArray;
         jsonInfo.timeTable_small = result;
 
-        //console.log(jsonInfo);
+        console.log(jsonInfo);
         return JSON.stringify(jsonInfo);
     } catch (error) {
         console.error('An error occurred:', error);
@@ -119,5 +119,4 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     }
 }
 
-const fdsa = Eclass('fdsa','sdaf','fdsa');
 console.log(fdsa)
