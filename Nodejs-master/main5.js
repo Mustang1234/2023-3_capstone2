@@ -127,12 +127,13 @@ app.post('/login', express.json(), generateToken);
 app.get('/id_duplicate_check', async (req, res) => {
   const Student_id = req.params.Student_id;
   FindUser.findById(Student_id, async (user) => {
+    console.log(Student_id)
     console.log(user)
     if (user === undefined) {
       return res.status(200).json({ success: true, message: 'available id' });
     }
     else {
-      return res.status(401).json({success: false, message: 'username already exists' });
+      return res.status(200).json({ success: false, message: 'username already exists' });
     }
   });
 });
