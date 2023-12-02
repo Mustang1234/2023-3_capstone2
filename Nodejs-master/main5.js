@@ -145,7 +145,7 @@ app.post('/signup', async (req, res) => {
             if (jsonInfo.timeTable.length !== 0) break;
             if (jsonInfo.retCode === false) return res.status(402).json({success: false,  message: 'portal_login_failed' });
           } catch (error) {
-            res.status(403).json({success: false,  message: 'portal_login_failed' });
+            res.status(403).json({success: false,  retCode: false, error: error });
             return;
           }
         }
