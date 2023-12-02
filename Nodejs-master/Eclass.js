@@ -1,18 +1,19 @@
 const { Builder, By, Key, until } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
+const lodash = require('lodash');
 
-async function Eclass(_studentID, portal_id, portal_pw) {
+async function Eclass(_studentID, portal_id, portal_pw)  {
     // JSON 배열에 항목 추가
     var jsonInfo = { studentID: _studentID, retCode: false, student_name: "", student_number: "", department: "", timeTable: [], timeTable_small: [] };
 
     // Selenium WebDriver를 시작합니다.
-    const driver = await new Builder().forBrowser('chrome').setChromeOptions(new chrome.Options().headless()).build();
+    const driver = await new Builder().forBrowser('chrome').setChromeOptions(new chrome.Options()).build();
 
     try {
 
         // 로그인 페이지로 이동
         await driver.get('https://mportal.cau.ac.kr/common/auth/SSOlogin.do');
-        await driver.wait(until.urlIs('https://mportal.cau.ac.kr/common/auth/SSOlogin.do'), 10000);
+        await driver.wait(until.elementLocated(By.name('userID')), 10000);
 
         // 아이디와 비밀번호 입력
         await driver.findElement(By.name('userID')).sendKeys(portal_id);
@@ -109,7 +110,11 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 
         //console.log(jsonInfo);
         return JSON.stringify(jsonInfo);
-    } finally {
+    } catch (error) {
+        console.error('An error occurred:', error);
+        jsonInfo.retCode = false;
+        return JSON.stringify(jsonInfo);
+    }  finally {
         await driver.quit();
     }
 }
