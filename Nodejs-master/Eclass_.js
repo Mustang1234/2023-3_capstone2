@@ -21,7 +21,15 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     
     // 로그인 페이지로 이동합니다.
     await page.goto('https://mportal.cau.ac.kr/common/auth/SSOlogin.do');
-    await page.waitForNavigation();
+    try {
+        await page.waitForNavigation({ timeout : 2000 });
+    } catch (error) {
+        if (error instanceof puppeteer.errors.TimeoutError) {
+            //console.error('Navigation timed out');
+        } else {
+            throw error;
+        }
+    }
 
     // 아이디와 비밀번호 입력
     await page.type('input[name="userID"]', portal_id); // 여기에 아이디를 입력합니다.
@@ -53,7 +61,6 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     }*/
 
     const cookies = await page.cookies();
-    //console.log(cookies)
     //console.log(cookies);
     /*try {
         await page.waitForNavigation({ timeout : 2000 });
@@ -133,8 +140,8 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     // JSON 문자열로 변환
     //const jsonString = JSON.stringify(jsonArray);
 
-    const page2 = await browser.newPage();
-    await page2.setCookie(...cookies);
+    //const page2 = await browser.newPage();
+    //await page2.setCookie(...cookies);
     //await page2.setCookie(...cookies);
     /*try {
         await page2.waitForNavigation({ timeout : 2000 });
@@ -145,11 +152,11 @@ async function Eclass(_studentID, portal_id, portal_pw) {
             throw error;
         }
     }*/
-    await page2.goto('https://mportal.cau.ac.kr/std/usk/sUskCap003/index.do');
+    await page.goto('https://mportal.cau.ac.kr/std/usk/sUskCap003/index.do');
     //await page2.setCookie(...cookies);
     //await page2.waitForNavigation();
     try {
-        await page2.waitForNavigation({ timeout: 2500 });
+        await page.waitForNavigation({ timeout: 2500 });
     } catch (error) {
         if (error instanceof puppeteer.errors.TimeoutError) {
             //console.error('Navigation timed out');
@@ -157,7 +164,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
             throw error;
         }
     }
-    const pageContent2 = await page2.content();
+    const pageContent2 = await page.content();
     //console.log(pageContent2);
     await browser.close();
 
