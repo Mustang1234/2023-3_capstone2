@@ -418,10 +418,11 @@ app.post('/get_timetable_from_db', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const year_semester = _year_semester();
-    const result = JSON.parse(await DB_IO.db_to_timetable(Student_id, year_semester));
+    const result1 = JSON.parse(await DB_IO.db_to_timetable(Student_id, year_semester));
+    const result2 = JSON.parse(await DB_IO.db_to_timetable_small(Student_id, year_semester));
     const projects = JSON.parse(await DB_IO.list_whole_project(Student_id, year_semester));
     //console.log(result)
-    res.status(200).json({ timetable: result, projects: projects });
+    res.status(200).json({ timetable: result1, timetable_small: result2, projects: projects });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
@@ -452,11 +453,11 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
     //console.log(jsonInfo);
     const result1 = await DB_IO.course_to_db(year_semester, jsonInfo.timeTable);
     const result2 = await DB_IO.timetable_to_db(Student_id, year_semester, jsonInfo.timeTable_small);
-    const result3 = JSON.parse(await DB_IO.db_to_timetable(Student_id, year_semester));
+    const result3 = JSON.parse(await DB_IO.db_to_timetable_small(Student_id, year_semester));
     const projects = JSON.parse(await DB_IO.list_whole_project(Student_id, year_semester));
     //console.log(result1);
     //console.log(result2);
-    res.status(200).json({ timetable: result3, projects: projects });
+    res.status(200).json({ timetable: jsonInfo.timeTable, timetable_small: result3, projects: projects });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
