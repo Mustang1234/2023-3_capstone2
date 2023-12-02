@@ -667,6 +667,7 @@ module.exports = {
         }
     },
     leave_team: async (Team_id, Student_id) => {
+        console.log("leave_team");
         try {
             const _leave_team0 = await new Promise((resolve, reject) => {
                 db.query(`SELECT * FROM TeamPeopleTable WHERE Team_id = ? and Student_id = ?;`, [Team_id, Student_id], (error, rows) => {
