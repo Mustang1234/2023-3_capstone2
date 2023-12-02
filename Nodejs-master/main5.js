@@ -452,10 +452,11 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
     //console.log(jsonInfo);
     const result1 = await DB_IO.course_to_db(year_semester, jsonInfo.timeTable);
     const result2 = await DB_IO.timetable_to_db(Student_id, year_semester, jsonInfo.timeTable_small);
+    const result3 = await DB_IO.db_to_timetable(Student_id, year_semester, jsonInfo.timeTable_small);
     const projects = JSON.parse(await DB_IO.list_whole_project(Student_id, year_semester));
     //console.log(result1);
     //console.log(result2);
-    res.status(200).json({ timetable: jsonInfo.timeTable, projects: projects });
+    res.status(200).json({ timetable: result3, projects: projects });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');

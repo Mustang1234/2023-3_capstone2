@@ -111,7 +111,7 @@ module.exports = {
     db_to_timetable: async (Student_id, year_semester) => {
         try {
             const timeTable = await new Promise((resolve, reject) => {
-                db.query(`SELECT B.day, B.time, B.Course_name
+                db.query(`SELECT B.Course_id, B.day, B.time, B.Course_name
                 FROM TimeTable as A INNER JOIN  CourseTable as B 
                 ON A.Course_id = B.Course_id and A.Student_id = ? and A.year_semester = ?`, [Student_id, year_semester], (error, rows) => {
                     if (error) {

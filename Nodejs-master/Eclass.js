@@ -18,23 +18,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
             req.continue();
         }
     });
-    await page.waitForTimeout(1000);
-    await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 });
     
-    page.on('request', (req) => {
-        const resourceType = req.resourceType();
-        
-        if (resourceType === 'document' || 
-            resourceType === 'script' || 
-            resourceType === 'xhr' || 
-            resourceType === 'fetch' ||
-            resourceType === 'websocket' ||
-            resourceType === 'eventsource') {
-        req.continue();
-        } else {
-        req.abort();
-        }
-    });
     // 로그인 페이지로 이동합니다.
     await page.goto('https://mportal.cau.ac.kr/common/auth/SSOlogin.do');
     await page.waitForNavigation();
