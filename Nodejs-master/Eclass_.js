@@ -6,7 +6,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     var jsonInfo = {studentID: _studentID, retCode: false, student_name: "", student_number: "", department: "", timeTable: [], timeTable_small: []};
 
     // Puppeteer를 시작합니다.
-    const browser = await puppeteer.launch({ headless: false, }); // headless: false로 설정하면 브라우저를 실제로 표시합니다.
+    const browser = await puppeteer.launch({ headless: true, }); // headless: false로 설정하면 브라우저를 실제로 표시합니다.
     const page = await browser.newPage();
 
     await page.setRequestInterception(true);
