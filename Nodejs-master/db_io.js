@@ -818,7 +818,7 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    leave_team: async (Team_id, Student_id) => {
+    /*leave_team: async (Team_id, Student_id) => {
         try {
             const _leave_team = await new Promise((resolve, reject) => {
                 db.query(`DELETE FROM TeamPeopleTable WHERE Team_id = ? and Student_id = ?;`, [Team_id, Student_id], (error) => {
@@ -836,7 +836,7 @@ module.exports = {
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
             throw new Error('오류 발생');
         }
-    },
+    },*/
     list_team: async (Project_id) => {
         try {
             const teams = await new Promise((resolve, reject) => {
