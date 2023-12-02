@@ -58,6 +58,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         }*/
 
         jsonInfo.retCode = true;
+        console.log(1)
 
         // 로그인 후 페이지로 이동
         await driver.get('https://mportal.cau.ac.kr/std/uhs/sUhsPer001/index.do');
@@ -72,9 +73,11 @@ async function Eclass(_studentID, portal_id, portal_pw) {
             }
             // 다른 에러가 아니더라도 특별한 처리가 필요한 경우, 이 부분에 추가
         }
+        console.log(2)
 
         // 학생 정보 추출
         const pageContent1 = await driver.getPageSource();
+        console.log(3)
 
         const wow5 = '성명';
         pageContent_name = pageContent1.substring(pageContent1.indexOf(wow5), pageContent1.indexOf(wow5) + 200);
@@ -108,6 +111,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
             return JSON.stringify(jsonInfo);
         }
 
+        console.log(4)
         // 시간표 페이지로 이동
         await driver.get('https://mportal.cau.ac.kr/std/usk/sUskCap003/index.do');
         try {
@@ -121,8 +125,10 @@ async function Eclass(_studentID, portal_id, portal_pw) {
             }
             // 다른 에러가 아니더라도 특별한 처리가 필요한 경우, 이 부분에 추가
         }
+        console.log(5)
         const pageContent2 = await driver.getPageSource();
 
+        console.log(6)
         var timeTableArray = []
         //const Days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
         const Days_kor = ['월', '화', '수', '목', '금', '토', '일'];
