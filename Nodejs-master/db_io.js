@@ -743,7 +743,26 @@ module.exports = {
                         });
                     }
                     else{
-                        await delete_team(Team_id, _leave_team2);
+                        const _delete_team1 = await new Promise((resolve, reject) => {
+                            db.query(`DELETE FROM TeamPeopleTable WHERE Team_id = ?;`, [Team_id], (error) => {
+                                if (error) {
+                                    console.error(error);
+                                    reject(error);
+                                } else {
+                                    resolve(true);
+                                }
+                            });
+                        });
+                        const _delete_team2 = await new Promise((resolve, reject) => {
+                            db.query(`DELETE FROM TeamTable WHERE Team_id = ?;`, [Team_id], (error) => {
+                                if (error) {
+                                    console.error(error);
+                                    reject(error);
+                                } else {
+                                    resolve(true);
+                                }
+                            });
+                        });
                     }
                 }
                 const _leave_team5 = await new Promise((resolve, reject) => {
