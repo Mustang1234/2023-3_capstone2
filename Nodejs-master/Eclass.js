@@ -152,9 +152,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 
         return JSON.stringify(jsonInfo);
     } catch (error) {
-        if (!(error instanceof NoSuchSessionError)) {
-            console.error('An error occurred:', error);
-        }
+        console.error('An error occurred:', error);
         jsonInfo.retCode = false;
         return JSON.stringify(jsonInfo);
     }  finally {
