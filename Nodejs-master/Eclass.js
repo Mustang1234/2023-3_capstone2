@@ -53,7 +53,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     }*/
 
     const cookies = await page.cookies();
-    console.log(1);
+    //console.log(cookies);
     /*try {
         await page.waitForNavigation({ timeout : 2000 });
     } catch (error) {
@@ -69,12 +69,11 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 	    await browser.close();
         return JSON.stringify(jsonInfo);
     }
-    console.log(2);
+    jsonInfo.retCode = true;
 
     // 로그인 후 원하는 페이지로 이동 (예: 시간표 페이지)
     await page.setCookie(...cookies);
-    console.log(3);
-    try {
+    /*try {
 	await page.waitForNavigation({ timeout : 2000 });
     } catch (error) {
         if (error instanceof puppeteer.errors.TimeoutError) {
@@ -82,25 +81,22 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         } else {
 	    throw error;
         }
-    }
+    }*/
     await page.goto('https://mportal.cau.ac.kr/std/uhs/sUhsPer001/index.do');
-    console.log(4);
     //await page.setCookie(...cookies);
     //await page.setCookie(...cookies);
     //await page.waitForNavigation();
-    /*try {
-        await page.waitForNavigation({ timeout : 3000 });
+    try {
+        await page.waitForNavigation({ timeout : 2000 });
     } catch (error) {
         if (error instanceof puppeteer.errors.TimeoutError) {
             //console.error('Navigation timed out');
         } else {
             throw error;
         }
-    }*/
-    console.log(5);
+    }
 
     const pageContent1 = await page.content();
-    console.log(6);
     
     const wow5 = '성명';
     pageContent_name = pageContent1.substring(pageContent1.indexOf(wow5), pageContent1.indexOf(wow5)+200);
@@ -136,13 +132,10 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     // JSON 문자열로 변환
     //const jsonString = JSON.stringify(jsonArray);
 
-    console.log(7);
     const page2 = await browser.newPage();
-    console.log(8);
     await page2.setCookie(...cookies);
-    console.log(9);
     //await page2.setCookie(...cookies);
-    try {
+    /*try {
         await page2.waitForNavigation({ timeout : 2000 });
     } catch (error) {
         if (error instanceof puppeteer.errors.TimeoutError) {
@@ -150,23 +143,20 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         } else {
             throw error;
         }
-    }
+    }*/
     await page2.goto('https://mportal.cau.ac.kr/std/usk/sUskCap003/index.do');
-    console.log(10);
     //await page2.setCookie(...cookies);
     //await page2.waitForNavigation();
-    /*try {
-        await page.waitForNavigation({ timeout: 2000 });
+    try {
+	await page.waitForNavigation({ timeout : 2000 });
     } catch (error) {
-        if (error instanceof puppeteer.errors.TimeoutError) {
-            //console.error('Navigation timed out');
-        } else {
-            throw error;
-        }
-    }*/
-    console.log(11);
+	if (error instanceof puppeteer.errors.TimeoutError) {
+	    //console.error('Navigation timed out');
+	} else {
+	    throw error;
+	}
+    }
     const pageContent2 = await page2.content();
-    console.log(12);
     //console.log(pageContent2);
     await browser.close();
 
@@ -203,10 +193,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     jsonInfo.timeTable = timeTableArray;
     jsonInfo.timeTable_small = result;
 
-    jsonInfo.retCode = true;
-
-    console.log(jsonInfo)
-
+    //console.log(jsonInfo);
     return JSON.stringify(jsonInfo);
 }
 
