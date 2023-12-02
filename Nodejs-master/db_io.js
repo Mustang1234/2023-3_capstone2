@@ -743,7 +743,7 @@ module.exports = {
                         });
                     }
                     else{
-                        await this.delete_team(Team_id, _leave_team2);
+                        await delete_team(Team_id, _leave_team2);
                     }
                 }
                 const _leave_team5 = await new Promise((resolve, reject) => {
