@@ -9,15 +9,6 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     const driver = await new Builder().forBrowser('chrome').setChromeOptions(new chrome.Options().headless()).build();
 
     try {
-        // 요청 중단 설정
-        await driver.setRequestInterception(true);
-        driver.on('request', (req) => {
-            if (req.resourceType() === 'stylesheet' || req.resourceType() === 'font' || req.resourceType() === 'image') {
-                req.abort();
-            } else {
-                req.continue();
-            }
-        });
 
         // 로그인 페이지로 이동
         await driver.get('https://mportal.cau.ac.kr/common/auth/SSOlogin.do');
