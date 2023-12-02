@@ -36,7 +36,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         const cookies = await driver.manage().getCookies();
 
         console.log(cookies,'\n\n\n\n\n');
-
+        /*
         if (!cookies || cookies.length === 0) {
             console.error('No cookies found after login');
             try{
@@ -55,7 +55,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
             finally{
                 return JSON.stringify(jsonInfo);
             }
-        }
+        }*/
 
         jsonInfo.retCode = true;
 
@@ -156,6 +156,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         jsonInfo.timeTable = timeTableArray;
         jsonInfo.timeTable_small = result;
 
+        console.log(jsonInfo);
         return JSON.stringify(jsonInfo);
     } catch (error) {
         console.error('An error occurred:', error);
