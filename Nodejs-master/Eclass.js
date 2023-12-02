@@ -205,6 +205,8 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 
     jsonInfo.retCode = true;
 
+    console.log(jsonInfo)
+
     return JSON.stringify(jsonInfo);
 }
 
