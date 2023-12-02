@@ -7,7 +7,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     var jsonInfo = { studentID: _studentID, retCode: false, student_name: "", student_number: "", department: "", timeTable: [], timeTable_small: [] };
     const service = new chrome.ServiceBuilder('./chromedriver').build();
     // Selenium WebDriver를 시작합니다.
-    const driver = await new Builder().forBrowser('chrome').setChromeOptions(new chrome.Options()).build();
+    const driver = await new Builder().forBrowser('chrome').setChromeOptions(new chrome.Options().headless()).build();
 
     try {
 
@@ -108,7 +108,6 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         jsonInfo.timeTable = timeTableArray;
         jsonInfo.timeTable_small = result;
 
-        console.log(jsonInfo);
         return JSON.stringify(jsonInfo);
     } catch (error) {
         console.error('An error occurred:', error);
