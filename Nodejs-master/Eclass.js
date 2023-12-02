@@ -53,7 +53,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     }*/
 
     const cookies = await page.cookies();
-    //console.log(cookies)
+    console.log(cookies)
     //console.log(cookies);
     /*try {
         await page.waitForNavigation({ timeout : 2000 });
