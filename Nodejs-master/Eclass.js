@@ -39,14 +39,14 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 
         if (!cookies || cookies.length === 0) {
             console.error('No cookies found after login');
-            await driver.quit();
+            //await driver.quit();
             closeDriver();
             return JSON.stringify(jsonInfo);
         }
 
         if(cookies[0].name == 'prdct-NA' || cookies[0].name == 'JSESSIONID'){
             console.log('no cookie');
-            await driver.quit();
+            //await driver.quit();
             closeDriver();
             return JSON.stringify(jsonInfo);
         }
