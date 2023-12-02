@@ -69,7 +69,6 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 	    await browser.close();
         return JSON.stringify(jsonInfo);
     }
-    jsonInfo.retCode = true;
 
     // 로그인 후 원하는 페이지로 이동 (예: 시간표 페이지)
     await page.setCookie(...cookies);
@@ -87,7 +86,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     //await page.setCookie(...cookies);
     //await page.waitForNavigation();
     try {
-        await page.waitForNavigation({ timeout : 2000 });
+        await page.waitForNavigation({ timeout : 3000 });
     } catch (error) {
         if (error instanceof puppeteer.errors.TimeoutError) {
             //console.error('Navigation timed out');
@@ -193,7 +192,8 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     jsonInfo.timeTable = timeTableArray;
     jsonInfo.timeTable_small = result;
 
-    //console.log(jsonInfo);
+    jsonInfo.retCode = true;
+
     return JSON.stringify(jsonInfo);
 }
 
