@@ -53,6 +53,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     }*/
 
     const cookies = await page.cookies();
+    console.log(cookies)
     //console.log(cookies);
     /*try {
         await page.waitForNavigation({ timeout : 2000 });
@@ -87,7 +88,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     //await page.setCookie(...cookies);
     //await page.waitForNavigation();
     try {
-        await page.waitForNavigation({ timeout : 2000 });
+        await page.waitForNavigation({ timeout : 2500 });
     } catch (error) {
         if (error instanceof puppeteer.errors.TimeoutError) {
             //console.error('Navigation timed out');
@@ -124,8 +125,8 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     jsonInfo.department = pageContent_department;
     
     if(jsonInfo.student_name.length === 0
-        || jsonInfo.student_name === '      <dd>\n            <span>{{vm.stuInfo.kornm}}'
-        || jsonInfo.student_name === "<!DOCTYPE html><html><he'"){
+        || jsonInfo.student_name.includes(' <dd>\n            <span>{{vm.stuInfo.kor')
+        || jsonInfo.student_name.includes('<!DOCTYPE html><ht')){
         return JSON.stringify(jsonInfo);
     }
 
@@ -148,13 +149,13 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     //await page2.setCookie(...cookies);
     //await page2.waitForNavigation();
     try {
-	await page2.waitForNavigation({ timeout : 2000 });
+        await page2.waitForNavigation({ timeout: 2500 });
     } catch (error) {
-	if (error instanceof puppeteer.errors.TimeoutError) {
-	    //console.error('Navigation timed out');
-	} else {
-	    throw error;
-	}
+        if (error instanceof puppeteer.errors.TimeoutError) {
+            //console.error('Navigation timed out');
+        } else {
+            throw error;
+        }
     }
     const pageContent2 = await page2.content();
     //console.log(pageContent2);
@@ -193,7 +194,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     jsonInfo.timeTable = timeTableArray;
     jsonInfo.timeTable_small = result;
 
-    //console.log(jsonInfo);
+    console.log(jsonInfo);
     return JSON.stringify(jsonInfo);
 }
 
