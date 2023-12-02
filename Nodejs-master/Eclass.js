@@ -148,7 +148,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     await page.goto('https://mportal.cau.ac.kr/std/usk/sUskCap003/index.do');
     //await page2.setCookie(...cookies);
     //await page2.waitForNavigation();
-    /*try {
+    try {
         await page.waitForNavigation({ timeout: 2500 });
     } catch (error) {
         if (error instanceof puppeteer.errors.TimeoutError) {
@@ -156,7 +156,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         } else {
             throw error;
         }
-    }*/
+    }
     const pageContent2 = await page.content();
     //console.log(pageContent2);
     await browser.close();
