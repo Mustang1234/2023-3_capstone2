@@ -37,6 +37,13 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 
         if (!cookies || cookies.length === 0) {
             console.error('No cookies found after login');
+            await driver.quit();
+            return JSON.stringify(jsonInfo);
+        }
+
+        if(cookies[0].name == 'prdct-NA'){
+            console.log('no cookie');
+            await driver.quit();
             return JSON.stringify(jsonInfo);
         }
 
@@ -87,6 +94,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         if (jsonInfo.student_name.length === 0
             || jsonInfo.student_name === '      <dd>\n            <span>{{vm.stuInfo.kornm}}'
             || jsonInfo.student_name === "<!DOCTYPE html><html><he'") {
+            await driver.quit();
             return JSON.stringify(jsonInfo);
         }
 
