@@ -370,6 +370,31 @@ app.get('/main_page', authenticateToken, async (req, res) => {
   }
 });
 
+app.get('/add_student_description', authenticateToken, async (req, res) => {
+  try {
+    const Student_id = req.user.user.Student_id;
+    const description  = req.query.description;
+    const result = await DB_IO.add_student_description(description, Student_id);
+    res.status(200).json({ success: result });
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
+app.get('/add_team_description', authenticateToken, async (req, res) => {
+  try {
+    const Student_id = req.user.user.Student_id;
+    const description  = req.query.description;
+    const Team_id  = req.query.Team_id;
+    const result = await DB_IO.add_team_description(description, Team_id, Student_id);
+    res.status(200).json({ success: result });
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(500).send('오류 발생');
+  }
+});
+
 /*// Example route that requires authentication
 app.get('/protected', authenticateToken, (req, res) => {
   res.json({ message: 'Protected route', user: req.user });
@@ -686,10 +711,11 @@ app.get('/create_team2', authenticateToken, async (req, res) => {
 
 app.get('/create_team3', authenticateToken, async (req, res) => {
   try {
-    //const Student_id = req.user.user.Student_id;
+    const Student_id = req.user.user.Student_id;
     const Project_id  = req.query.Project_id;
     const Team_name = req.query.Team_name;
-    const result = await DB_IO.create_team(Project_id, Team_name);
+    const max_member = req.query.max_member;
+    const result = await DB_IO.create_team(Project_id, Team_name, max_member, Student_id);
     //console.log(result);
     res.status(200).json({ success: result });
   } catch (error) {

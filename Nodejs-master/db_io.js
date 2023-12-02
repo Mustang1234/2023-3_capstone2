@@ -832,25 +832,6 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    /*leave_team: async (Team_id, Student_id) => {
-        try {
-            const _leave_team = await new Promise((resolve, reject) => {
-                db.query(`DELETE FROM TeamPeopleTable WHERE Team_id = ? and Student_id = ?;`, [Team_id, Student_id], (error) => {
-                    if (error) {
-                        console.error(error);
-                        reject(error);
-                    } else {
-                        resolve(true);
-                    }
-                });
-            });
-            return _leave_team;
-        } catch (error) {
-            console.error('오류 발생:', error);
-            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
-            throw new Error('오류 발생');
-        }
-    },*/
     list_team: async (Project_id) => {
         try {
             const teams = await new Promise((resolve, reject) => {
@@ -875,6 +856,64 @@ module.exports = {
                 });
             });
             return JSON.stringify(teams);
+        } catch (error) {
+            console.error('오류 발생:', error);
+            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
+            throw new Error('오류 발생');
+        }
+    },
+    add_student_description: async (description, Student_id) => {
+        try {
+            const _add_student_description = await new Promise((resolve, reject) => {
+                db.query(`UPDATE StudentTable SET description = ? WHERE Student_id= ?;`, [description, Student_id], (error) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
+                });
+            });
+            return _add_student_description;
+        } catch (error) {
+            console.error('오류 발생:', error);
+            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
+            throw new Error('오류 발생');
+        }
+    },
+    add_team_description: async (description, Team_id, Student_id) => {
+        try {
+            const _add_team_description1 = await new Promise((resolve, reject) => {
+                db.query(`SELECT * FROM TeamTable WHERE Team_id = ? and head = ?;`, [Team_id, Student_id], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        if(rows.length !== 0) {
+                            resolve(Student_id);
+                        }
+                        else {
+                            resolve(false);
+                        }
+                    }
+                });
+            });
+            if(_add_team_description1) {
+                const _add_team_description2 = await new Promise((resolve, reject) => {
+                    db.query(`UPDATE TeamTable SET description = ? WHERE Team_id= ? and head = ?;`, [description, Team_id, Student_id], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                return _add_team_description2;
+            }
+            else {
+                return false;
+            }
         } catch (error) {
             console.error('오류 발생:', error);
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
