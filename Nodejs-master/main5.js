@@ -499,7 +499,7 @@ app.get('/list_my_team', authenticateToken, async (req, res) => {
     const year_semester = _year_semester();
     const result = JSON.parse(await DB_IO.list_my_team(Student_id, year_semester));
     //console.log(result);
-    res.status(200).json({ projects: result });
+    res.status(200).json({ teams: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
@@ -512,7 +512,7 @@ app.get('/list_whole_team', authenticateToken, async (req, res) => {
     const year_semester = _year_semester();
     const result = JSON.parse(await DB_IO.list_whole_team(Student_id, year_semester));
     //console.log(result);
-    res.status(200).json({projects: result});
+    res.status(200).json({teams: result});
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(500).send('오류 발생');
