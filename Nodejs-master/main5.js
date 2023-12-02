@@ -435,7 +435,7 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
     const { portal_id, portal_pw } = req.body;
     const year_semester = _year_semester();
     if (portal_id === undefined || portal_pw === undefined) {
-      return res.status(400).json({ message: 'portal id and password are required' });
+      return res.status(401).json({ message: 'portal id and password are required' });
     }
     ///console.log(Student_id, year_semester, portal_id, portal_pw);
     var jsonInfo = {};
@@ -443,10 +443,10 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
       try {
         jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_id, portal_pw));
         if (jsonInfo.timeTable.length !== 0) break;
-        if (jsonInfo.retCode === false) return res.status(400).json({ message: 'portal_login_failed' });
+        if (jsonInfo.retCode === false) return res.status(402).json({ message: 'portal_login_failed' });
       } catch (error) {
         console.error('오류 발생:', error);
-        res.status(400).json({ returnCode: false, error: error });  
+        res.status(403).json({ returnCode: false, error: error });  
         return;
       }
     }
@@ -461,7 +461,7 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
     res.status(200).json({ timetable: result3, timetable_small: result4, projects: projects });
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(405).send('오류 발생');
   }
 });
 

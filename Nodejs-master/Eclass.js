@@ -96,6 +96,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     }
 
     const pageContent1 = await page.content();
+    console.log(pageContent1)
     
     const wow5 = '성명';
     pageContent_name = pageContent1.substring(pageContent1.indexOf(wow5), pageContent1.indexOf(wow5)+200);
@@ -156,6 +157,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 	}
     }
     const pageContent2 = await page2.content();
+    console.log(pageContent2)
     //console.log(pageContent2);
     await browser.close();
 
