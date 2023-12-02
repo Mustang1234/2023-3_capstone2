@@ -133,7 +133,7 @@ app.post('/signup', async (req, res) => {
     return res.status(401).json({success: false,  message: 'Username and password are required' });
   }
   if (portal_id === undefined || portal_pw === undefined) {
-    return res.status(402).json({success: false,  message: 'portal_login_failed' });
+    return res.status(402).json({success: false,  message: 'portal id and password are required' });
   }
   FindUser.findById(Student_id, async (user) => {
     if (user === false) {
@@ -435,7 +435,7 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
     const { portal_id, portal_pw } = req.body;
     const year_semester = _year_semester();
     if (portal_id === undefined || portal_pw === undefined) {
-      return res.status(400).json({ message: 'portal_login_failed' });
+      return res.status(400).json({ message: 'portal id and password are required' });
     }
     ///console.log(Student_id, year_semester, portal_id, portal_pw);
     var jsonInfo = {};
