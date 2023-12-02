@@ -9,6 +9,16 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     const browser = await puppeteer.launch({ headless: true, }); // headless: false로 설정하면 브라우저를 실제로 표시합니다.
     const page = await browser.newPage();
 
+    await page.setRequestInterception(true);
+    page.on('request', (req) => {
+        if (req.resourceType() === 'stylesheet' || req.resourceType() === 'font' || req.resourceType() === 'image') {
+            req.abort();
+        }
+        else {
+            req.continue();
+        }
+    });
+    
     // 로그인 페이지로 이동합니다.
     await page.goto('https://mportal.cau.ac.kr/common/auth/SSOlogin.do');
     await page.waitForNavigation();
@@ -30,6 +40,8 @@ async function Eclass(_studentID, portal_id, portal_pw) {
             throw error;
         }
     }
+
+
     /*try {
         await page.waitForNavigation({ timeout : 2000 });
     } catch (error) {
