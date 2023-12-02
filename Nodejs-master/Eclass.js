@@ -39,26 +39,22 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 
         if (!cookies || cookies.length === 0) {
             console.error('No cookies found after login');
-            const session = await driver.getSession();
-            if (session) {
-                // 세션이 유효한 경우에만 종료
+            try{
                 await driver.quit();
-            } else {
-                console.log('Session is already closed or invalid.');
             }
-            return JSON.stringify(jsonInfo);
+            finally{
+                return JSON.stringify(jsonInfo);
+            }
         }
 
         if(cookies[0].name == 'prdct-NA' || cookies[0].name == 'JSESSIONID'){
             console.log('no cookie');
-            const session = await driver.getSession();
-            if (session) {
-                // 세션이 유효한 경우에만 종료
+            try{
                 await driver.quit();
-            } else {
-                console.log('Session is already closed or invalid.');
             }
-            return JSON.stringify(jsonInfo);
+            finally{
+                return JSON.stringify(jsonInfo);
+            }
         }
 
         jsonInfo.retCode = true;
