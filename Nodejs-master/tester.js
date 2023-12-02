@@ -119,4 +119,5 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     }
 }
 
+const fdsa = Eclass('fdsa','joonkkkk1234','@kjkszpj12');
 console.log(fdsa)

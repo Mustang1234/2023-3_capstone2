@@ -5,7 +5,7 @@ const lodash = require('lodash');
 async function Eclass(_studentID, portal_id, portal_pw) {
     // JSON 배열에 항목 추가
     var jsonInfo = { studentID: _studentID, retCode: false, student_name: "", student_number: "", department: "", timeTable: [], timeTable_small: [] };
-
+    const service = new chrome.ServiceBuilder('./chromedriver').build();
     // Selenium WebDriver를 시작합니다.
     const driver = await new Builder().forBrowser('chrome').setChromeOptions(new chrome.Options()).build();
 
