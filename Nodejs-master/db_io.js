@@ -667,7 +667,7 @@ module.exports = {
         }
     },
     leave_team: async (Team_id, Student_id) => {
-        console.log("leave_team");
+        //console.log("leave_team");
         try {
             const _leave_team0 = await new Promise((resolve, reject) => {
                 db.query(`SELECT * FROM TeamPeopleTable WHERE Team_id = ? and Student_id = ?;`, [Team_id, Student_id], (error, rows) => {
@@ -684,7 +684,7 @@ module.exports = {
                     }
                 });
             });
-            console.log(_leave_team0);
+            //console.log(_leave_team0);
             if(_leave_team0){
                 const _leave_team1 = await new Promise((resolve, reject) => {
                     db.query(`UPDATE TeamTable SET current_member = current_member - 1 WHERE Team_id = ?;`, [Team_id], (error) => {
@@ -696,7 +696,7 @@ module.exports = {
                         }
                     });
                 });
-                console.log(_leave_team1);
+                //console.log(_leave_team1);
                 const _leave_team2 = await new Promise((resolve, reject) => {
                     db.query(`SELECT * FROM TeamTable WHERE Team_id = ? and head = ?;`, [Team_id, Student_id], (error, rows) => {
                         if (error) {
@@ -712,7 +712,7 @@ module.exports = {
                         }
                     });
                 });
-                console.log(_leave_team2);
+                //console.log(_leave_team2);
                 if(_leave_team2){
                     const _leave_team3 = await new Promise((resolve, reject) => {
                         db.query(`SELECT * FROM TeamPeopleTable WHERE Team_id = ? and Student_id != ?;`, [Team_id, Student_id], (error, rows) => {
@@ -729,7 +729,7 @@ module.exports = {
                             }
                         });
                     });
-                    console.log(_leave_team3);
+                    //console.log(_leave_team3);
                     if(_leave_team3){
                         const _leave_team4 = await new Promise((resolve, reject) => {
                             db.query(`UPDATE TeamTable SET head = ? WHERE Team_id = ?;`, [_leave_team3, Team_id], (error) => {
@@ -743,7 +743,7 @@ module.exports = {
                         });
                     }
                     else{
-                        this.delete_team(Team_id, _leave_team2);
+                        delete_team(Team_id, _leave_team2);
                     }
                 }
                 const _leave_team5 = await new Promise((resolve, reject) => {
