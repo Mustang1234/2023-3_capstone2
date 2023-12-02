@@ -21,7 +21,15 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     
     // 로그인 페이지로 이동합니다.
     await page.goto('https://mportal.cau.ac.kr/common/auth/SSOlogin.do');
-    await page.waitForNavigation();
+    try {
+        await page.waitForNavigation({ timeout : 2000 });
+    } catch (error) {
+        if (error instanceof puppeteer.errors.TimeoutError) {
+            //console.error('Navigation timed out');
+        } else {
+            throw error;
+        }
+    }
 
     // 아이디와 비밀번호 입력
     await page.type('input[name="userID"]', portal_id); // 여기에 아이디를 입력합니다.
@@ -31,7 +39,15 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     await page.evaluate(() => {
         document.querySelector('a.btn-login').click();
     });
-    await page.waitForNavigation();
+    try {
+        await page.waitForNavigation({ timeout : 2000 });
+    } catch (error) {
+        if (error instanceof puppeteer.errors.TimeoutError) {
+            //console.error('Navigation timed out');
+        } else {
+            throw error;
+        }
+    }
 
 
     /*try {
@@ -78,7 +94,15 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     //await page.setCookie(...cookies);
     //await page.setCookie(...cookies);
     //await page.waitForNavigation();
-    await page.waitForNavigation();
+    try {
+        await page.waitForNavigation({ timeout : 2500 });
+    } catch (error) {
+        if (error instanceof puppeteer.errors.TimeoutError) {
+            //console.error('Navigation timed out');
+        } else {
+            throw error;
+        }
+    }
 
     const pageContent1 = await page.content();
     
@@ -131,7 +155,15 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     await page.goto('https://mportal.cau.ac.kr/std/usk/sUskCap003/index.do');
     //await page2.setCookie(...cookies);
     //await page2.waitForNavigation();
-    //await page.waitForNavigation();
+    try {
+        await page.waitForNavigation({ timeout: 2500 });
+    } catch (error) {
+        if (error instanceof puppeteer.errors.TimeoutError) {
+            //console.error('Navigation timed out');
+        } else {
+            throw error;
+        }
+    }
     const pageContent2 = await page.content();
     //console.log(pageContent2);
     await browser.close();
