@@ -89,7 +89,7 @@ function generateToken(req, res, next) {
   passport.authenticate('local', { session: false }, (err, user, info) => {
     if (err) { return next(err); }
     if (!user) {
-      return res.status(401).json({ success: false, message: 'login failed' });
+      return res.status(200).json({ success: false, message: 'login failed' });
     }
 
     const token = jwt.sign({ user }, token_secret_key.token_secret_key, { expiresIn: '1w' });
@@ -131,7 +131,7 @@ app.get('/id_duplicate_check', async (req, res) => {
       return res.status(200).json({ success: true, message: 'available id' });
     }
     else {
-      return res.status(401).json({ success: false, message: 'username already exists' });
+      return res.status(200).json({ success: false, message: 'username already exists' });
     }
   });
 });
@@ -142,10 +142,10 @@ app.post('/signup', async (req, res) => {
   const year_semester = _year_semester();
 
   if (!Student_id || !Student_pw) {
-    return res.status(401).json({success: false,  message: 'Username and password are required' });
+    return res.status(200).json({success: false,  message: 'Username and password are required' });
   }
   if (portal_id === undefined || portal_pw === undefined) {
-    return res.status(402).json({success: false,  message: 'portal id and password are required' });
+    return res.status(200).json({success: false,  message: 'portal id and password are required' });
   }
   FindUser.findById(Student_id, async (user) => {
     if (user === false) {
@@ -155,9 +155,9 @@ app.post('/signup', async (req, res) => {
           try {
             jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_id, portal_pw));
             if (jsonInfo.timeTable.length !== 0) break;
-            if (jsonInfo.retCode === false) return res.status(402).json({success: false,  message: 'portal_login_failed' });
+            if (jsonInfo.retCode === false) return res.status(200).json({success: false,  message: 'portal_login_failed' });
           } catch (error) {
-            res.status(403).json({success: false,  retCode: false, error: error });
+            res.status(200).json({success: false,  retCode: false, error: error });
             return;
           }
         }
@@ -174,17 +174,17 @@ app.post('/signup', async (req, res) => {
             return res.status(200).json({ success: true, message: 'sign up success', status: result });
           }
           else {
-            return res.status(406).json({success: false, message: 'username already exists' });
+            return res.status(200).json({success: false, message: 'username already exists' });
           }
         });
       } catch (error) {
         console.error('오류 발생:', error);
-        res.status(405).send('오류 발생');
+        res.status(400).send('오류 발생');
       }
       //return res.status(400).json({ message: 'sign up success', status: true });
     }
     else {
-      return res.status(406).json({success: false, message: 'username already exists' });
+      return res.status(200).json({success: false, message: 'username already exists' });
     }
   });
 });
@@ -480,7 +480,7 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
     const { portal_id, portal_pw } = req.body;
     const year_semester = _year_semester();
     if (portal_id === undefined || portal_pw === undefined) {
-      return res.status(401).json({ message: 'portal id and password are required' });
+      return res.status(200).json({ message: 'portal id and password are required' });
     }
     ///console.log(Student_id, year_semester, portal_id, portal_pw);
     var jsonInfo = {};
@@ -488,10 +488,10 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
       try {
         jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_id, portal_pw));
         if (jsonInfo.timeTable.length !== 0) break;
-        if (jsonInfo.retCode === false) return res.status(402).json({ message: 'portal_login_failed' });
+        if (jsonInfo.retCode === false) return res.status(200).json({ message: 'portal_login_failed' });
       } catch (error) {
         console.error('오류 발생:', error);
-        res.status(403).json({ returnCode: false, error: error });  
+        res.status(200).json({ returnCode: false, error: error });  
         return;
       }
     }
@@ -506,7 +506,7 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
     res.status(200).json({ timetable: result3, timetable_small: result4, projects: projects });
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(405).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -610,7 +610,7 @@ app.get('/vote_my_project2', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const Project_id = req.query.Project_id;
     if(!await DB_IO.has_project_expired(Project_id)){
-      res.status(401).json({ success: false, message: 'project not expired' });
+      res.status(200).json({ success: false, message: 'project not expired' });
       return;
     }
     const result = JSON.parse(await DB_IO.list_project_peole(Student_id, Project_id));
@@ -628,31 +628,31 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const Project_id = req.body.Project_id;
     if(!await DB_IO.has_project_expired(Project_id)){
-      res.status(401).json({ success: false, message: 'project not expired' });
+      res.status(200).json({ success: false, message: 'project not expired' });
       return;
     }
     const votes = req.body.votes;
     if(await DB_IO.project_voted(Project_id, Student_id)){
-      res.status(402).json({ success: false, message: 'project already voted' });
+      res.status(200).json({ success: false, message: 'project already voted' });
       return;
     }
     const list_peole = JSON.parse(await DB_IO.list_project_peole(Student_id, Project_id));
     if(list_peole.length !== votes.length){
-      res.status(403).json({ success: false, message: 'vote info incorrect' });
+      res.status(200).json({ success: false, message: 'vote info incorrect' });
       return;
     }
     const j = votes.length;
     for (let i = 0; i < j; i++) {
       if (list_peole[i].Student_id !== votes[i].Student_id) {
-        res.status(403).json({ success: false, message: 'vote info incorrect' });
+        res.status(200).json({ success: false, message: 'vote info incorrect' });
         return;
       }
       if (Student_id === votes[i].Student_id) {
-        res.status(405).json({ success: false, message: 'no vote for self' });
+        res.status(200).json({ success: false, message: 'no vote for self' });
         return;
       }
       if(!['1', '2', '3', '4', '5'].includes(votes[i].vote_value)) {
-        res.status(406).json({ success: false, message: 'unknown vote value' });
+        res.status(200).json({ success: false, message: 'unknown vote value' });
         return;
       }
     }
@@ -789,9 +789,9 @@ app.get('/join_team_request', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const Team_id  = req.query.Team_id;
     //const Team_name = req.query.Team_name
-    const result = JSON.parse(await DB_IO.join_team_request(Team_id, Student_id));
+    const result = await DB_IO.join_team_request(Team_id, Student_id);
     //console.log(result);
-    res.status(result.code).json(result.result);
+    res.status(200).json(JSON.parse(result));
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
@@ -802,9 +802,9 @@ app.get('/join_team_request_list', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     //const Team_name = req.query.Team_name
-    const result = JSON.parse(await DB_IO.join_team_request_list(Student_id));
+    const result = await DB_IO.join_team_request_list(Student_id);
     //console.log(result);
-    res.status(result.code).json(result.result);
+    res.status(200).json({ requested_list: JSON.parse(result) });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
@@ -819,15 +819,15 @@ app.get('/join_team_response', authenticateToken, async (req, res) => {
     const requested_Student_id = req.query.requested_Student_id;
     const permit = req.query.permit;
     if(permit === 'true') {
-      const result = JSON.parse(await DB_IO.join_team_response_accept(JoinRequest_id, Team_id, requested_Student_id, Student_id));
-      res.status(result.code).json(result.result);
+      const result = await DB_IO.join_team_response_accept(JoinRequest_id, Team_id, requested_Student_id, Student_id);
+      res.status(200).json(JSON.parse(result));
     }
     else if (permit === 'false'){
-      const result = JSON.parse(await DB_IO.join_team_response_reject(JoinRequest_id, Team_id, requested_Student_id, Student_id));
-      res.status(result.code).json(result.result);
+      const result = await DB_IO.join_team_response_reject(JoinRequest_id, Team_id, requested_Student_id, Student_id);
+      res.status(200).json(JSON.parse(result));
     }
     else {
-      res.status(405).json({success: false, message: 'unknown permit value'});
+      res.status(200).json({success: false, message: 'unknown permit value'});
     }
   } catch (error) {
     console.error('오류 발생:', error);

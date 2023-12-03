@@ -837,7 +837,7 @@ module.exports = {
                                 reject(error);
                             } else {
                                 if(rows.length === 0){
-                                    return JSON.stringify({code : 401, result: { success: false, message : 'no such team' } });
+                                    return JSON.stringify({success: false, message : 'no such team' });
                                 }
                                 resolve(rows[0].head);
                             }
@@ -854,14 +854,14 @@ module.exports = {
                             }
                         });
                     });
-                    return JSON.stringify({code : 200, result: {success: _join_team_request3, message: 'requested'} });
+                    return JSON.stringify({success: _join_team_request3, message: 'requested'});
                 }
                 else{
-                    return JSON.stringify({code : 402, result: { success: false, message: "team full" } });
+                    return JSON.stringify({ success: false, message: "team full" });
                 }
             }
             else {
-                return JSON.stringify({code : 403, result: { success: false, message: "already in that team" } });
+                return JSON.stringify({ success: false, message: "already in that team" });
             }
         } catch (error) {
             console.error('오류 발생:', error);
@@ -886,7 +886,7 @@ module.exports = {
                     }
                 });
             });
-            return JSON.stringify({code : 200, result: { request_list : _join_team_request_list } });
+                return JSON.stringify(_join_team_request_list);
             
         } catch (error) {
             console.error('오류 발생:', error);
@@ -975,10 +975,10 @@ module.exports = {
                                 }
                             });
                         });
-                        return JSON.stringify({code : 200, result: {success: _join_team3 && _join_team4 && _join_team5, message: 'accepted'} });
+                        return JSON.stringify({success: _join_team3 && _join_team4 && _join_team5, message: 'accepted'});
                     }
                     else{
-                        return JSON.stringify({code : 401, result: {success: false, message: 'you are not head of team'} });
+                        return JSON.stringify({success: false, message: 'you are not head of team'});
                     }
                 }
                 else{
@@ -992,11 +992,11 @@ module.exports = {
                             }
                         });
                     });
-                    return JSON.stringify({code : 402, result: { success: false && !_join_team6, message: "team full" } });
+                    return JSON.stringify({ success: false && !_join_team6, message: "team full" });
                 }
             }
             else {
-                return JSON.stringify({code : 403, result: { success: false, message: "not in request list" } });
+                return JSON.stringify({ success: false, message: "not in request list" });
             }
         } catch (error) {
             console.error('오류 발생:', error);
@@ -1033,10 +1033,10 @@ module.exports = {
                         }
                     });
                 });
-                return JSON.stringify({code : 201, result: { success: true && _join_team1, message: "rejected" } });
+                return JSON.stringify({ success: true && _join_team1, message: "rejected" });
             }
             else {
-                return JSON.stringify({code : 403, result: { success: false, message: "not in request list" } });
+                return JSON.stringify({ success: false, message: "not in request list" });
             }
         } catch (error) {
             console.error('오류 발생:', error);
