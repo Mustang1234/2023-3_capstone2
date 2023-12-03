@@ -51,6 +51,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         }
     } catch (error) {
 	    await browser.close();
+        jsonInfo.retCode = true;
         return JSON.stringify(jsonInfo);
     }
 
