@@ -816,12 +816,15 @@ app.get('/join_team_response', authenticateToken, async (req, res) => {
     const Team_id = req.query.Team_id;
     const requested_Student_id = req.query.requested_Student_id;
     const permit = req.query.permit;
-    if(permit) {
+    if(permit === 'true') {
       const result = await DB_IO.join_team(JoinRequest_id, Team_id, requested_Student_id, Student_id);
       res.status(200).json(JSON.parse(result));
     }
-    else {
+    else if (permit === 'false'){
       res.status(200).json({success: true, message: 'rejected'});
+    }
+    else if (permit === 'false'){
+      res.status(401).json({success: false, message: 'unknown permit value'});
     }
   } catch (error) {
     console.error('오류 발생:', error);

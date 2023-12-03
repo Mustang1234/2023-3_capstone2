@@ -895,13 +895,14 @@ module.exports = {
     },
     join_team: async (JoinRequest_id, Team_id, Student_id, head) => {
         try {
-            const _join_team1 = await new Promise((resolve, reject) => {
-                db.query(`select * from TeamTable where Team_id = ?;`, [Team_id], (error, rows) => {
+            const _join_team0 = await new Promise((resolve, reject) => {
+                db.query(`select * from JoinRequestTable where JoinRequest_id = ? and Student_id = ? and Team_id = ? and req_Student_id = ?;`,
+                [JoinRequest_id, head, Team_id, Student_id], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
                     } else {
-                        if(rows[0].current_member < rows[0].max_member){
+                        if(rows.length !== 0){
                             resolve(true);
                         }
                         else{
@@ -910,14 +911,14 @@ module.exports = {
                     }
                 });
             });
-            if(_join_team1){
-                const _join_team2 = await new Promise((resolve, reject) => {
-                    db.query(`select * from TeamTable where Team_id = ? and head = ?;`, [Team_id, head], (error, rows) => {
+            if(_join_team0){
+                const _join_team1 = await new Promise((resolve, reject) => {
+                    db.query(`select * from TeamTable where Team_id = ?;`, [Team_id], (error, rows) => {
                         if (error) {
                             console.error(error);
                             reject(error);
                         } else {
-                            if(rows.length !== 0){
+                            if(rows[0].current_member < rows[0].max_member){
                                 resolve(true);
                             }
                             else{
@@ -926,28 +927,61 @@ module.exports = {
                         }
                     });
                 });
-                if(_join_team2){
-                    const _join_team3 = await new Promise((resolve, reject) => {
-                        db.query(`INSERT INTO TeamPeopleTable (Team_id, Student_id, voted)VALUES (?, ?, 0);`, [Team_id, Student_id], (error) => {
+                if(_join_team1){
+                    const _join_team2 = await new Promise((resolve, reject) => {
+                        db.query(`select * from TeamTable where Team_id = ? and head = ?;`, [Team_id, head], (error, rows) => {
                             if (error) {
                                 console.error(error);
                                 reject(error);
                             } else {
-                                resolve(true);
+                                if(rows.length !== 0){
+                                    resolve(true);
+                                }
+                                else{
+                                    resolve(false);
+                                }
                             }
                         });
                     });
-                    const _join_team4 = await new Promise((resolve, reject) => {
-                        db.query(`UPDATE TeamTable SET current_member = current_member + 1 WHERE Team_id = ?;`, [Team_id], (error) => {
-                            if (error) {
-                                console.error(error);
-                                reject(error);
-                            } else {
-                                resolve(true);
-                            }
+                    if(_join_team2){
+                        const _join_team3 = await new Promise((resolve, reject) => {
+                            db.query(`INSERT INTO TeamPeopleTable (Team_id, Student_id, voted)VALUES (?, ?, 0);`, [Team_id, Student_id], (error) => {
+                                if (error) {
+                                    console.error(error);
+                                    reject(error);
+                                } else {
+                                    resolve(true);
+                                }
+                            });
                         });
-                    });
-                    const _join_team5 = await new Promise((resolve, reject) => {
+                        const _join_team4 = await new Promise((resolve, reject) => {
+                            db.query(`UPDATE TeamTable SET current_member = current_member + 1 WHERE Team_id = ?;`, [Team_id], (error) => {
+                                if (error) {
+                                    console.error(error);
+                                    reject(error);
+                                } else {
+                                    resolve(true);
+                                }
+                            });
+                        });
+                        const _join_team5 = await new Promise((resolve, reject) => {
+                            db.query(`DELETE FROM JoinRequestTable WHERE JoinRequest_id = ?;`, [JoinRequest_id], (error) => {
+                                if (error) {
+                                    console.error(error);
+                                    reject(error);
+                                } else {
+                                    resolve(true);
+                                }
+                            });
+                        });
+                        return JSON.stringify({success: _join_team3 && _join_team4 && _join_team5, message: 'accepted'});
+                    }
+                    else{
+                        return JSON.stringify({success: false, message: 'you are not head of team'});
+                    }
+                }
+                else{
+                    const _join_team6 = await new Promise((resolve, reject) => {
                         db.query(`DELETE FROM JoinRequestTable WHERE JoinRequest_id = ?;`, [JoinRequest_id], (error) => {
                             if (error) {
                                 console.error(error);
@@ -957,24 +991,11 @@ module.exports = {
                             }
                         });
                     });
-                    return JSON.stringify({success: _join_team3 && _join_team4 && _join_team5, message: 'accepted'});
-                }
-                else{
-                    return JSON.stringify({success: false, message: 'you are not head of team'});
+                    return JSON.stringify({ success: false && !_join_team6, message: "team full" });
                 }
             }
-            else{
-                const _join_team6 = await new Promise((resolve, reject) => {
-                    db.query(`DELETE FROM JoinRequestTable WHERE JoinRequest_id = ?;`, [JoinRequest_id], (error) => {
-                        if (error) {
-                            console.error(error);
-                            reject(error);
-                        } else {
-                            resolve(true);
-                        }
-                    });
-                });
-                return JSON.stringify({ success: false && !_join_team6, message: "team full" });
+            else {
+                return JSON.stringify({ success: false, message: "not in request list" });
             }
         } catch (error) {
             console.error('오류 발생:', error);
