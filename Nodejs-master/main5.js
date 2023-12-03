@@ -823,7 +823,7 @@ app.get('/join_team_response', authenticateToken, async (req, res) => {
     else if (permit === 'false'){
       res.status(200).json({success: true, message: 'rejected'});
     }
-    else if (permit === 'false'){
+    else {
       res.status(401).json({success: false, message: 'unknown permit value'});
     }
   } catch (error) {
