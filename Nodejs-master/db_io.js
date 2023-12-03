@@ -785,7 +785,97 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    join_team: async (Team_id, Student_id) => {
+    join_team_request: async (Team_id, Student_id) => {
+        try {
+            const _join_team_request1 = await new Promise((resolve, reject) => {
+                db.query(`select * from TeamTable where Team_id = ?;`, [Team_id], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        if(rows[0].current_member < rows[0].max_member){
+                            resolve(true);
+                        }
+                        else{
+                            resolve(false);
+                        }
+                    }
+                });
+            });
+            if(_join_team_request1){
+                const _description = await new Promise((resolve, reject) => {
+                    db.query(`SELECT * FROM StudentTable WHERE Student_id = ?;`, [Student_id], (error, rows) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(rows[0].description);
+                        }
+                    });
+                });
+                const _head_Student_id = await new Promise((resolve, reject) => {
+                    db.query(`SELECT * FROM TeamTable WHERE Team_id = ?;`, [Team_id], (error, rows) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            if(rows.length === 0){
+                                return JSON.stringify({success: false, message : 'no such team' });
+                            }
+                            resolve(rows[0].description);
+                        }
+                    });
+                });
+                const _join_team_request3 = await new Promise((resolve, reject) => {
+                    db.query(`INSERT INTO JoinRequestTable (Student_id, Team_id, req_Student_id, description)
+                    VALUES (?, ?, ?, ?);`, [_head_Student_id, Team_id, Student_id, _description], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                return JSON.stringify({success: _join_team_request3, message: 'requested'});
+            }
+            else{
+                return JSON.stringify({ success: false, message: "team full" });
+            }
+        } catch (error) {
+            console.error('오류 발생:', error);
+            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
+            throw new Error('오류 발생');
+        }
+    },
+    join_team_request_list: async (Student_id) => {
+        try {
+            const _join_team_request_list = await new Promise((resolve, reject) => {
+                db.query(`select * from JoinRequestTable where Student_id = ?;`, [Student_id], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        const j = rows.length;
+                        var result = [];
+                        for (let i = 0; i < j; i++) {
+                            if (rows[i].Student_id !== Student_id) {
+                                result.push(rows[i]);
+                            }
+                        }
+                        resolve(result);
+                    }
+                });
+            });
+                return JSON.stringify(_join_team_request_list);
+            
+        } catch (error) {
+            console.error('오류 발생:', error);
+            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
+            throw new Error('오류 발생');
+        }
+    },
+    join_team: async (Team_id, Student_id, head) => {
         try {
             const _join_team1 = await new Promise((resolve, reject) => {
                 db.query(`select * from TeamTable where Team_id = ?;`, [Team_id], (error, rows) => {
@@ -804,29 +894,49 @@ module.exports = {
             });
             if(_join_team1){
                 const _join_team2 = await new Promise((resolve, reject) => {
-                    db.query(`INSERT INTO TeamPeopleTable (Team_id, Student_id, voted)VALUES (?, ?, 0);`, [Team_id, Student_id], (error) => {
+                    db.query(`select * from TeamTable where Team_id = ? and head = ?;`, [Team_id, head], (error, rows) => {
                         if (error) {
                             console.error(error);
                             reject(error);
                         } else {
-                            resolve(true);
+                            if(rows.length !== 0){
+                                resolve(true);
+                            }
+                            else{
+                                resolve(false);
+                            }
                         }
                     });
                 });
-                const _join_team3 = await new Promise((resolve, reject) => {
-                    db.query(`UPDATE TeamTable SET current_member = current_member + 1 WHERE Team_id = ?;`, [Team_id], (error) => {
-                        if (error) {
-                            console.error(error);
-                            reject(error);
-                        } else {
-                            resolve(true);
-                        }
+                if(_join_team2){
+                    const _join_team3 = await new Promise((resolve, reject) => {
+                        db.query(`INSERT INTO TeamPeopleTable (Team_id, Student_id, voted)VALUES (?, ?, 0);`, [Team_id, Student_id], (error) => {
+                            if (error) {
+                                console.error(error);
+                                reject(error);
+                            } else {
+                                resolve(true);
+                            }
+                        });
                     });
-                });
-                return {success: _join_team2 && _join_team3};
+                    const _join_team4 = await new Promise((resolve, reject) => {
+                        db.query(`UPDATE TeamTable SET current_member = current_member + 1 WHERE Team_id = ?;`, [Team_id], (error) => {
+                            if (error) {
+                                console.error(error);
+                                reject(error);
+                            } else {
+                                resolve(true);
+                            }
+                        });
+                    });
+                    return JSON.stringify({success: _join_team3 && _join_team4, message: 'accepted'});
+                }
+                else{
+                    return JSON.stringify({success: false, message: 'you are not head of team'});
+                }
             }
             else{
-                return { success: false, message: "team full" };
+                return JSON.stringify({ success: false, message: "team full" });
             }
         } catch (error) {
             console.error('오류 발생:', error);

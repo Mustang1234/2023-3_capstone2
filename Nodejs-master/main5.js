@@ -385,7 +385,7 @@ app.get('/main_page', authenticateToken, async (req, res) => {
     res.status(200).json(returnJson);
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -397,7 +397,7 @@ app.get('/add_student_description', authenticateToken, async (req, res) => {
     res.status(200).json({ success: result });
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -410,7 +410,7 @@ app.get('/add_team_description', authenticateToken, async (req, res) => {
     res.status(200).json({ success: result });
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -441,7 +441,7 @@ app.get('/my_page', authenticateToken, async (req, res) => {
     res.status(200).json(returnJson);
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -454,7 +454,7 @@ app.post('/my_page_photo_upload', authenticateToken, async (req, res) => {
     res.status(200).json({ Student_id: Student_id, success: result });
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -469,7 +469,7 @@ app.post('/get_timetable_from_db', authenticateToken, async (req, res) => {
     res.status(200).json({ timetable: result1, timetable_small: result2, projects: projects });
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -519,7 +519,7 @@ app.get('/list_my_project', authenticateToken, async (req, res) => {
     res.status(200).json({ projects: result });
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -532,7 +532,7 @@ app.get('/list_whole_project', authenticateToken, async (req, res) => {
     res.status(200).json({projects: result});
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -546,7 +546,7 @@ app.get('/list_my_team', authenticateToken, async (req, res) => {
     res.status(200).json({ teams: result });
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -559,7 +559,7 @@ app.get('/list_whole_team', authenticateToken, async (req, res) => {
     res.status(200).json({teams: result});
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -572,7 +572,7 @@ app.get('/delete_team', authenticateToken, async (req, res) => {
     res.status(200).json({retCode: result});
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -585,7 +585,7 @@ app.get('/leave_team', authenticateToken, async (req, res) => {
     res.status(200).json({retCode: result});
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -599,7 +599,7 @@ app.get('/vote_my_project1', authenticateToken, async (req, res) => {
     res.status(200).json({ projects: result });
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -617,7 +617,7 @@ app.get('/vote_my_project2', authenticateToken, async (req, res) => {
     res.status(200).json({ Project_id: Project_id, people: result });
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -669,7 +669,7 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
     res.status(200).json({ success: result, message: 'success' });
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -682,7 +682,7 @@ app.get('/add_project1', authenticateToken, async (req, res) => {
     res.status(200).json({timeTable: result});
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -698,7 +698,7 @@ app.get('/add_project2', authenticateToken, async (req, res) => {
     res.status(200).json({ success: result });
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -711,7 +711,7 @@ app.get('/create_team1', authenticateToken, async (req, res) => {
     res.status(200).json({timeTable: result});
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -724,7 +724,7 @@ app.get('/create_team2', authenticateToken, async (req, res) => {
     res.status(200).json({projects: result});
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -739,7 +739,7 @@ app.get('/create_team3', authenticateToken, async (req, res) => {
     res.status(200).json({ success: result });
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -752,7 +752,7 @@ app.get('/join_team1', authenticateToken, async (req, res) => {
     res.status(200).json({timeTable: result});
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -765,7 +765,7 @@ app.get('/join_team2', authenticateToken, async (req, res) => {
     res.status(200).json({projects: result});
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -778,7 +778,7 @@ app.get('/join_team3', authenticateToken, async (req, res) => {
     res.status(200).json({teams: result});
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -787,26 +787,42 @@ app.get('/join_team_request', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const Team_id  = req.query.Team_id;
     //const Team_name = req.query.Team_name
-    const result = await DB_IO.join_team(Team_id, Student_id);
+    const result = await DB_IO.join_team_request(Team_id, Student_id);
     //console.log(result);
-    res.status(200).json({ success: result });
+    res.status(200).json(JSON.parse(result));
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
+  }
+});
+
+app.get('/join_team_request_list', authenticateToken, async (req, res) => {
+  try {
+    const Student_id = req.user.user.Student_id;
+    //const Team_name = req.query.Team_name
+    const result = await DB_IO.join_team_request_list(Student_id);
+    //console.log(result);
+    res.status(200).json({ requested_list: JSON.parse(result) });
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(400).send('오류 발생');
   }
 });
 
 app.get('/join_team_response', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const Team_id  = req.query.Team_id;
-    //const Team_name = req.query.Team_name
-    const result = await DB_IO.join_team(Team_id, Student_id);
-    //console.log(result);
-    res.status(200).json({ success: result });
+    const Team_id = req.query.Team_id;
+    const requested_Student_id = req.query.requested_Student_id;
+    const permit = req.query.permit;
+    if(permit) {
+      const result = await DB_IO.join_team(Team_id, requested_Student_id, Student_id);
+      res.status(200).json(JSON.parse(result));
+    }
+    res.status(200).json({success: true, message: 'rejected'});
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -820,7 +836,7 @@ app.get('/leave_team', authenticateToken, async (req, res) => {
     res.status(200).json({ success: result });
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -834,7 +850,7 @@ app.get('/add_schedule1', authenticateToken, async (req, res) => {
     res.status(200).json({projects: result});
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -849,7 +865,7 @@ app.get('/add_schedule2', authenticateToken, async (req, res) => {
     res.status(200).json({ success: result });
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -871,7 +887,7 @@ app.get('/test', authenticateToken, async (req, res) => {
     res.redirect('/pages');
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -883,7 +899,7 @@ app.get('/test2', authenticateToken, async (req, res) => {
     res.redirect('/pages');
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -894,7 +910,7 @@ app.get('/test3', authenticateToken, async (req, res) => {
     res.redirect('/pages');
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });
 
@@ -924,7 +940,7 @@ app.post('/tester_process', authenticateToken, async (req, res) => {
     res.end();
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   }
 });*/
 
@@ -940,7 +956,7 @@ INSERT INTO ProjectTable (Course_id, start_time, finish_time, description)
     res.redirect('/pages');
   } catch (error) {
     console.error('오류 발생:', error);
-    res.status(500).send('오류 발생');
+    res.status(400).send('오류 발생');
   } 
 });*/
 
@@ -950,7 +966,7 @@ app.use(function (req, res, next) {
 });
 /*
 app.use(function (err, req, res, next) {
-  res.status(500).send(err);
+  res.status(400).send(err);
 });*/
 
 app.listen(port, () => {
