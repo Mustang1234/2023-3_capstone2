@@ -787,13 +787,13 @@ module.exports = {
     },
     join_team_request: async (Team_id, Student_id) => {
         try {
-            const _join_team_request1 = await new Promise((resolve, reject) => {
-                db.query(`select * from TeamTable where Team_id = ?;`, [Team_id], (error, rows) => {
+            const _join_team_request0 = await new Promise((resolve, reject) => {
+                db.query(`select * from TeamPeopleTable where Team_id = ? and Student_id = ?;`, [Team_id, Student_id], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
                     } else {
-                        if(rows[0].current_member < rows[0].max_member){
+                        if(rows.length === 0){
                             resolve(true);
                         }
                         else{
@@ -802,45 +802,65 @@ module.exports = {
                     }
                 });
             });
-            if(_join_team_request1){
-                const _description = await new Promise((resolve, reject) => {
-                    db.query(`SELECT * FROM StudentTable WHERE Student_id = ?;`, [Student_id], (error, rows) => {
+            if(_join_team_request0){
+                const _join_team_request1 = await new Promise((resolve, reject) => {
+                    db.query(`select * from TeamTable where Team_id = ?;`, [Team_id], (error, rows) => {
                         if (error) {
                             console.error(error);
                             reject(error);
                         } else {
-                            resolve(rows[0].description);
-                        }
-                    });
-                });
-                const _head_Student_id = await new Promise((resolve, reject) => {
-                    db.query(`SELECT * FROM TeamTable WHERE Team_id = ?;`, [Team_id], (error, rows) => {
-                        if (error) {
-                            console.error(error);
-                            reject(error);
-                        } else {
-                            if(rows.length === 0){
-                                return JSON.stringify({success: false, message : 'no such team' });
+                            if(rows[0].current_member < rows[0].max_member){
+                                resolve(true);
                             }
-                            resolve(rows[0].head);
+                            else{
+                                resolve(false);
+                            }
                         }
                     });
                 });
-                const _join_team_request3 = await new Promise((resolve, reject) => {
-                    db.query(`INSERT INTO JoinRequestTable (Student_id, Team_id, req_Student_id, description)
-                    VALUES (?, ?, ?, ?);`, [_head_Student_id, Team_id, Student_id, _description], (error) => {
-                        if (error) {
-                            console.error(error);
-                            reject(error);
-                        } else {
-                            resolve(true);
-                        }
+                if(_join_team_request1){
+                    const _description = await new Promise((resolve, reject) => {
+                        db.query(`SELECT * FROM StudentTable WHERE Student_id = ?;`, [Student_id], (error, rows) => {
+                            if (error) {
+                                console.error(error);
+                                reject(error);
+                            } else {
+                                resolve(rows[0].description);
+                            }
+                        });
                     });
-                });
-                return JSON.stringify({success: _join_team_request3, message: 'requested'});
+                    const _head_Student_id = await new Promise((resolve, reject) => {
+                        db.query(`SELECT * FROM TeamTable WHERE Team_id = ?;`, [Team_id], (error, rows) => {
+                            if (error) {
+                                console.error(error);
+                                reject(error);
+                            } else {
+                                if(rows.length === 0){
+                                    return JSON.stringify({success: false, message : 'no such team' });
+                                }
+                                resolve(rows[0].head);
+                            }
+                        });
+                    });
+                    const _join_team_request3 = await new Promise((resolve, reject) => {
+                        db.query(`INSERT INTO JoinRequestTable (Student_id, Team_id, req_Student_id, description)
+                        VALUES (?, ?, ?, ?);`, [_head_Student_id, Team_id, Student_id, _description], (error) => {
+                            if (error) {
+                                console.error(error);
+                                reject(error);
+                            } else {
+                                resolve(true);
+                            }
+                        });
+                    });
+                    return JSON.stringify({success: _join_team_request3, message: 'requested'});
+                }
+                else{
+                    return JSON.stringify({ success: false, message: "team full" });
+                }
             }
-            else{
-                return JSON.stringify({ success: false, message: "team full" });
+            else {
+                return JSON.stringify({ success: false, message: "already in that team" });
             }
         } catch (error) {
             console.error('오류 발생:', error);
@@ -944,7 +964,17 @@ module.exports = {
                 }
             }
             else{
-                return JSON.stringify({ success: false, message: "team full" });
+                const _join_team6 = await new Promise((resolve, reject) => {
+                    db.query(`DELETE FROM JoinRequestTable WHERE JoinRequest_id = ?;`, [JoinRequest_id], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                return JSON.stringify({ success: false && !_join_team6, message: "team full" });
             }
         } catch (error) {
             console.error('오류 발생:', error);
