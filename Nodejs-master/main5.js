@@ -131,7 +131,7 @@ app.get('/id_duplicate_check', async (req, res) => {
       return res.status(200).json({ success: true, message: 'available id' });
     }
     else {
-      return res.status(200).json({ success: false, message: 'username already exists' });
+      return res.status(401).json({ success: false, message: 'username already exists' });
     }
   });
 });
@@ -610,7 +610,7 @@ app.get('/vote_my_project2', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const Project_id = req.query.Project_id;
     if(!await DB_IO.has_project_expired(Project_id)){
-      res.status(400).json({ success: false, message: 'project not expired' });
+      res.status(401).json({ success: false, message: 'project not expired' });
       return;
     }
     const result = JSON.parse(await DB_IO.list_project_peole(Student_id, Project_id));
@@ -789,9 +789,9 @@ app.get('/join_team_request', authenticateToken, async (req, res) => {
     const Student_id = req.user.user.Student_id;
     const Team_id  = req.query.Team_id;
     //const Team_name = req.query.Team_name
-    const result = await DB_IO.join_team_request(Team_id, Student_id);
+    const result = JSON.parse(await DB_IO.join_team_request(Team_id, Student_id));
     //console.log(result);
-    res.status(200).json(JSON.parse(result));
+    res.status(result.code).json(result.result);
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
@@ -802,9 +802,9 @@ app.get('/join_team_request_list', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     //const Team_name = req.query.Team_name
-    const result = await DB_IO.join_team_request_list(Student_id);
+    const result = JSON.parse(await DB_IO.join_team_request_list(Student_id));
     //console.log(result);
-    res.status(200).json({ requested_list: JSON.parse(result) });
+    res.status(result.code).json(result.result);
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
@@ -819,15 +819,15 @@ app.get('/join_team_response', authenticateToken, async (req, res) => {
     const requested_Student_id = req.query.requested_Student_id;
     const permit = req.query.permit;
     if(permit === 'true') {
-      const result = await DB_IO.join_team_response_accept(JoinRequest_id, Team_id, requested_Student_id, Student_id);
-      res.status(200).json(JSON.parse(result));
+      const result = JSON.parse(await DB_IO.join_team_response_accept(JoinRequest_id, Team_id, requested_Student_id, Student_id));
+      res.status(result.code).json(result.result);
     }
     else if (permit === 'false'){
-      const result = await DB_IO.join_team_response_reject(JoinRequest_id, Team_id, requested_Student_id, Student_id);
-      res.status(200).json(JSON.parse(result));
+      const result = JSON.parse(await DB_IO.join_team_response_reject(JoinRequest_id, Team_id, requested_Student_id, Student_id));
+      res.status(result.code).json(result.result);
     }
     else {
-      res.status(401).json({success: false, message: 'unknown permit value'});
+      res.status(405).json({success: false, message: 'unknown permit value'});
     }
   } catch (error) {
     console.error('오류 발생:', error);
