@@ -822,7 +822,7 @@ module.exports = {
                             if(rows.length === 0){
                                 return JSON.stringify({success: false, message : 'no such team' });
                             }
-                            resolve(rows[0].description);
+                            resolve(rows[0].head);
                         }
                     });
                 });
