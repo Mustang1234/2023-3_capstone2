@@ -817,11 +817,12 @@ app.get('/join_team_response', authenticateToken, async (req, res) => {
     const requested_Student_id = req.query.requested_Student_id;
     const permit = req.query.permit;
     if(permit === 'true') {
-      const result = await DB_IO.join_team(JoinRequest_id, Team_id, requested_Student_id, Student_id);
+      const result = await DB_IO.join_team_response_accept(JoinRequest_id, Team_id, requested_Student_id, Student_id);
       res.status(200).json(JSON.parse(result));
     }
     else if (permit === 'false'){
-      res.status(200).json({success: true, message: 'rejected'});
+      const result = await DB_IO.join_team_response_reject(JoinRequest_id, Team_id, requested_Student_id, Student_id);
+      res.status(200).json(JSON.parse(result));
     }
     else {
       res.status(401).json({success: false, message: 'unknown permit value'});

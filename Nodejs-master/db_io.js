@@ -893,7 +893,7 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    join_team: async (JoinRequest_id, Team_id, Student_id, head) => {
+    join_team_response_accept: async (JoinRequest_id, Team_id, Student_id, head) => {
         try {
             const _join_team0 = await new Promise((resolve, reject) => {
                 db.query(`select * from JoinRequestTable where JoinRequest_id = ? and Student_id = ? and Team_id = ? and req_Student_id = ?;`,
@@ -993,6 +993,46 @@ module.exports = {
                     });
                     return JSON.stringify({ success: false && !_join_team6, message: "team full" });
                 }
+            }
+            else {
+                return JSON.stringify({ success: false, message: "not in request list" });
+            }
+        } catch (error) {
+            console.error('오류 발생:', error);
+            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
+            throw new Error('오류 발생');
+        }
+    },
+    join_team_response_reject: async (JoinRequest_id, Team_id, Student_id, head) => {
+        try {
+            const _join_team0 = await new Promise((resolve, reject) => {
+                db.query(`select * from JoinRequestTable where JoinRequest_id = ? and Student_id = ? and Team_id = ? and req_Student_id = ?;`,
+                [JoinRequest_id, head, Team_id, Student_id], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        if(rows.length !== 0){
+                            resolve(true);
+                        }
+                        else{
+                            resolve(false);
+                        }
+                    }
+                });
+            });
+            if(_join_team0){
+                const _join_team1 = await new Promise((resolve, reject) => {
+                    db.query(`DELETE FROM JoinRequestTable WHERE JoinRequest_id = ?;`, [JoinRequest_id], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                return JSON.stringify({ success: true && _join_team1, message: "rejected" });
             }
             else {
                 return JSON.stringify({ success: false, message: "not in request list" });
