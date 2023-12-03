@@ -29,6 +29,7 @@ module.exports = {
             }
             const groupedData = lodash.groupBy(timetable, 'name');
             const timetable_result = Object.values(groupedData).map(group => group);
+            console.log(timetable_result)
             const j = timetable_result.length;
             for (let i = 0; i < j; i++) {
                 const time_table_index = timetable_result[i];
