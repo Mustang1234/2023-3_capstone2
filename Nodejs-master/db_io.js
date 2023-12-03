@@ -34,6 +34,7 @@ module.exports = {
             for (let i = 0; i < j; i++) {
                 const time_table_index = timetable_result[i];
                 const CourseID = year_semester + time_table_index[0].day + time_table_index[0].time + time_table_index[0].name;
+                console.log(CourseID)
                 const answer = await new Promise((resolve, reject) => {
                     db.query(`SELECT * FROM CourseTable WHERE Course_id = ?`, [CourseID], (error, rows) => {
                         if (error) {
