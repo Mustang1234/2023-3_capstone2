@@ -32,21 +32,26 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     }
 
     // 아이디와 비밀번호 입력
-    await page.type('input[name="userID"]', portal_id); // 여기에 아이디를 입력합니다.
-    await page.type('input[name="password"]', portal_pw); // 여기에 비밀번호를 입력합니다.
-
-    // 로그인 버튼을 클릭합니다.
-    await page.evaluate(() => {
-        document.querySelector('a.btn-login').click();
-    });
-    try {
-        await page.waitForNavigation({ timeout : 2000 });
-    } catch (error) {
-        if (error instanceof puppeteer.errors.TimeoutError) {
-            //console.error('Navigation timed out');
-        } else {
-            throw error;
+    try{
+        await page.type('input[name="userID"]', portal_id); // 여기에 아이디를 입력합니다.
+        await page.type('input[name="password"]', portal_pw); // 여기에 비밀번호를 입력합니다.
+    
+        // 로그인 버튼을 클릭합니다.
+        await page.evaluate(() => {
+            document.querySelector('a.btn-login').click();
+        });
+        try {
+            await page.waitForNavigation({ timeout : 2000 });
+        } catch (error) {
+            if (error instanceof puppeteer.errors.TimeoutError) {
+                //console.error('Navigation timed out');
+            } else {
+                throw error;
+            }
         }
+    } catch (error) {
+	    await browser.close();
+        return JSON.stringify(jsonInfo);
     }
 
 
