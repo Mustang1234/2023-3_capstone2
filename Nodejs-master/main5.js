@@ -137,7 +137,7 @@ app.get('/id_duplicate_check', async (req, res) => {
 });
 
 app.post('/signup', async (req, res) => {
-  const { Student_id, Student_pw, portal_id, portal_pw, description } = req.body;
+  const { Student_id, Student_pw, portal_id, portal_pw } = req.body;
 
   const year_semester = _year_semester();
 
@@ -169,7 +169,7 @@ app.post('/signup', async (req, res) => {
             //console.log('result1', result1);
             //console.log('result2', result2);
 
-            const result = await DB_IO.add_student_table(Student_id, Student_pw, jsonInfo.student_name, jsonInfo.student_number, jsonInfo.department, description);
+            const result = await DB_IO.add_student_table(Student_id, Student_pw, jsonInfo.student_name, jsonInfo.student_number, jsonInfo.department);
             //console.log(result);
             return res.status(200).json({ success: true, message: 'sign up success', status: result });
           }
@@ -389,6 +389,38 @@ app.get('/main_page', authenticateToken, async (req, res) => {
   }
 });
 
+/*// Example route that requires authentication
+app.get('/protected', authenticateToken, (req, res) => {
+  res.json({ message: 'Protected route', user: req.user });
+});
+
+// Example route that requires authentication
+app.post('/protected2', authenticateToken, (req, res) => {
+  res.json({ message: 'Protected route2', user: req.user });
+});*/
+
+app.get('/my_page', authenticateToken, async (req, res) => {
+  try {
+    const Student_id = req.user.user.Student_id;
+    var returnJson = { Student_id: Student_id, retCode: false, Student_name: '', Student_number: '',
+      department: '', Speed: 0, ProfilePhoto: null, description: ''
+    }
+    const student_info = JSON.parse(await DB_IO.get_student_table(Student_id));
+    //console.log(student_info);
+    returnJson.Student_name = student_info.Student_name;
+    returnJson.Student_number = student_info.Student_number;
+    returnJson.department = student_info.department;
+    returnJson.Speed = student_info.Speed;
+    returnJson.description = student_info.description;
+    returnJson.ProfilePhoto = JSON.parse(await DB_IO.get_student_photo_table(Student_id)).ProfilePhoto;
+    returnJson.retCode = true;
+    res.status(200).json(returnJson);
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(400).send('오류 발생');
+  }
+});
+
 app.get('/add_student_description', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
@@ -408,37 +440,6 @@ app.get('/add_team_description', authenticateToken, async (req, res) => {
     const Team_id  = req.query.Team_id;
     const result = await DB_IO.add_team_description(description, Team_id, Student_id);
     res.status(200).json({ success: result });
-  } catch (error) {
-    console.error('오류 발생:', error);
-    res.status(400).send('오류 발생');
-  }
-});
-
-/*// Example route that requires authentication
-app.get('/protected', authenticateToken, (req, res) => {
-  res.json({ message: 'Protected route', user: req.user });
-});
-
-// Example route that requires authentication
-app.post('/protected2', authenticateToken, (req, res) => {
-  res.json({ message: 'Protected route2', user: req.user });
-});*/
-
-app.get('/my_page', authenticateToken, async (req, res) => {
-  try {
-    const Student_id = req.user.user.Student_id;
-    var returnJson = { Student_id: Student_id, retCode: false, Student_name: '', Student_number: '',
-      department: '', Speed: 0, ProfilePhoto: null
-    }
-    const student_info = JSON.parse(await DB_IO.get_student_table(Student_id));
-    //console.log(student_info);
-    returnJson.Student_name = student_info.Student_name;
-    returnJson.Student_number = student_info.Student_number;
-    returnJson.department = student_info.department;
-    returnJson.Speed = student_info.Speed;
-    returnJson.ProfilePhoto = JSON.parse(await DB_IO.get_student_photo_table(Student_id)).ProfilePhoto;
-    returnJson.retCode = true;
-    res.status(200).json(returnJson);
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');

@@ -214,12 +214,12 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    add_student_table: async (Student_id, Student_pw, student_name, student_number, department, description) => {
+    add_student_table: async (Student_id, Student_pw, student_name, student_number, department) => {
         try {
             const _add_student_table = await new Promise((resolve, reject) => {
                 db.query(`INSERT INTO StudentTable
                 (Student_id, Student_pw, Student_name, Student_number, Speed, department, description)
-                VALUES (?, ?, ?, ?, ?, ?, ?)`, [Student_id, Student_pw, student_name, student_number, 100, department, description], (error) => {
+                VALUES (?, ?, ?, ?, ?, ?, null)`, [Student_id, Student_pw, student_name, student_number, 100, department], (error) => {
                     if (error) {
                         console.error(error);
                         reject(error);
