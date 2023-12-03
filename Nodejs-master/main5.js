@@ -491,8 +491,8 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
         if (jsonInfo.retCode === false) return res.status(200).json({ message: 'portal_login_failed' });
       } catch (error) {
         console.error('오류 발생:', error);
-        res.status(200).json({ returnCode: false, error: error });  
-        return;
+        //res.status(200).json({ returnCode: false, error: error });  
+        //return;
       }
     }
     //console.log(jsonInfo);
