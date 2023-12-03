@@ -73,7 +73,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     }*/
 
     if(cookies[0].name == 'prdct-NA'){
-        console.log('no cookie');
+        //console.log('no cookie');
 	    await browser.close();
         return JSON.stringify(jsonInfo);
     }
