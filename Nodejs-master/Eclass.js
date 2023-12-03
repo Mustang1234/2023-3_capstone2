@@ -3,7 +3,7 @@ const lodash = require('lodash');
 
 async function Eclass(_studentID, portal_id, portal_pw) {
     // JSON 배열에 항목 추가
-    var jsonInfo = {studentID: _studentID, retCode: false, student_name: "", student_number: "", department: "", timeTable: [], timeTable_small: []};
+    var jsonInfo = {studentID: _studentID, retCode: true, student_name: "", student_number: "", department: "", timeTable: [], timeTable_small: []};
 
     // Puppeteer를 시작합니다.
     const browser = await puppeteer.launch({ headless: true, }); // headless: false로 설정하면 브라우저를 실제로 표시합니다.
@@ -51,7 +51,6 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         }
     } catch (error) {
 	    await browser.close();
-        jsonInfo.retCode = true;
         return JSON.stringify(jsonInfo);
     }
 
@@ -81,9 +80,9 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     if(cookies[0].name == 'prdct-NA'){
         //console.log('no cookie');
 	    await browser.close();
+        jsonInfo.retCode = false;
         return JSON.stringify(jsonInfo);
     }
-    jsonInfo.retCode = true;
 
     // 로그인 후 원하는 페이지로 이동 (예: 시간표 페이지)
     await page.setCookie(...cookies);
