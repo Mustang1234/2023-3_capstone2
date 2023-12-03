@@ -137,7 +137,7 @@ app.get('/id_duplicate_check', async (req, res) => {
 });
 
 app.post('/signup', async (req, res) => {
-  const { Student_id, Student_pw, portal_id, portal_pw } = req.body;
+  const { Student_id, Student_pw, portal_id, portal_pw, description } = req.body;
 
   const year_semester = _year_semester();
 
@@ -169,7 +169,7 @@ app.post('/signup', async (req, res) => {
             //console.log('result1', result1);
             //console.log('result2', result2);
 
-            const result = await DB_IO.add_student_table(Student_id, Student_pw, jsonInfo.student_name, jsonInfo.student_number, jsonInfo.department);
+            const result = await DB_IO.add_student_table(Student_id, Student_pw, jsonInfo.student_name, jsonInfo.student_number, jsonInfo.department, description);
             //console.log(result);
             return res.status(200).json({ success: true, message: 'sign up success', status: result });
           }
@@ -734,7 +734,8 @@ app.get('/create_team3', authenticateToken, async (req, res) => {
     const Project_id  = req.query.Project_id;
     const Team_name = req.query.Team_name;
     const max_member = req.query.max_member;
-    const result = await DB_IO.create_team(Project_id, Team_name, max_member, Student_id);
+    const description = req.query.description;
+    const result = await DB_IO.create_team(Project_id, Team_name, max_member, Student_id, description);
     //console.log(result);
     res.status(200).json({ success: result });
   } catch (error) {
