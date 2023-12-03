@@ -819,7 +819,9 @@ app.get('/join_team_response', authenticateToken, async (req, res) => {
       const result = await DB_IO.join_team(Team_id, requested_Student_id, Student_id);
       res.status(200).json(JSON.parse(result));
     }
-    res.status(200).json({success: true, message: 'rejected'});
+    else {
+      res.status(200).json({success: true, message: 'rejected'});
+    }
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
