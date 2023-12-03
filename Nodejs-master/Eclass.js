@@ -22,7 +22,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     // 로그인 페이지로 이동합니다.
     await page.goto('https://mportal.cau.ac.kr/common/auth/SSOlogin.do');
     try {
-        await page.waitForNavigation({ timeout : 2000 });
+        await page.waitForNavigation({ timeout : 2500 });
     } catch (error) {
         if (error instanceof puppeteer.errors.TimeoutError) {
             //console.error('Navigation timed out');
