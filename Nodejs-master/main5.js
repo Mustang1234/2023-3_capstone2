@@ -812,11 +812,12 @@ app.get('/join_team_request_list', authenticateToken, async (req, res) => {
 app.get('/join_team_response', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
+    const JoinRequest_id = req.query.JoinRequest_id;
     const Team_id = req.query.Team_id;
     const requested_Student_id = req.query.requested_Student_id;
     const permit = req.query.permit;
     if(permit) {
-      const result = await DB_IO.join_team(Team_id, requested_Student_id, Student_id);
+      const result = await DB_IO.join_team(JoinRequest_id, Team_id, requested_Student_id, Student_id);
       res.status(200).json(JSON.parse(result));
     }
     else {

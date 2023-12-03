@@ -873,7 +873,7 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    join_team: async (Team_id, Student_id, head) => {
+    join_team: async (JoinRequest_id, Team_id, Student_id, head) => {
         try {
             const _join_team1 = await new Promise((resolve, reject) => {
                 db.query(`select * from TeamTable where Team_id = ?;`, [Team_id], (error, rows) => {
@@ -927,7 +927,17 @@ module.exports = {
                             }
                         });
                     });
-                    return JSON.stringify({success: _join_team3 && _join_team4, message: 'accepted'});
+                    const _join_team5 = await new Promise((resolve, reject) => {
+                        db.query(`DELETE FROM JoinRequestTable WHERE JoinRequest_id = ?;`, [JoinRequest_id], (error) => {
+                            if (error) {
+                                console.error(error);
+                                reject(error);
+                            } else {
+                                resolve(true);
+                            }
+                        });
+                    });
+                    return JSON.stringify({success: _join_team3 && _join_team4 && _join_team5, message: 'accepted'});
                 }
                 else{
                     return JSON.stringify({success: false, message: 'you are not head of team'});
