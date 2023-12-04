@@ -575,7 +575,7 @@ module.exports = {
             });
             if(_get_schedule1) {
                 const _get_schedule2 = await new Promise((resolve, reject) => {
-                    db.query(`SELECT * from ScheduleTable where Team_id = ? ORDER BY Deadline ASC;`, [Team_id], (error) => {
+                    db.query(`SELECT * from ScheduleTable where Team_id = ? ORDER BY Deadline ASC;`, [Team_id], (error, rows) => {
                         if (error) {
                             console.error(error);
                             reject(error);
