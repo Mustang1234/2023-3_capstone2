@@ -102,7 +102,7 @@ function authenticateToken(req, res, next) {
   const token = req.headers['authorization'];
 
   if (!token) {
-    return res.sendStatus(401);
+    return res.sendStatus(200);
   }
 
   jwt.verify(token, token_secret_key.token_secret_key, (err, user) => {
@@ -491,7 +491,7 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
         if (jsonInfo.retCode === false) return res.status(200).json({ message: 'portal_login_failed' });
       } catch (error) {
         console.error('오류 발생:', error);
-        //res.status(200).json({ returnCode: false, error: error });  
+        //res.status(400).json({ returnCode: false, error: error });  
         //return;
       }
     }
