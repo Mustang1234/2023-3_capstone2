@@ -330,6 +330,22 @@ app.get('/signout', authenticateToken, async (req, res) => {
   }
 });
 
+app.get('/find_id_by_email', authenticateToken, async (req, res) => {
+  const email = req.query.email;
+  try {
+    result = await DB_IO.find_id_by_email(email);
+    if(result) {
+      return res.status(200).json({success: true, id: result });
+    }
+    else {
+      return res.status(200).json({success: false, message: 'cannot find id' });
+    }
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(400).send('오류 발생');
+  }
+});
+
 passport.use(new LocalStrategy(
   {
     usernameField: 'Student_id',

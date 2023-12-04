@@ -375,6 +375,29 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
+    find_id_by_email: async (email) => {
+        try {
+            const _find_id_by_email = await new Promise((resolve, reject) => {
+                db.query(`SELECT * FROM StudentTable WHERE email = ?`, [email], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        if(rows.length === 0){
+                            resolve(false);
+                        }
+                        else{
+                            resolve(rows[0].Student_id);
+                        }
+                    }
+                });
+            });
+            return _find_id_by_email;
+        } catch (error) {
+            console.error('오류 발생:', error);
+            throw new Error('오류 발생');
+        }
+    },
     add_student_table: async (email, Student_id, Student_pw, student_name, student_number, department) => {
         try {
             const _add_student_table1 = await new Promise((resolve, reject) => {
