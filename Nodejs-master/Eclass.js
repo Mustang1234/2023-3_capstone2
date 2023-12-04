@@ -18,7 +18,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
             req.continue();
         }
     });
-    
+    /*
     // 로그인 페이지로 이동합니다.
     await page.goto('https://mportal.cau.ac.kr/common/auth/SSOlogin.do');
     try {
@@ -52,7 +52,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     } catch (error) {
 	    await browser.close();
         return JSON.stringify(jsonInfo);
-    }
+    }*/
 
     /*try {
         await page.waitForNavigation({ timeout : 2000 });
@@ -64,7 +64,50 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         }
     }*/
 
-    const cookies = await page.cookies();
+    const cookies = [
+        {
+          name: 'prdct',
+          value: '846e01de57c44d6d33022e6366faa731ff69d72153e0158eaa1dc8bf2bf420612dde96af5fa6e74b8632a929fb0b40af7865c597239f32873c4d7837e09886255f80b6745608059f2ae14288c59b4c2cf428fccbdc4d85027c5c0cb7baa5436641b63162c258a416f0f92b35515a694360c1e336b5ab36f79760ffd5d40f16b64d67b7aa9bf3f49cfe570411aa909fa20d484adda46e9be989632d5105c0d6902e34786bae694c5a10e0c2d2c31c26607567416985a1b7a89b5229f081',
+          domain: '.sso4.cau.ac.kr',
+          path: '/',
+          expires: -1,
+          size: 383,
+          httpOnly: true,
+          secure: false,
+          session: true,
+          sameParty: false,
+          sourceScheme: 'Secure',
+          sourcePort: 443
+        },
+        {
+          name: 'UAKEY',
+          value: 'cd70226b7262405f89ab04fbbfe64248',
+          domain: '.sso4.cau.ac.kr',
+          path: '/',
+          expires: 1736232412.553671,
+          size: 37,
+          httpOnly: true,
+          secure: false,
+          session: false,
+          sameParty: false,
+          sourceScheme: 'Secure',
+          sourcePort: 443
+        },
+        {
+          name: 'WMONID',
+          value: '-0jtsvHiIMn',
+          domain: 'sso4.cau.ac.kr',
+          path: '/',
+          expires: 1733240812.553603,
+          size: 17,
+          httpOnly: false,
+          secure: false,
+          session: false,
+          sameParty: false,
+          sourceScheme: 'Secure',
+          sourcePort: 443
+        }
+      ]//await page.cookies();
     console.log(cookies);
     /*try {
         await page.waitForNavigation({ timeout : 2000 });
