@@ -208,7 +208,7 @@ app.get('/verify1', async (req, res) => {
         res.status(200).json({ success: false, message: 'email send fail' });
       }
     }
-    else{
+    else {
       res.status(200).json({ success: false, message: 'email required' });
     }
   } catch (error) {
@@ -231,7 +231,7 @@ app.post('/verify2', async (req, res) => {
         res.status(200).json({ success: false, message: 'auth fail' });
       }
     }
-    else{
+    else {
       res.status(200).json({ success: false, message: 'email and token required' });
     }
   } catch (error) {
@@ -255,46 +255,46 @@ app.post('/signup', async (req, res) => {
     }
     const id_duplicate_check1 = await DB_IO.id_duplicate_check(Student_id);
     if (id_duplicate_check1) {
-      try {
-        var jsonInfo = {};
-        while (true) {
-          try {
-            jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_id, portal_pw));
-            if (jsonInfo.timeTable.length !== 0) break;
-            if (jsonInfo.retCode === false) return res.status(200).json({ success: false, message: 'portal_login_failed' });
-          } catch (error) {
-            console.error('오류 발생:', error);
-            //res.status(200).json({ retCode: false, error: error });
-            //return;
+      const _email_used = await DB_IO.email_used(email);
+      if (_email_used) {
+        try {
+          var jsonInfo = {};
+          while (true) {
+            try {
+              jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_id, portal_pw));
+              if (jsonInfo.timeTable.length !== 0) break;
+              if (jsonInfo.retCode === false) return res.status(200).json({ success: false, message: 'portal_login_failed' });
+            } catch (error) {
+              console.error('오류 발생:', error);
+              //res.status(200).json({ retCode: false, error: error });
+              //return;
+            }
           }
-        }
-        //console.log(jsonInfo);
-        const id_duplicate_check2 = await DB_IO.id_duplicate_check(Student_id);
-        if (id_duplicate_check2) {
-          const _email_used = await DB_IO.email_used(Student_id);
-          if(_email_used){
+          //console.log(jsonInfo);
+          const id_duplicate_check2 = await DB_IO.id_duplicate_check(Student_id);
+          if (id_duplicate_check2) {
             const result1 = await DB_IO.course_to_db(year_semester, jsonInfo.timeTable);
             const result2 = await DB_IO.timetable_to_db(Student_id, year_semester, jsonInfo.timeTable_small);
             //console.log('result1', result1);
             //console.log('result2', result2);
-  
+
             const result = await DB_IO.add_student_table(email, Student_id, Student_pw, jsonInfo.student_name, jsonInfo.student_number, jsonInfo.department);
             //console.log(result);
-            if(result){
+            if (result) {
               return res.status(200).json({ success: result, message: 'sign up success' });
             }
           }
-          else{
+          else {
             return res.status(200).json({ success: result, message: 'already signed up with that email' });
           }
+        } catch (error) {
+          console.error('오류 발생:', error);
+          res.status(400).send('오류 발생');
         }
-        else {
-          return res.status(200).json({ success: false, message: 'username already exists' });
-        }
-      } catch (error) {
-        console.error('오류 발생:', error);
-        res.status(400).send('오류 발생');
       }
+      else {
+        return res.status(200).json({ success: false, message: 'username already exists' });
+      } 
       //return res.status(400).json({ message: 'sign up success', status: true });
     }
     else {
