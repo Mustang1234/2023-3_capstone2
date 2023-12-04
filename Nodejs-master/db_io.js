@@ -248,7 +248,7 @@ module.exports = {
     sign_out: async (Student_id) => {
         try {
             const _sign_out1 = await new Promise((resolve, reject) => {
-                db.query(`DELETE FROM JoinRequestTable WHERE Student_id = ?`, [Student_id], (error) => {
+                db.query(`DELETE FROM JoinRequestTable WHERE req_Student_id = ?`, [Student_id], (error) => {
                     if (error) {
                         console.error(error);
                         reject(error);
@@ -258,7 +258,7 @@ module.exports = {
                 });
             });
             const _sign_out2 = await new Promise((resolve, reject) => {
-                db.query(`DELETE FROM StudentTable WHERE Student_id = ?`, [Student_id], (error) => {
+                db.query(`DELETE FROM JoinRequestTable WHERE Student_id = ?`, [Student_id], (error) => {
                     if (error) {
                         console.error(error);
                         reject(error);
@@ -268,6 +268,16 @@ module.exports = {
                 });
             });
             const _sign_out3 = await new Promise((resolve, reject) => {
+                db.query(`DELETE FROM StudentTable WHERE Student_id = ?`, [Student_id], (error) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
+                });
+            });
+            const _sign_out4 = await new Promise((resolve, reject) => {
                 db.query(`DELETE FROM TimeTable WHERE Student_id = ?`, [Student_id], (error) => {
                     if (error) {
                         console.error(error);
@@ -277,7 +287,7 @@ module.exports = {
                     }
                 });
             });
-            return _sign_out1 && _sign_out2 && _sign_out3;
+            return _sign_out1 && _sign_out2 && _sign_out3 && _sign_out4;
         } catch (error) {
             console.error('오류 발생:', error);
             throw new Error('오류 발생');
