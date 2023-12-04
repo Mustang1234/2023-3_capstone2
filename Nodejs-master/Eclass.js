@@ -54,8 +54,6 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         return JSON.stringify(jsonInfo);
     }
 
-    console.log(page)
-
     /*try {
         await page.waitForNavigation({ timeout : 2000 });
     } catch (error) {
@@ -96,6 +94,8 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 	    throw error;
         }
     }*/
+    await page.goto('https://mportal.cau.ac.kr/std/uhs/sUhsPer001/index.do');
+    await page.setCookie(...cookies);
     await page.goto('https://mportal.cau.ac.kr/std/uhs/sUhsPer001/index.do');
     //await page.setCookie(...cookies);
     //await page.setCookie(...cookies);
