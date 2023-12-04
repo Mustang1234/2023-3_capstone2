@@ -574,14 +574,20 @@ app.get('/list_whole_team', authenticateToken, async (req, res) => {
     const search  = req.query.search;
     const year_semester = _year_semester();
     const result = JSON.parse(await DB_IO.list_whole_team(Student_id, year_semester));
-    const jsonInfo = { teams: [] }
-    for(let i = 0; i < result.length; i++){
-      if(result[i].Course_name.includes(search)){
-        jsonInfo.teams.push(result[i])
+    console.log(result)
+    if(search !== undefined) {
+      const jsonInfo = { teams: [] }
+      for(let i = 0; i < result.length; i++){
+        if(result[i].Course_name.includes(search)){
+          jsonInfo.teams.push(result[i])
+        }
       }
+      //console.log(result);
+      res.status(200).json(jsonInfo);
     }
-    //console.log(result);
-    res.status(200).json(jsonInfo);
+    else {
+      res.status(200).json({ teams: result });
+    }
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
