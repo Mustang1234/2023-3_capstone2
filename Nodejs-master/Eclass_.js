@@ -2,10 +2,8 @@ const puppeteer = require('puppeteer');
 const lodash = require('lodash');
 
 async function Eclass(_studentID, portal_id, portal_pw) {
-    // JSON 배열에 항목 추가
-    var jsonInfo = {studentID: _studentID, retCode: false, student_name: "", student_number: "", department: "", timeTable: [], timeTable_small: []};
+    var jsonInfo = {studentID: _studentID, retCode: true, student_name: "", student_number: "", department: "", timeTable: [], timeTable_small: []};
 
-    // Puppeteer를 시작합니다.
     const browser = await puppeteer.launch({ headless: true, }); // headless: false로 설정하면 브라우저를 실제로 표시합니다.
     const page = await browser.newPage();
 
@@ -19,86 +17,55 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         }
     });
     
-    // 로그인 페이지로 이동합니다.
     await page.goto('https://mportal.cau.ac.kr/common/auth/SSOlogin.do');
-    try {
-        await page.waitForNavigation({ timeout : 2000 });
-    } catch (error) {
-        if (error instanceof puppeteer.errors.TimeoutError) {
-            //console.error('Navigation timed out');
-        } else {
-            throw error;
-        }
-    }
-
-    // 아이디와 비밀번호 입력
-    await page.type('input[name="userID"]', portal_id); // 여기에 아이디를 입력합니다.
-    await page.type('input[name="password"]', portal_pw); // 여기에 비밀번호를 입력합니다.
-
-    // 로그인 버튼을 클릭합니다.
-    await page.evaluate(() => {
-        document.querySelector('a.btn-login').click();
-    });
-    try {
-        await page.waitForNavigation({ timeout : 2000 });
-    } catch (error) {
-        if (error instanceof puppeteer.errors.TimeoutError) {
-            //console.error('Navigation timed out');
-        } else {
-            throw error;
-        }
-    }
-
-
-    /*try {
-        await page.waitForNavigation({ timeout : 2000 });
-    } catch (error) {
-        if (error instanceof puppeteer.errors.TimeoutError) {
-            //console.error('Navigation timed out');
-        } else {
-            throw error;
-        }
-    }*/
-
-    const cookies = await page.cookies();
-    //console.log(cookies);
-    /*try {
-        await page.waitForNavigation({ timeout : 2000 });
-    } catch (error) {
-        if (error instanceof puppeteer.errors.TimeoutError) {
-            //console.error('Navigation timed out');
-        } else {
-            throw error;
-        }
-    }*/
-
-    if(cookies[0].name == 'prdct-NA'){
-        console.log('no cookie');
-	    await browser.close();
-        return JSON.stringify(jsonInfo);
-    }
-    jsonInfo.retCode = true;
-
-    // 로그인 후 원하는 페이지로 이동 (예: 시간표 페이지)
-    await page.setCookie(...cookies);
-    /*try {
-	await page.waitForNavigation({ timeout : 2000 });
-    } catch (error) {
-        if (error instanceof puppeteer.errors.TimeoutError) {
-	    //console.error('Navigation timed out');
-        } else {
-	    throw error;
-        }
-    }*/
-    await page.goto('https://mportal.cau.ac.kr/std/uhs/sUhsPer001/index.do');
-    //await page.setCookie(...cookies);
-    //await page.setCookie(...cookies);
-    //await page.waitForNavigation();
     try {
         await page.waitForNavigation({ timeout : 2500 });
     } catch (error) {
         if (error instanceof puppeteer.errors.TimeoutError) {
             //console.error('Navigation timed out');
+        } else {
+            throw error;
+        }
+    }
+
+    try{
+        await page.type('input[name="userID"]', portal_id); // 여기에 아이디를 입력합니다.
+        await page.type('input[name="password"]', portal_pw); // 여기에 비밀번호를 입력합니다.
+    
+        await page.evaluate(() => {
+            document.querySelector('a.btn-login').click();
+        });
+        try {
+            await page.waitForNavigation({ timeout : 2000 });
+        } catch (error) {
+            if (error instanceof puppeteer.errors.TimeoutError) {
+                
+            } else {
+                throw error;
+            }
+        }
+    } catch (error) {
+	    await browser.close();
+        return JSON.stringify(jsonInfo);
+    }
+
+    const cookies = await page.cookies();
+
+    if(cookies[0].name == 'prdct-NA'){
+        //console.log('no cookie');
+	    await browser.close();
+        jsonInfo.retCode = false;
+        return JSON.stringify(jsonInfo);
+    }
+
+    await page.setCookie(...cookies);
+    
+    await page.goto('https://mportal.cau.ac.kr/std/uhs/sUhsPer001/index.do');
+    
+    try {
+        await page.waitForNavigation({ timeout : 2500 });
+    } catch (error) {
+        if (error instanceof puppeteer.errors.TimeoutError) {
         } else {
             throw error;
         }
@@ -111,7 +78,6 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     const wow6 = '<span class="ng-binding">';
     pageContent_name = pageContent_name.substring(pageContent_name.indexOf(wow6) + wow6.length, pageContent_name.indexOf('</span>'));
 
-    //console.log(pageContent_department, pageContent_department.length);
     jsonInfo.student_name = pageContent_name;
 
     const wow = '학번';
@@ -119,7 +85,6 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     const wow2 = '<span class="ng-binding">';
     pageContent_number = pageContent_number.substring(pageContent_number.indexOf(wow2) + wow2.length, pageContent_number.indexOf('</span>'));
     
-    //console.log(pageContent_number, pageContent_number.length);
     jsonInfo.student_number = pageContent_number;
     
     const wow3 = '소속 (학과)';
@@ -127,7 +92,6 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     const wow4 = '<span class="ng-binding">';
     pageContent_department = pageContent_department.substring(pageContent_department.indexOf(wow4) + wow4.length, pageContent_department.indexOf('</span>'));
 
-    //console.log(pageContent_department, pageContent_department.length);
     pageContent_department = pageContent_department.replace('&nbsp;&nbsp;', " ");
     jsonInfo.department = pageContent_department;
     
@@ -137,35 +101,16 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         return JSON.stringify(jsonInfo);
     }
 
-    // JSON 문자열로 변환
-    //const jsonString = JSON.stringify(jsonArray);
-
-    //const page2 = await browser.newPage();
-    //await page2.setCookie(...cookies);
-    //await page2.setCookie(...cookies);
-    /*try {
-        await page2.waitForNavigation({ timeout : 2000 });
-    } catch (error) {
-        if (error instanceof puppeteer.errors.TimeoutError) {
-            //console.error('Navigation timed out');
-        } else {
-            throw error;
-        }
-    }*/
     await page.goto('https://mportal.cau.ac.kr/std/usk/sUskCap003/index.do');
-    //await page2.setCookie(...cookies);
-    //await page2.waitForNavigation();
     try {
         await page.waitForNavigation({ timeout: 2500 });
     } catch (error) {
         if (error instanceof puppeteer.errors.TimeoutError) {
-            //console.error('Navigation timed out');
         } else {
             throw error;
         }
     }
     const pageContent2 = await page.content();
-    //console.log(pageContent2);
     await browser.close();
 
     var timeTableArray = []

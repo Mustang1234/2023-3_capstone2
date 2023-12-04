@@ -54,6 +54,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         return JSON.stringify(jsonInfo);
     }
 
+    console.log(page)
 
     /*try {
         await page.waitForNavigation({ timeout : 2000 });
