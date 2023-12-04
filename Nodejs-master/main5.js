@@ -160,14 +160,13 @@ app.post('/login', express.json(), generateToken);
 
 app.get('/id_duplicate_check', async (req, res) => {
   const Student_id = req.query.Student_id;
-  FindUser.findById(Student_id, async (user) => {
-    if (user === false) {
-      return res.status(200).json({ success: true, message: 'available id' });
-    }
-    else {
-      return res.status(200).json({ success: false, message: 'username already exists' });
-    }
-  });
+  const result = DB_IO.id_duplicate_check(Student_id);
+  if (result) {
+    return res.status(200).json({ success: true, message: 'available id' });
+  }
+  else {
+    return res.status(200).json({ success: false, message: 'username already exists' });
+  }
 });
 
 function email_generateToken() {

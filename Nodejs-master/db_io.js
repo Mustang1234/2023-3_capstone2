@@ -21,6 +21,29 @@ function getCurrentDateTime() {
 }
 
 module.exports = {
+    id_duplicate_check: async (Student_id) => {
+        try {
+            const _id_duplicate_check = await new Promise((resolve, reject) => {
+                db.query(`SELECT * FROM StudentTable WHERE Student_id = ?`, [Student_id], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        if(rows.length === 0){
+                            resolve(true);
+                        }
+                        else{
+                            resolve(false);
+                        }
+                    }
+                });
+            });
+            return _id_duplicate_check;
+        } catch (error) {
+            console.error('오류 발생:', error);
+            //res.status(500).send('오류 발생');
+        }
+    },
     course_to_db: async (year_semester, timetable) => {
         try {
             if (timetable.length === 0) {
