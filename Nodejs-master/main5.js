@@ -528,7 +528,7 @@ app.get('/main_page', authenticateToken, async (req, res) => {
     //console.log(student_info);
     returnJson.department = student_info.department;
     const schedule = JSON.parse(await DB_IO.get_whole_schedule(Student_id, year_semester));
-    schedule.sort((a, b) => new Date(a.Deadline) - new Date(b.Deadline));
+    //schedule.sort((a, b) => new Date(a.Deadline) - new Date(b.Deadline));
     returnJson.schedule = schedule;
     returnJson.retCode = true;
     res.status(200).json(returnJson);
