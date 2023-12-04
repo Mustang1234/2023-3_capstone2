@@ -196,6 +196,7 @@ app.get('/signout', authenticateToken, async (req, res) => {
   try {
     const teams = JSON.parse(await DB_IO.list_whole_team(Student_id, year_semester));
     var result = true;
+    result = result && await DB_IO.sign_out(Student_id);
     for (let i = 0; i < teams.length; i++) {
       result = result && (await DB_IO.leave_team(teams[i].Team_id, Student_id));
     }
