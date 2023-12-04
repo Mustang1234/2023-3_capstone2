@@ -352,9 +352,9 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    add_student_table: async (email, Student_id, Student_pw, student_name, student_number, department) => {
+    email_used: async (email) => {
         try {
-            const _add_student_table0 = await new Promise((resolve, reject) => {
+            const _email_used = await new Promise((resolve, reject) => {
                 db.query(`SELECT * FROM StudentTable WHERE token is NULL and email = ?`, [email], (error, rows) => {
                     if (error) {
                         console.error(error);
@@ -369,44 +369,48 @@ module.exports = {
                     }
                 });
             });
-            if(_add_student_table0){
-                const _add_student_table1 = await new Promise((resolve, reject) => {
-                    db.query(`UPDATE StudentTable SET Student_id = ?, Student_pw = ?, student_name = ?, student_number = ?,
+            return _email_used;
+        } catch (error) {
+            console.error('오류 발생:', error);
+            throw new Error('오류 발생');
+        }
+    },
+    add_student_table: async (email, Student_id, Student_pw, student_name, student_number, department) => {
+        try {
+            const _add_student_table1 = await new Promise((resolve, reject) => {
+                db.query(`UPDATE StudentTable SET Student_id = ?, Student_pw = ?, student_name = ?, student_number = ?,
                     speed = 100, department = ?, description = 'hello world!!' WHERE email = ? and verified = 1;`, [Student_id, Student_pw, student_name, student_number, department, email], (error) => {
-                        if (error) {
-                            console.error(error);
-                            reject(error);
-                        } else {
-                            resolve(true);
-                        }
-                    });
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
                 });
-                const _add_student_table2 = await new Promise((resolve, reject) => {
-                    db.query(`UPDATE StudentTable SET token = NULL WHERE Student_id = ?;`, [Student_id], (error) => {
-                        if (error) {
-                            console.error(error);
-                            reject(error);
-                        } else {
-                            resolve(true);
-                        }
-                    });
+            });
+            const _add_student_table2 = await new Promise((resolve, reject) => {
+                db.query(`UPDATE StudentTable SET token = NULL WHERE Student_id = ?;`, [Student_id], (error) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
                 });
-                const _add_student_photo_table = await new Promise((resolve, reject) => {
-                    db.query(`INSERT INTO StudentPhotoTable
+            });
+            const _add_student_photo_table = await new Promise((resolve, reject) => {
+                db.query(`INSERT INTO StudentPhotoTable
                     (Student_id, ProfilePhoto) VALUES (?, ?)`, [Student_id, null], (error) => {
-                        if (error) {
-                            console.error(error);
-                            reject(error);
-                        } else {
-                            resolve(true);
-                        }
-                    });
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
                 });
-                return _add_student_table0 && _add_student_table1 && _add_student_table2 && _add_student_photo_table;
-            }
-            else{
-                return _add_student_table0;
-            }
+            });
+            return _add_student_table1 && _add_student_table2 && _add_student_photo_table;
+
         } catch (error) {
             console.error('오류 발생:', error);
             throw new Error('오류 발생');

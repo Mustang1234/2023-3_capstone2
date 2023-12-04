@@ -271,15 +271,18 @@ app.post('/signup', async (req, res) => {
         //console.log(jsonInfo);
         const id_duplicate_check2 = await DB_IO.id_duplicate_check(Student_id);
         if (id_duplicate_check2) {
-          const result1 = await DB_IO.course_to_db(year_semester, jsonInfo.timeTable);
-          const result2 = await DB_IO.timetable_to_db(Student_id, year_semester, jsonInfo.timeTable_small);
-          //console.log('result1', result1);
-          //console.log('result2', result2);
-
-          const result = await DB_IO.add_student_table(email, Student_id, Student_pw, jsonInfo.student_name, jsonInfo.student_number, jsonInfo.department);
-          //console.log(result);
-          if(result){
-            return res.status(200).json({ success: result, message: 'sign up success' });
+          const _email_used = await DB_IO.email_used(Student_id);
+          if(_email_used){
+            const result1 = await DB_IO.course_to_db(year_semester, jsonInfo.timeTable);
+            const result2 = await DB_IO.timetable_to_db(Student_id, year_semester, jsonInfo.timeTable_small);
+            //console.log('result1', result1);
+            //console.log('result2', result2);
+  
+            const result = await DB_IO.add_student_table(email, Student_id, Student_pw, jsonInfo.student_name, jsonInfo.student_number, jsonInfo.department);
+            //console.log(result);
+            if(result){
+              return res.status(200).json({ success: result, message: 'sign up success' });
+            }
           }
           else{
             return res.status(200).json({ success: result, message: 'already signed up with that email' });
