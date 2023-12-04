@@ -6,10 +6,17 @@ module.exports = {
                 callback(false);
                 return;
             }
-            var json = JSON.stringify(rows[0]);
-            var userinfo = JSON.parse(json);
-            //console.log(userinfo);
-            callback(userinfo);
+            if(rows[0].verified === 0) {
+                var json = JSON.stringify(rows[0]);
+                var userinfo = JSON.parse(json);
+                //console.log(userinfo);
+                callback(userinfo);
+                return;
+            }
+            else {
+                callback(false);
+                return;
+            }
         });
     },
     findById: function (Student_id, callback) {
@@ -18,10 +25,17 @@ module.exports = {
                 callback(false);
                 return;
             }
-            var json = JSON.stringify(rows[0]);
-            var userinfo = JSON.parse(json);
-            //console.log(userinfo);
-            callback(userinfo);
+            if(rows[0].verified === 0) {
+                var json = JSON.stringify(rows[0]);
+                var userinfo = JSON.parse(json);
+                //console.log(userinfo);
+                callback(userinfo);
+                return;
+            }
+            else {
+                callback(false);
+                return;
+            }
         });
     }
 }

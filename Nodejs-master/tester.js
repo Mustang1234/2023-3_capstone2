@@ -13,61 +13,81 @@ app.use(express.urlencoded({ extended: true }));
 const users = [];
 
 // 이메일 인증 토큰 생성 함수
-function generateToken() {
-  return crypto.randomBytes(20).toString('hex');
+function email_generateToken() {
+    return crypto.randomBytes(4).toString('hex');
 }
 
 // 이메일 발송 함수
 async function sendEmail(email, token) {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: '32gurihs@gmail.com',
-      pass: 'ofqh ukjz kycn orlv'
-    }
-  });
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: '32gurihs@gmail.com',
+            pass: 'ofqh ukjz kycn orlv'
+        }
+    });
 
-  const mailOptions = {
-    from: '32gurihs@gmail.com',
-    to: email,
-    subject: '이메일 인증',
-    text: `인증을 완료하려면 다음 링크를 클릭하세요: http://20.39.186.138:1234/verify/${token}`
-  };
+    const mailOptions = {
+        from: '32gurihs@gmail.com',
+        to: email,
+        subject: '이메일 인증',
+        text: `인증을 완료하려면 다음 값을 입력하세요: ${token}`
+    };
 
-  await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
 }
 
 // 회원가입 라우트
-app.post('/signup', (req, res) => {
-  const { email, password } = req.body;
+app.get('/verify1', (req, res) => {
+    const email = req.query.email;
 
-  // 새로운 사용자 생성
-  const user = { email, password, verified: false, token: generateToken() };
-  users.push(user);
+    // 새로운 사용자 생성
+    const user = { email, id: '', pw:'', verified: false, token: email_generateToken(), verified: false };
+    users.push(user);
 
-  // 이메일 발송
-  sendEmail(email, user.token);
+    // 이메일 발송
+    sendEmail(email, user.token);
 
-  res.json({ message: '회원가입이 완료되었습니다. 이메일을 확인하세요.' });
+    res.json({ message: '이메일을 확인하세요.' });
+});
+
+
+// 회원가입 라우트
+app.get('/verify2', (req, res) => {
+    const email = req.query.email;
+    const user_token = req.query.token;
+
+    // 새로운 사용자 생성
+    const user = users.find(u => u.token === token);
+    if(user && user.email === email){
+        user.verified = true;
+        res.json({ message: '인증 성공' });
+    }
+    else{
+        res.json({ message: '인증 실패' });
+    }
 });
 
 // 이메일 인증 라우트
-app.get('/verify/:token', (req, res) => {
-  const token = req.params.token;
+app.post('/signup', (req, res) => {
+    const email = req.query.email;
+    const id = req.query.id;
+    const pw = req.query.pw;
 
-  // 토큰을 가진 사용자 찾기
-  const user = users.find(u => u.token === token);
 
-  if (user) {
-    // 사용자 인증 상태 변경
-    user.verified = true;
-    res.send('이메일 인증이 완료되었습니다.');
-  } else {
-    res.status(404).send('유효하지 않은 토큰입니다.');
-  }
+    // 토큰을 가진 사용자 찾기
+    const user = users.find(u => u.email === email);
+
+    if (user && user.email === email) {
+        user.id = id;
+        user.pw = pw;
+        res.send('회원가입 성공');
+    } else {
+        res.send('인증되지 않은 이메일 입니다');
+    }
 });
 
 // 서버 시작
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+    console.log(`Server is running at http://localhost:${port}`);
 });

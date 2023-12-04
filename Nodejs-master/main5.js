@@ -57,7 +57,11 @@ const Eclass = require('./Eclass.js');
 const DB_IO = require('./db_io.js');
 const token_secret_key = require('./token_secret_key.js');
 //const { post } = require('request');
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -166,58 +170,125 @@ app.get('/id_duplicate_check', async (req, res) => {
   });
 });
 
-app.post('/signup', async (req, res) => {
-  const { Student_id, Student_pw, portal_id, portal_pw } = req.body;
+function email_generateToken() {
+    return crypto.randomBytes(4).toString('hex');
+}
 
-  const year_semester = _year_semester();
-
-  if (!Student_id || !Student_pw) {
-    return res.status(200).json({success: false,  message: 'Username and password are required' });
-  }
-  if (portal_id === undefined || portal_pw === undefined) {
-    return res.status(200).json({success: false,  message: 'portal id and password are required' });
-  }
-  FindUser.findById(Student_id, async (user) => {
-    if (user === false) {
-      try {
-        var jsonInfo = {};
-        while (true) {
-          try {
-            jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_id, portal_pw));
-            if (jsonInfo.timeTable.length !== 0) break;
-            if (jsonInfo.retCode === false) return res.status(200).json({success: false,  message: 'portal_login_failed' });
-          } catch (error) {
-            console.error('오류 발생:', error);
-            //res.status(200).json({ retCode: false, error: error });
-            //return;
-          }
+async function sendEmail(email, token) {
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: '32gurihs@gmail.com',
+            pass: 'ofqh ukjz kycn orlv'
         }
-        //console.log(jsonInfo);
-        FindUser.findById(Student_id, async (user) => {
-          if (user === false) {
-            const result1 = await DB_IO.course_to_db(year_semester, jsonInfo.timeTable);
-            const result2 = await DB_IO.timetable_to_db(Student_id, year_semester, jsonInfo.timeTable_small);
-            //console.log('result1', result1);
-            //console.log('result2', result2);
+    });
 
-            const result = await DB_IO.add_student_table(Student_id, Student_pw, jsonInfo.student_name, jsonInfo.student_number, jsonInfo.department);
-            //console.log(result);
-            return res.status(200).json({ success: true, message: 'sign up success', status: result });
-          }
-          else {
-            return res.status(200).json({success: false, message: 'username already exists' });
-          }
-        });
-      } catch (error) {
-        console.error('오류 발생:', error);
-        res.status(400).send('오류 발생');
-      }
-      //return res.status(400).json({ message: 'sign up success', status: true });
+    const mailOptions = {
+        from: '32gurihs@gmail.com',
+        to: email,
+        subject: '이메일 인증',
+        text: `인증을 완료하려면 다음 값을 입력하세요: ${token}`
+    };
+
+    await transporter.sendMail(mailOptions);
+}
+
+app.get('/verify1', async (req, res) => {
+  try{
+    const email = req.query.email;
+
+    const token = email_generateToken();
+    sendEmail(email, token);
+    const result = await DB_IO.add_student_table_not_verified(email, token);
+
+    if (result) {
+      res.status(200).json({ success: true, message: '이메일 발송 성공' });
     }
     else {
-      return res.status(200).json({success: false, message: 'username already exists' });
+      res.status(200).json({ success: false, message: '이메일 발송 실패' });
     }
-  });
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(400).send('오류 발생');
+  }
+});
+
+app.post('/verify2', async (req, res) => {
+  try {
+    const { email, user_token } = req.body;
+
+    const result = await DB_IO.student_verify(email, user_token);
+
+    if (result) {
+      res.status(200).json({ success: true, message: '인증 성공' });
+    }
+    else {
+      res.status(200).json({ success: false, message: '인증 실패' });
+    }
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(400).send('오류 발생');
+  }
+});
+
+app.post('/signup', async (req, res) => {
+  const { Student_id, Student_pw, portal_id, portal_pw, email } = req.body;
+
+  const has_verified = await DB_IO.has_student_verified(email);
+  if(has_verified){
+    const year_semester = _year_semester();
+  
+    if (!Student_id || !Student_pw) {
+      return res.status(200).json({success: false,  message: 'Username and password are required' });
+    }
+    if (portal_id === undefined || portal_pw === undefined) {
+      return res.status(200).json({success: false,  message: 'portal id and password are required' });
+    }
+    FindUser.findById(Student_id, async (user) => {
+      if (user === false) {
+        try {
+          var jsonInfo = {};
+          while (true) {
+            try {
+              jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_id, portal_pw));
+              if (jsonInfo.timeTable.length !== 0) break;
+              if (jsonInfo.retCode === false) return res.status(200).json({success: false,  message: 'portal_login_failed' });
+            } catch (error) {
+              console.error('오류 발생:', error);
+              //res.status(200).json({ retCode: false, error: error });
+              //return;
+            }
+          }
+          //console.log(jsonInfo);
+          FindUser.findById(Student_id, async (user) => {
+            if (user === false) {
+              const result1 = await DB_IO.course_to_db(year_semester, jsonInfo.timeTable);
+              const result2 = await DB_IO.timetable_to_db(Student_id, year_semester, jsonInfo.timeTable_small);
+              //console.log('result1', result1);
+              //console.log('result2', result2);
+  
+              const result = await DB_IO.add_student_table(Student_id, Student_pw, jsonInfo.student_name, jsonInfo.student_number, jsonInfo.department);
+              //console.log(result);
+              return res.status(200).json({ success: true, message: 'sign up success', status: result });
+            }
+            else {
+              return res.status(200).json({success: false, message: 'username already exists' });
+            }
+          });
+        } catch (error) {
+          console.error('오류 발생:', error);
+          res.status(400).send('오류 발생');
+        }
+        //return res.status(400).json({ message: 'sign up success', status: true });
+      }
+      else {
+        return res.status(200).json({success: false, message: 'username already exists' });
+      }
+    });
+  }
+  else{
+    return res.status(200).json({success: false, message: 'email not verified yet' });
+  }
 });
 
 app.get('/signout', authenticateToken, async (req, res) => {
