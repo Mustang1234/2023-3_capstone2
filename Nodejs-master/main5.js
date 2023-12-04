@@ -160,7 +160,7 @@ app.post('/login', express.json(), generateToken);
 
 app.get('/id_duplicate_check', async (req, res) => {
   const Student_id = req.query.Student_id;
-  const result = DB_IO.id_duplicate_check(Student_id);
+  const result = await DB_IO.id_duplicate_check(Student_id);
   if (result) {
     return res.status(200).json({ success: true, message: 'available id' });
   }
