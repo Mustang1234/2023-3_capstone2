@@ -83,9 +83,8 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         return JSON.stringify(jsonInfo);
     }
 
-    await page.setCookie(...cookies);
-    
     // 로그인 후 원하는 페이지로 이동 (예: 시간표 페이지)
+    await page.setCookie(...cookies);
     /*try {
 	await page.waitForNavigation({ timeout : 2000 });
     } catch (error) {
@@ -95,13 +94,11 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 	    throw error;
         }
     }*/
-    //await page.goto('https://mportal.cau.ac.kr/std/uhs/sUhsPer001/index.do');
+    await page.goto('https://mportal.cau.ac.kr/std/uhs/sUhsPer001/index.do');
     //await page.setCookie(...cookies);
     //await page.setCookie(...cookies);
     //await page.waitForNavigation();
     try {
-        await page.setCookie(...cookies);
-        await page.goto('https://mportal.cau.ac.kr/std/uhs/sUhsPer001/index.do');
         await page.waitForNavigation({ timeout : 2500 });
     } catch (error) {
         if (error instanceof puppeteer.errors.TimeoutError) {
