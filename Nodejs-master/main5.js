@@ -136,7 +136,7 @@ function authenticateToken(req, res, next) {
   const token = req.headers['authorization'];
 
   if (!token) {
-    return res.sendStatus(200);
+    return res.sendStatus(400);
   }
 
   jwt.verify(token, token_secret_key.token_secret_key, (err, user) => {
