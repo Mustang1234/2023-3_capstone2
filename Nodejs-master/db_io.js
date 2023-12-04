@@ -290,7 +290,7 @@ module.exports = {
                         console.error(error);
                         reject(error);
                     } else {
-                        if(rows.length > 0 && rows.verified == 1){
+                        if(rows.length > 0 && rows[0].verified == 1){
                             resolve(true);
                         }
                         else{
