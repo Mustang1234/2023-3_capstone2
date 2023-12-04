@@ -554,8 +554,15 @@ app.get('/list_my_team', authenticateToken, async (req, res) => {
 app.get('/list_whole_team', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
+    const search  = req.query.search;
     const year_semester = _year_semester();
     const result = JSON.parse(await DB_IO.list_whole_team(Student_id, year_semester));
+    const jsonInfo = { teams: [] }
+    for(let i = 0; i < result.length; i++){
+      if(result.teams[i].Course_name.includes(search)){
+        jsonInfo.teams.push(result.teams[i])
+      }
+    }
     //console.log(result);
     res.status(200).json({teams: result});
   } catch (error) {
@@ -568,7 +575,7 @@ app.get('/delete_team', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const Team_id  = req.query.Team_id;
-    const result = JSON.parse(await DB_IO.delete_team(Team_id, Student_id));
+    const result = await DB_IO.delete_team(Team_id, Student_id);
     //console.log(result);
     res.status(200).json({retCode: result});
   } catch (error) {
@@ -581,7 +588,7 @@ app.get('/leave_team', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const Team_id  = req.query.Team_id;
-    const result = JSON.parse(await DB_IO.leave_team(Team_id, Student_id));
+    const result = await DB_IO.leave_team(Team_id, Student_id);
     //console.log(result);
     res.status(200).json({retCode: result});
   } catch (error) {
