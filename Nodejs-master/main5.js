@@ -196,16 +196,20 @@ async function sendEmail(email, token) {
 app.get('/verify1', async (req, res) => {
   try{
     const email = req.query.email;
-
-    const token = email_generateToken();
-    sendEmail(email, token);
-    const result = await DB_IO.add_student_table_not_verified(email, token);
-
-    if (result) {
-      res.status(200).json({ success: true, message: 'email send success' });
+    if(email !== undefined){
+      const token = email_generateToken();
+      sendEmail(email, token);
+      const result = await DB_IO.add_student_table_not_verified(email, token);
+  
+      if (result) {
+        res.status(200).json({ success: true, message: 'email send success' });
+      }
+      else {
+        res.status(200).json({ success: false, message: 'email send fail' });
+      }
     }
-    else {
-      res.status(200).json({ success: false, message: 'email send fail' });
+    else{
+      res.status(200).json({ success: false, message: 'email required' });
     }
   } catch (error) {
     console.error('오류 발생:', error);
@@ -216,14 +220,19 @@ app.get('/verify1', async (req, res) => {
 app.post('/verify2', async (req, res) => {
   try {
     const { email, user_token } = req.body;
+    if (email !== undefined && user_token !== undefined) {
 
-    const result = await DB_IO.student_verify(email, user_token);
+      const result = await DB_IO.student_verify(email, user_token);
 
-    if (result) {
-      res.status(200).json({ success: true, message: 'auth success' });
+      if (result) {
+        res.status(200).json({ success: true, message: 'auth success' });
+      }
+      else {
+        res.status(200).json({ success: false, message: 'auth fail' });
+      }
     }
-    else {
-      res.status(200).json({ success: false, message: 'auth fail' });
+    else{
+      res.status(200).json({ success: false, message: 'email and token required' });
     }
   } catch (error) {
     console.error('오류 발생:', error);
