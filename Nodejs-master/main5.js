@@ -285,7 +285,7 @@ app.post('/signup', async (req, res) => {
             }
           }
           else {
-            return res.status(200).json({ success: result, message: 'already signed up with that email' });
+            return res.status(200).json({ success: result, message: 'username already exists' });
           }
         } catch (error) {
           console.error('오류 발생:', error);
@@ -293,7 +293,7 @@ app.post('/signup', async (req, res) => {
         }
       }
       else {
-        return res.status(200).json({ success: false, message: 'username already exists' });
+        return res.status(200).json({ success: false, message: 'already signed up with that email' });
       } 
       //return res.status(400).json({ message: 'sign up success', status: true });
     }
