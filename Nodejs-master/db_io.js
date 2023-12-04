@@ -245,7 +245,7 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    get_schedule: async (Student_id) => {
+    get_whole_schedule: async (Student_id) => {
         try {
             const schedules = await new Promise((resolve, reject) => {
                 db.query(`SELECT DISTINCT F.Course_name, D.Project_name, A.Team_name, C.Deadline, C.description
