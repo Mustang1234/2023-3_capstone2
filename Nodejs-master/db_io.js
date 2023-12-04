@@ -217,7 +217,7 @@ module.exports = {
     add_student_table_not_verified: async (email, token) => {
         try {
             const _add_student_table_not_verified0 = await new Promise((resolve, reject) => {
-                db.query(`SELECT * FROM StudentTable WHERE email = ?`, [email], (error) => {
+                db.query(`SELECT * FROM StudentTable WHERE email = ?`, [email], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
@@ -265,7 +265,7 @@ module.exports = {
     student_verify: async (email, token) => {
         try {
             const _student_verify1 = await new Promise((resolve, reject) => {
-                db.query(`SELECT * FROM StudentTable WHERE email = ?`, [email], (error) => {
+                db.query(`SELECT * FROM StudentTable WHERE email = ?`, [email], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
@@ -303,7 +303,7 @@ module.exports = {
     has_student_verified: async (email) => {
         try {
             const _has_student_verified = await new Promise((resolve, reject) => {
-                db.query(`SELECT * FROM StudentTable WHERE email = ?`, [email], (error) => {
+                db.query(`SELECT * FROM StudentTable WHERE email = ?`, [email], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
