@@ -222,31 +222,27 @@ app.post('/signup', async (req, res) => {
 
 app.get('/signout', authenticateToken, async (req, res) => {
   const Student_id = req.user.user.Student_id;
-  if(Student_id === undefined){
-    return res.status(200).json({success: false, message: 'no user' });
-  }
-  else{
-    const year_semester = _year_semester();
-    try {
-      var result = true;
-      result = result && await DB_IO.sign_out(Student_id);
-      const teams = JSON.parse(await DB_IO.list_my_team(Student_id, year_semester));
-      console.log(teams);
-      for (let i = 0; i < teams.length; i++) {
-        console.log(teams[i].Team_id, Student_id);
-        result = result && (await DB_IO.leave_team(teams[i].Team_id, Student_id));
-      }
-      if(result) {
-        return res.status(200).json({success: result, message: 'sign out success' });
-      }
-      else {
-        return res.status(200).json({success: !result, message: 'sign out fail' });
-      }
-    } catch (error) {
-      console.error('오류 발생:', error);
-      res.status(400).send('오류 발생');
+  const year_semester = _year_semester();
+  try {
+    var result = true;
+    result = result && await DB_IO.sign_out(Student_id);
+    const teams = JSON.parse(await DB_IO.list_my_team(Student_id, year_semester));
+    console.log(teams);
+    for (let i = 0; i < teams.length; i++) {
+      console.log(teams[i].Team_id, Student_id);
+      result = result && (await DB_IO.leave_team(teams[i].Team_id, Student_id));
     }
+    if(result) {
+      return res.status(200).json({success: result, message: 'sign out success' });
+    }
+    else {
+      return res.status(200).json({success: !result, message: 'sign out fail' });
+    }
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(400).send('오류 발생');
   }
+
 });
 
 passport.use(new LocalStrategy(
