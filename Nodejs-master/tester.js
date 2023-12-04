@@ -22,8 +22,8 @@ async function sendEmail(email, token) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: '32gurihs@gmail.com',
-      pass: '@kjkszpj1234'
+      Username: '32gurihs@gmail.com',
+      Password: '@kjkszpj1234'
     }
   });
 
