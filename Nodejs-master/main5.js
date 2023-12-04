@@ -196,7 +196,8 @@ async function sendEmail(email, token) {
 app.get('/verify1', async (req, res) => {
   try{
     const email = req.query.email;
-    if(email !== undefined && await DB_IO.email_available(email)){
+    if(email !== undefined){
+      //if(await DB_IO.email_available(email))
       const token = email_generateToken();
       sendEmail(email, token);
       const result = await DB_IO.add_student_table_not_verified(email, token);
