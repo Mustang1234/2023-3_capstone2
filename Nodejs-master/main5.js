@@ -370,7 +370,7 @@ app.get('/main_page', authenticateToken, async (req, res) => {
     const student_info = JSON.parse(await DB_IO.get_student_table(Student_id));
     //console.log(student_info);
     returnJson.department = student_info.department;
-    const schedule = JSON.parse(await DB_IO.get_schedule(Student_id));
+    const schedule = JSON.parse(await DB_IO.get_whole_schedule(Student_id));
     returnJson.schedule = schedule;
     returnJson.retCode = true;
     res.status(200).json(returnJson);
