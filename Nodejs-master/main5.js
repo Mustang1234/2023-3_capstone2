@@ -242,7 +242,6 @@ app.get('/signout', authenticateToken, async (req, res) => {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
   }
-
 });
 
 passport.use(new LocalStrategy(
