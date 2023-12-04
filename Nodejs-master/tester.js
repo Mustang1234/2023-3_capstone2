@@ -23,7 +23,7 @@ async function sendEmail(email, token) {
     service: 'gmail',
     auth: {
       user: '32gurihs@gmail.com',
-      pass: '@kjkszpj1234'
+      pass: 'fdsahrEAHJREAJ5eaj43qa#$Q#4qaj43ewkjaa'//jssn mmgn ytdc insn
     }
   });
 
