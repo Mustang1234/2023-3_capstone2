@@ -248,9 +248,9 @@ module.exports = {
     get_whole_schedule: async (Student_id, year_semester) => {
         try {
             const schedules = await new Promise((resolve, reject) => {
-                db.query(`SELECT DISTINCT D.Course_id, D.Course_id, E.Project_name, A.Team_name, C.Deadline, C.description
-                FROM TeamTable as A INNER JOIN TeamPeopleTable as B INNER JOIN ScheduleTable as C INNER JOIN TimeTable as D INNER JOIN ProjectTable as E
-                ON A.Team_id = B.Team_id and B.Team_id = C.Team_id and B.Student_id = ? and A.Project_id = E.Project_id and E.Course_id = D.Course_id and D.year_semester = ?;`, [Student_id, year_semester], (error, rows) => {
+                db.query(`SELECT DISTINCT D.Course_id, F.Course_name, E.Project_name, A.Team_name, C.Deadline, C.description
+                FROM TeamTable as A INNER JOIN TeamPeopleTable as B INNER JOIN ScheduleTable as C INNER JOIN TimeTable as D INNER JOIN ProjectTable as E INNER JOIN CourseTable as F
+                ON A.Team_id = B.Team_id and B.Team_id = C.Team_id and B.Student_id = ? and A.Project_id = E.Project_id and E.Course_id = D.Course_id and D.year_semester = ? and E.Course_id = F.Course_id;`, [Student_id, year_semester], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
