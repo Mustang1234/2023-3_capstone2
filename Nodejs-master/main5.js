@@ -559,7 +559,7 @@ app.get('/list_whole_team', authenticateToken, async (req, res) => {
     const result = JSON.parse(await DB_IO.list_whole_team(Student_id, year_semester));
     const jsonInfo = { teams: [] }
     for(let i = 0; i < result.length; i++){
-      if(result[i].Course_name.includes('인')){
+      if(result[i].Course_name.includes(search)){
         jsonInfo.teams.push(result[i])
       }
     }
