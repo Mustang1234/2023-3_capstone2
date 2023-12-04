@@ -356,7 +356,7 @@ module.exports = {
         try {
             const _add_student_table = await new Promise((resolve, reject) => {
                 db.query(`UPDATE StudentTable SET Student_id = ?, Student_pw = ?, student_name = ?, student_number = ?,
-                speed = 100, department = ? WHERE email = ?;`, [Student_id, Student_pw, student_name, student_number, department, email], (error) => {
+                speed = 100, department = ? WHERE email = ? and verified = 1;`, [Student_id, Student_pw, student_name, student_number, department, email], (error) => {
                     if (error) {
                         console.error(error);
                         reject(error);
