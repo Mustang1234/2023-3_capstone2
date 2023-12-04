@@ -366,20 +366,10 @@ app.post('/page_delete_process', authenticateToken, function (req, res) {
 app.get('/main_page', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const year_semester = _year_semester();
-    var returnJson = { Student_id: Student_id, retCode: false, Student_name: '', Student_number: '',
-      department: '', Speed: 0, timeTable: [], schedule: [], ProfilePhoto: null
-    }
+    var returnJson = { retCode: false, department: '', schedule: [] }
     const student_info = JSON.parse(await DB_IO.get_student_table(Student_id));
     //console.log(student_info);
-    returnJson.Student_name = student_info.Student_name;
-    returnJson.Student_number = student_info.Student_number;
     returnJson.department = student_info.department;
-    returnJson.Speed = student_info.Speed;
-    const student_photo_info = JSON.parse(await DB_IO.get_student_photo_table(Student_id));
-    returnJson.ProfilePhoto = student_photo_info.ProfilePhoto;
-    const timetable = JSON.parse(await DB_IO.db_to_timetable(Student_id, year_semester));
-    returnJson.timeTable = timetable;
     const schedule = JSON.parse(await DB_IO.get_schedule(Student_id));
     returnJson.schedule = schedule;
     returnJson.retCode = true;
