@@ -354,9 +354,19 @@ module.exports = {
     },
     add_student_table: async (email, Student_id, Student_pw, student_name, student_number, department) => {
         try {
-            const _add_student_table = await new Promise((resolve, reject) => {
+            const _add_student_table1 = await new Promise((resolve, reject) => {
                 db.query(`UPDATE StudentTable SET Student_id = ?, Student_pw = ?, student_name = ?, student_number = ?,
                 speed = 100, department = ? WHERE email = ? and verified = 1;`, [Student_id, Student_pw, student_name, student_number, department, email], (error) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
+                });
+            });
+            const _add_student_table2 = await new Promise((resolve, reject) => {
+                db.query(`UPDATE StudentTable SET token = NULL WHERE Student_id = ?;`, [Student_id], (error) => {
                     if (error) {
                         console.error(error);
                         reject(error);
@@ -376,7 +386,7 @@ module.exports = {
                     }
                 });
             });
-            return _add_student_table && _add_student_photo_table;
+            return _add_student_table1 && _add_student_table2 && _add_student_photo_table;
         } catch (error) {
             console.error('오류 발생:', error);
             throw new Error('오류 발생');
