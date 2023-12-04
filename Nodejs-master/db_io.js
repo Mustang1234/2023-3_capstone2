@@ -341,7 +341,10 @@ module.exports = {
                             const j = rows.length;
                             var result = [];
                             for (let i = 0; i < j; i++) {
+                            const currentTime = getCurrentDateTime();
+                            if(scheduleTime > currentTime){
                                 result.push(rows[i]);
+                            }
                             }
                             resolve(result);
                         }
