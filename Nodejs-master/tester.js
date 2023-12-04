@@ -23,7 +23,7 @@ async function sendEmail(email, token) {
     service: 'gmail',
     auth: {
       user: '32gurihs@gmail.com',
-      pass: 'your-email-password'
+      pass: '@kjkszpj1234'
     }
   });
 
