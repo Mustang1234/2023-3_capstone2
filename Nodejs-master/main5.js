@@ -8,10 +8,10 @@ const sanitizeHtml = require('sanitize-html');
 const port = 1234;
 //const ip = '20.39.186.138';
 const bodyParser = require('body-parser');
-var swaggerJsdoc = require("swagger-jsdoc");
-var swaggerUi = require("swagger-ui-express");
+//var swaggerJsdoc = require("swagger-jsdoc");
+//var swaggerUi = require("swagger-ui-express");
 
-const options = {
+/*const options = {
   definition: {
     openapi: "4.0.0",
     info: {
@@ -32,12 +32,12 @@ const options = {
   },
   apis: ["./Eclass.js", "./db_id.js"],
 };
-
 const specs = swaggerJsdoc(options);
 app.use("/api-docs",
   swaggerUi.serve,
   swaggerUi.setup(specs)
-);
+);*/
+
 const compression = require('compression');
 const helmet = require('helmet');
 //const cookie = require('cookie');
