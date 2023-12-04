@@ -278,7 +278,12 @@ app.post('/signup', async (req, res) => {
 
           const result = await DB_IO.add_student_table(email, Student_id, Student_pw, jsonInfo.student_name, jsonInfo.student_number, jsonInfo.department);
           //console.log(result);
-          return res.status(200).json({ success: true, message: 'sign up success', status: result });
+          if(result){
+            return res.status(200).json({ success: result, message: 'sign up success' });
+          }
+          else{
+            return res.status(200).json({ success: result, message: 'already signed up with that email' });
+          }
         }
         else {
           return res.status(200).json({ success: false, message: 'username already exists' });
