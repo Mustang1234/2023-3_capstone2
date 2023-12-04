@@ -245,6 +245,44 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
+    sign_out: async (Student_id) => {
+        try {
+            const _sign_out1 = await new Promise((resolve, reject) => {
+                db.query(`DELETE FROM JoinRequestTable WHERE Student_id = ?`, [Student_id], (error) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
+                });
+            });
+            const _sign_out2 = await new Promise((resolve, reject) => {
+                db.query(`DELETE FROM StudentTable WHERE Student_id = ?`, [Student_id], (error) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
+                });
+            });
+            const _sign_out3 = await new Promise((resolve, reject) => {
+                db.query(`DELETE FROM TimeTable WHERE Student_id = ?`, [Student_id], (error) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
+                });
+            });
+            return _sign_out1 && _sign_out2 && _sign_out3;
+        } catch (error) {
+            console.error('오류 발생:', error);
+            throw new Error('오류 발생');
+        }
+    },
     get_whole_schedule: async (Student_id, year_semester) => {
         try {
             const schedules = await new Promise((resolve, reject) => {

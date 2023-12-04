@@ -190,6 +190,15 @@ app.post('/signup', async (req, res) => {
   });
 });
 
+app.get('/signout', authenticateToken, async (req, res) => {
+  const Student_id = req.user.user.Student_id;
+  const year_semester = _year_semester();
+  const teams = JSON.parse(await DB_IO.list_whole_team(Student_id, year_semester));
+  console.log(teams)
+  return res.status(200).json({success: false, message: 'sign out fail' });
+
+});
+
 passport.use(new LocalStrategy(
   {
     usernameField: 'Student_id',
