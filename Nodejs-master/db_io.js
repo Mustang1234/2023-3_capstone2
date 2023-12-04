@@ -275,19 +275,83 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    add_schedule: async (Team_id, Deadline, description) => {
+    add_schedule: async (Student_id, Team_id, Deadline, description) => {
         try {
-            const _add_schedule = await new Promise((resolve, reject) => {
-                db.query(`INSERT INTO ScheduleTable (Team_id, Deadline, description)VALUES (?, ?, ?);`, [Team_id, Deadline, description], (error) => {
+            const _add_schedule1 = await new Promise((resolve, reject) => {
+                db.query(`SELECT * from TeamPeopleTable where Student_id = ? and Team_id = ?`, [Student_id, Team_id], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
                     } else {
-                        resolve(true);
+                        if(rows.length !== 0) {
+                            resolve(true);
+                        }
+                        else {
+                            resolve(false);
+                        }
                     }
                 });
             });
-            return _add_schedule;
+            if(_add_schedule1) {
+                const _add_schedule2 = await new Promise((resolve, reject) => {
+                    db.query(`INSERT INTO ScheduleTable (Team_id, Deadline, description)VALUES (?, ?, ?);`, [Team_id, Deadline, description], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                return _add_schedule2;
+            }
+            else {
+                return false;
+            }
+        } catch (error) {
+            console.error('오류 발생:', error);
+            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
+            throw new Error('오류 발생');
+        }
+    },
+    get_schedule: async (Student_id, Team_id) => {
+        try {
+            const _get_schedule1 = await new Promise((resolve, reject) => {
+                db.query(`SELECT * from TeamPeopleTable where Student_id = ? and Team_id = ?`, [Student_id, Team_id], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        if(rows.length !== 0) {
+                            resolve(true);
+                        }
+                        else {
+                            resolve(false);
+                        }
+                    }
+                });
+            });
+            if(_get_schedule1) {
+                const _get_schedule2 = await new Promise((resolve, reject) => {
+                    db.query(`SELECT * from ScheduleTable where Team_id = ?`, [Team_id], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            const j = rows.length;
+                            var result = [];
+                            for (let i = 0; i < j; i++) {
+                                result.push(rows[i]);
+                            }
+                            resolve(result);
+                        }
+                    });
+                });
+                return JSON.stringify({ success: true, message: 'success', schedule : _get_schedule2 });
+            }
+            else {
+                return JSON.stringify({ success: false, message: 'not in that team' });
+            }
         } catch (error) {
             console.error('오류 발생:', error);
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.

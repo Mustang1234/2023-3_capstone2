@@ -564,7 +564,7 @@ app.get('/list_whole_team', authenticateToken, async (req, res) => {
       }
     }
     //console.log(result);
-    res.status(200).json({teams: jsonInfo});
+    res.status(200).json(jsonInfo);
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
@@ -855,7 +855,7 @@ app.get('/leave_team', authenticateToken, async (req, res) => {
     res.status(400).send('오류 발생');
   }
 });
-
+/*
 app.get('/add_schedule1', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
@@ -869,16 +869,31 @@ app.get('/add_schedule1', authenticateToken, async (req, res) => {
     res.status(400).send('오류 발생');
   }
 });
-
-app.get('/add_schedule2', authenticateToken, async (req, res) => {
+*/
+app.get('/add_schedule', authenticateToken, async (req, res) => {
   try {
+    const Student_id = req.user.user.Student_id;
     const Team_id = req.query.Team_id;
     const Deadline  = req.query.Deadline;
     const description  = req.query.description;
     //const Team_name = req.query.Team_name
-    const result = await DB_IO.add_schedule(Team_id, Deadline, description);
+    const result = await DB_IO.add_schedule(Student_id, Team_id, Deadline, description);
     //console.log(result);
     res.status(200).json({ success: result });
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(400).send('오류 발생');
+  }
+});
+
+app.get('/get_schedule', authenticateToken, async (req, res) => {
+  try {
+    const Student_id = req.user.user.Student_id;
+    const Team_id = req.query.Team_id;
+    //const Team_name = req.query.Team_name
+    const result = JSON.parse(await DB_IO.get_schedule(Student_id, Team_id));
+    //console.log(result);
+    res.status(200).json(result);
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
