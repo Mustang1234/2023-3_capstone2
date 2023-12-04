@@ -12,12 +12,10 @@ app.use(express.urlencoded({ extended: true }));
 // 사용자 데이터베이스 (간단하게 메모리에 저장)
 const users = [];
 
-// 이메일 인증 토큰 생성 함수
 function email_generateToken() {
     return crypto.randomBytes(4).toString('hex');
 }
 
-// 이메일 발송 함수
 async function sendEmail(email, token) {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -37,7 +35,6 @@ async function sendEmail(email, token) {
     await transporter.sendMail(mailOptions);
 }
 
-// 회원가입 라우트
 app.get('/verify1', (req, res) => {
     const email = req.query.email;
 
@@ -51,8 +48,6 @@ app.get('/verify1', (req, res) => {
     res.json({ message: '이메일을 확인하세요.' });
 });
 
-
-// 회원가입 라우트
 app.get('/verify2', (req, res) => {
     const email = req.query.email;
     const user_token = req.query.token;
@@ -68,7 +63,6 @@ app.get('/verify2', (req, res) => {
     }
 });
 
-// 이메일 인증 라우트
 app.post('/signup', (req, res) => {
     const email = req.query.email;
     const id = req.query.id;

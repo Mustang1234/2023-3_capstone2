@@ -202,10 +202,10 @@ app.get('/verify1', async (req, res) => {
     const result = await DB_IO.add_student_table_not_verified(email, token);
 
     if (result) {
-      res.status(200).json({ success: true, message: '이메일 발송 성공' });
+      res.status(200).json({ success: true, message: 'email send success' });
     }
     else {
-      res.status(200).json({ success: false, message: '이메일 발송 실패' });
+      res.status(200).json({ success: false, message: 'email send fail' });
     }
   } catch (error) {
     console.error('오류 발생:', error);
@@ -220,10 +220,10 @@ app.post('/verify2', async (req, res) => {
     const result = await DB_IO.student_verify(email, user_token);
 
     if (result) {
-      res.status(200).json({ success: true, message: '인증 성공' });
+      res.status(200).json({ success: true, message: 'auth success' });
     }
     else {
-      res.status(200).json({ success: false, message: '인증 실패' });
+      res.status(200).json({ success: false, message: 'auth fail' });
     }
   } catch (error) {
     console.error('오류 발생:', error);
