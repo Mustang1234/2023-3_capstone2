@@ -557,7 +557,7 @@ app.get('/list_whole_team', authenticateToken, async (req, res) => {
     const search  = req.query.search;
     const year_semester = _year_semester();
     const result = JSON.parse(await DB_IO.list_whole_team(Student_id, year_semester));
-    
+
     //console.log(result);
     res.status(200).json({teams: result});
   } catch (error) {
