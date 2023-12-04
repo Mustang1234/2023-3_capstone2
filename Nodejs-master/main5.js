@@ -196,7 +196,7 @@ async function sendEmail(email, token) {
 app.get('/verify1', async (req, res) => {
   try{
     const email = req.query.email;
-    if(email !== undefined){
+    if(email !== undefined && await DB_IO.email_available(email)){
       const token = email_generateToken();
       sendEmail(email, token);
       const result = await DB_IO.add_student_table_not_verified(email, token);
@@ -276,7 +276,7 @@ app.post('/signup', async (req, res) => {
               //console.log('result1', result1);
               //console.log('result2', result2);
   
-              const result = await DB_IO.add_student_table(Student_id, Student_pw, jsonInfo.student_name, jsonInfo.student_number, jsonInfo.department);
+              const result = await DB_IO.add_student_table(email, Student_id, Student_pw, jsonInfo.student_name, jsonInfo.student_number, jsonInfo.department);
               //console.log(result);
               return res.status(200).json({ success: true, message: 'sign up success', status: result });
             }
@@ -307,9 +307,9 @@ app.get('/signout', authenticateToken, async (req, res) => {
     var result = true;
     result = result && await DB_IO.sign_out(Student_id);
     const teams = JSON.parse(await DB_IO.list_my_team(Student_id, year_semester));
-    console.log(teams);
+    //console.log(teams);
     for (let i = 0; i < teams.length; i++) {
-      console.log(teams[i].Team_id, Student_id);
+      //console.log(teams[i].Team_id, Student_id);
       result = result && (await DB_IO.leave_team(teams[i].Team_id, Student_id));
     }
     if(result) {

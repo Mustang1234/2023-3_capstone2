@@ -214,6 +214,30 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
+    email_available: async (email) => {
+        try {
+            const _email_available = await new Promise((resolve, reject) => {
+                db.query(`SELECT * FROM StudentTable WHERE email = ?`, [email], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        if(rows.length === 0){
+                            resolve(true);
+                        }
+                        else{
+                            resolve(false);
+                        }
+                    }
+                });
+            });
+            return _email_available;
+
+        } catch (error) {
+            console.error('오류 발생:', error);
+            throw new Error('오류 발생');
+        }
+    },
     add_student_table_not_verified: async (email, token) => {
         try {
             const _add_student_table_not_verified1 = await new Promise((resolve, reject) => {
@@ -251,7 +275,7 @@ module.exports = {
                         console.error(error);
                         reject(error);
                     } else {
-                        console.log(rows.length, rows[0].token, token)
+                        //console.log(rows.length, rows[0].token, token)
                         if(rows.length > 0 && rows[0].token === token){
                             resolve(true);
                         }
@@ -305,12 +329,11 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    add_student_table: async (Student_id, Student_pw, student_name, student_number, department) => {
+    add_student_table: async (email, Student_id, Student_pw, student_name, student_number, department) => {
         try {
             const _add_student_table = await new Promise((resolve, reject) => {
-                db.query(`INSERT INTO StudentTable
-                (Student_id, Student_pw, Student_name, Student_number, Speed, department, description)
-                VALUES (?, ?, ?, ?, ?, ?, null)`, [Student_id, Student_pw, student_name, student_number, 100, department], (error) => {
+                db.query(`UPDATE StudentTable SET Student_id = ?, Student_pw = ?, student_name = ?, student_number = ?,
+                speed = 100, department = ? WHERE email = ?;`, [Student_id, Student_pw, student_name, student_number, department, email], (error) => {
                     if (error) {
                         console.error(error);
                         reject(error);
