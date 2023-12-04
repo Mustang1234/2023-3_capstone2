@@ -260,6 +260,7 @@ module.exports = {
                     }
                 });
             });
+            console.log(_student_verify1)
             if(_student_verify1){
                 const _student_verify2 = await new Promise((resolve, reject) => {
                     db.query(`UPDATE StudentTable SET verified = 1 WHERE email = ? and token = ?`, [email, token], (error) => {
