@@ -631,7 +631,7 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
     var jsonInfo = {};
     while (true) {
       try {
-        const portal_info = JSON.parse(await DB_IO.portal_info(Student_id));
+        const portal_info = JSON.parse(await DB_IO.get_portal_info(Student_id));
         jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_info.portal_id, portal_info.portal_pw));
         if (jsonInfo.timeTable.length !== 0) break;
         if (jsonInfo.retCode === false) return res.status(200).json({ success: false, message: 'portal_login_failed' });
