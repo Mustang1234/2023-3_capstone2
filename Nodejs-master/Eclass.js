@@ -169,7 +169,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         }
     }
     const pageContent2 = await page.content();
-    //console.log(pageContent2);
+    console.log(pageContent2);
     await browser.close();
 
     var timeTableArray = []
