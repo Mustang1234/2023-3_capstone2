@@ -420,7 +420,7 @@ module.exports = {
     change_password: async (Student_id, current_password, new_password) => {
         try {
             const _change_password0 = await new Promise((resolve, reject) => {
-                db.query(`SELECT * FROM StudentTable WHERE Student_id = ? and Student_pw`, [Student_id, current_password], (error, rows) => {
+                db.query(`SELECT * FROM StudentTable WHERE Student_id = ? and Student_pw = ?`, [Student_id, current_password], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
