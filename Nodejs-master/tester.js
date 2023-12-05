@@ -4,7 +4,6 @@ const swaggerAutogen = require('swagger-autogen')({ language: 'ko' });
 
 const app = express();
 const PORT = 1235;
-const express = require('express')
 const fs = require('fs');
 const template = require('./lib/template.js');
 const path = require('path');
