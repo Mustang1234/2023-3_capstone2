@@ -457,7 +457,7 @@ module.exports = {
             });
             if(_find_pw_by_email_token_check1){
                 const _find_pw_by_email_token_check2 = await new Promise((resolve, reject) => {
-                    db.query(`UPDATE StudentTable SET new_pw_token = null and Student_pw = ? WHERE email = ?`, [new_password, email], (error) => {
+                    db.query(`UPDATE StudentTable SET new_pw_token = NULL, Student_pw = ? WHERE email = ?`, [new_password, email], (error) => {
                         if (error) {
                             console.error(error);
                             reject(error);

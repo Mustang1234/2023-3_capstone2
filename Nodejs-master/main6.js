@@ -342,7 +342,7 @@ app.get('/find_pw_by_email_token_insert', async (req, res) => {
       res.status(200).json({ success: true, message: 'email send success' });
     }
     else {
-      res.status(200).json({ success: true, message: 'email send fail' });
+      res.status(200).json({ success: false, message: 'email send fail' });
     }
   } catch (error) {
     console.error('오류 발생:', error);
@@ -358,7 +358,7 @@ app.post('/find_pw_by_email_token_check', async (req, res) => {
       res.status(200).json({ success: true, message: 'password changed' });
     }
     else {
-      res.status(200).json({ success: true, message: 'wrong token or email' });
+      res.status(200).json({ success: false, message: 'wrong token or email' });
     }
   } catch (error) {
     console.error('오류 발생:', error);
