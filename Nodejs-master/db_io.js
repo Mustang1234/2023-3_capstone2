@@ -401,7 +401,7 @@ module.exports = {
     get_portal_info: async (Student_id) => {
         try {
             const _get_portal_info = await new Promise((resolve, reject) => {
-                db.query(`SELECT portal_id, portal_pw FROM StudentTable WHERE Student_id = ?`, [Student_id, email], (error, rows) => {
+                db.query(`SELECT portal_id, portal_pw FROM StudentTable WHERE Student_id = ?`, [Student_id], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
