@@ -348,16 +348,6 @@ app.get('/main_page', authenticateToken, async (req, res) => {
   }
 });
 
-/*// Example route that requires authentication
-app.get('/protected', authenticateToken, (req, res) => {
-  res.json({ message: 'Protected route', user: req.user });
-});
-
-// Example route that requires authentication
-app.post('/protected2', authenticateToken, (req, res) => {
-  res.json({ message: 'Protected route2', user: req.user });
-});*/
-
 app.get('/my_page', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
@@ -862,7 +852,7 @@ app.get('/get_schedule', authenticateToken, async (req, res) => {
   }
 });
 
-app.get('/test', authenticateToken, async (req, res) => {
+/*app.get('/test', authenticateToken, async (req, res) => {
   try {
     var jsonInfo = {};
     while (true) {
@@ -905,7 +895,7 @@ app.get('/test3', authenticateToken, async (req, res) => {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
   }
-});
+});*/
 
 /*app.get('/tester', authenticateToken, function (req, res) {
   res.setHeader('Content-Security-Policy', "form-action 'self' *");
