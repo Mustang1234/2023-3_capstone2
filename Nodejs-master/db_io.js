@@ -417,6 +417,45 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
+    change_password: async (Student_id, current_password, new_password) => {
+        try {
+            const _change_password0 = await new Promise((resolve, reject) => {
+                db.query(`SELECT * FROM StudentTable WHERE Student_id = ? and Student_pw`, [Student_id, current_password], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        if(rows.length !== 0){
+                            resolve(rows[0].Student_id);
+                        }
+                        else{
+                            resolve(false);
+                        }
+                    }
+                });
+            });
+            if(_change_password0 && _change_password0 === Student_id){
+                const _change_password1 = await new Promise((resolve, reject) => {
+                    db.query(`UPDATE StudentTable SET Student_pw = ? WHERE Student_id = ?;`, [new_password, Student_id], (error, rows) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                return _change_password1;
+            }
+            else{
+                return _change_password0;
+            }
+
+        } catch (error) {
+            console.error('오류 발생:', error);
+            throw new Error('오류 발생');
+        }
+    },
     add_student_table: async (email, Student_id, Student_pw, student_name, student_number, department, portal_id, portal_pw) => {
         try {
             const _add_student_table1 = await new Promise((resolve, reject) => {
