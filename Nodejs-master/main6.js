@@ -902,7 +902,7 @@ app.get('/get_schedule', authenticateToken, async (req, res) => {
   }
 });
 
-/*app.get('/test', authenticateToken, async (req, res) => {
+/*app.get('/test', authenticateToken, async (req, res) => { //
   try {
     var jsonInfo = {};
     while (true) {
