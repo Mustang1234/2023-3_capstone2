@@ -951,36 +951,6 @@ app.use(function (err, req, res, next) {
   res.status(400).send(err);
 });*/
 
-
-
-
-/////////////////////////////////////////SWAGGER/////////////////////////////////////////
-const swaggerUi = require('swagger-ui-express');
-const swaggerAutogen = require('swagger-autogen')({ language: 'ko' });
-
-// Swagger 자동 생성 설정
-const doc = {
-  info: {
-    title: "swagger_api",
-    description: "swagger_api",
-  },
-  host: "http://20.39.186.138",
-  schemes: ["http"],
-  // schemes: ["https" ,"http"],
-};
-
-const outputFile = "./swagger-output.json";
-const endpointsFiles = ["./main5.js"];
-
-swaggerAutogen(outputFile, endpointsFiles, doc);
-
-// Swagger 미들웨어 추가
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(require('./swagger-output.json')));
-/////////////////////////////////////////SWAGGER/////////////////////////////////////////
-
-
-
-
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
