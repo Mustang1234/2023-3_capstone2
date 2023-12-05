@@ -970,7 +970,7 @@ const doc = {
 };
 
 const outputFile = "./swagger-output.json";
-const endpointsFiles = ["./main6.js"];
+const endpointsFiles = ["./main5.js"];
 
 swaggerAutogen(outputFile, endpointsFiles, doc);
 
