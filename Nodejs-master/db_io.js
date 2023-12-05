@@ -407,7 +407,7 @@ module.exports = {
                         reject(error);
                     } else {
                         //console.log(rows.length, rows[0].token, token)
-                        if(rows.length > 0 && rows[0].token === token){
+                        if(rows.length !== 0 && rows[0].email === email){
                             resolve(true);
                         }
                         else{
