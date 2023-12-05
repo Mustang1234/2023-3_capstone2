@@ -434,6 +434,7 @@ module.exports = {
                     }
                 });
             });
+            console.log(_change_password0, Student_id)
             if(_change_password0 && _change_password0 === Student_id){
                 const _change_password1 = await new Promise((resolve, reject) => {
                     db.query(`UPDATE StudentTable SET Student_pw = ? WHERE Student_id = ?;`, [new_password, Student_id], (error, rows) => {
