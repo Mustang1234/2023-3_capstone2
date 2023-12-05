@@ -456,7 +456,7 @@ module.exports = {
                 });
             });
             if(_find_pw_by_email_token_check1){
-                const _find_pw_by_email_token_insert2 = await new Promise((resolve, reject) => {
+                const _find_pw_by_email_token_check2 = await new Promise((resolve, reject) => {
                     db.query(`UPDATE StudentTable SET new_pw_token = null and Student_pw = ? WHERE email = ?`, [new_password, email], (error) => {
                         if (error) {
                             console.error(error);
@@ -466,10 +466,10 @@ module.exports = {
                         }
                     });
                 });
-                return _find_pw_by_email_token_insert1 && _find_pw_by_email_token_insert2;
+                return _find_pw_by_email_token_check1 && _find_pw_by_email_token_check2;
             }
             else{
-                return _find_pw_by_email_token_insert1;
+                return _find_pw_by_email_token_check1;
             }
         } catch (error) {
             console.error('오류 발생:', error);
