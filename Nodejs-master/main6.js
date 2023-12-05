@@ -140,37 +140,37 @@ app.get('/id_duplicate_check', async (req, res) => {
 });
 
 function email_generateToken() {
-    return crypto.randomBytes(4).toString('hex');
+  return crypto.randomBytes(4).toString('hex');
 }
 
 async function sendEmail(email, token) {
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: '32gurihs@gmail.com',
-            pass: 'ofqh ukjz kycn orlv'
-        }
-    });
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: '32gurihs@gmail.com',
+      pass: 'ofqh ukjz kycn orlv'
+    }
+  });
 
-    const mailOptions = {
-        from: '32gurihs@gmail.com',
-        to: email,
-        subject: '이메일 인증',
-        text: `인증을 완료하려면 다음 값을 입력하세요: ${token}`
-    };
+  const mailOptions = {
+    from: '32gurihs@gmail.com',
+    to: email,
+    subject: '이메일 인증',
+    text: `인증을 완료하려면 다음 값을 입력하세요: ${token}`
+  };
 
-    await transporter.sendMail(mailOptions);
+  await transporter.sendMail(mailOptions);
 }
 
 app.get('/verify1', async (req, res) => {
-  try{
+  try {
     const email = req.query.email;
-    if(email !== undefined){
+    if (email !== undefined) {
       //if(await DB_IO.email_available(email))
       const token = email_generateToken();
       sendEmail(email, token);
       const result = await DB_IO.add_student_table_not_verified(email, token);
-  
+
       if (result) {
         res.status(200).json({ success: true, message: 'email send success' });
       }
@@ -264,7 +264,7 @@ app.post('/signup', async (req, res) => {
       }
       else {
         return res.status(200).json({ success: false, message: 'already signed up with that email' });
-      } 
+      }
       //return res.status(400).json({ message: 'sign up success', status: true });
     }
     else {
@@ -288,11 +288,11 @@ app.get('/signout', authenticateToken, async (req, res) => {
       //console.log(teams[i].Team_id, Student_id);
       result = result && (await DB_IO.leave_team(teams[i].Team_id, Student_id));
     }
-    if(result) {
-      return res.status(200).json({success: result, message: 'sign out success' });
+    if (result) {
+      return res.status(200).json({ success: result, message: 'sign out success' });
     }
     else {
-      return res.status(200).json({success: !result, message: 'sign out fail' });
+      return res.status(200).json({ success: !result, message: 'sign out fail' });
     }
   } catch (error) {
     console.error('오류 발생:', error);
@@ -304,11 +304,11 @@ app.get('/find_id_by_email', authenticateToken, async (req, res) => {
   const email = req.query.email;
   try {
     result = await DB_IO.find_id_by_email(email);
-    if(result) {
-      return res.status(200).json({success: true, id: result });
+    if (result) {
+      return res.status(200).json({ success: true, id: result });
     }
     else {
-      return res.status(200).json({success: false, message: 'cannot find id' });
+      return res.status(200).json({ success: false, message: 'cannot find id' });
     }
   } catch (error) {
     console.error('오류 발생:', error);
@@ -328,166 +328,6 @@ passport.use(new LocalStrategy(
       return cb(null, false, { message: 'no' });
     });
   }));
-
-app.get('/pages', authenticateToken, function (req, res) {
-  res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  if (req.user === undefined) {
-    res.redirect(`/login`);
-    return false;
-  }
-  var title = 'Welcome! ' + req.user.Student_id;
-  var description = 'Hello, Node.js';
-  var list = template.list(req.list);
-  var html = template.HTML(title, list,
-    `<h2>${title}</h2>${description}
-    <img src="image/hello.jpg" style="width:100px; display:block;">`,
-    `<a href="/page_create">create</a>`,
-    req.user.Student_id
-  );
-  res.send(html);
-});
-
-app.get('/page/:pageId', authenticateToken, function (req, res, next) {
-  res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  if (req.user === undefined) {
-    res.redirect(`/login`);
-    return false;
-  }
-  var filteredId = path.parse(req.params.pageId).base;
-  fs.readFile(`data/${filteredId}`, 'utf8', function (err, description) {
-    if (err) {
-      next('Error');
-    }
-    else {
-      var title = req.params.pageId;
-      var sanitizedTitle = sanitizeHtml(title);
-      var sanitizedDescription = sanitizeHtml(description, {
-        allowedTags: ['h1']
-      });
-      var list = template.list(req.list);
-      var html = template.HTML(sanitizedTitle, list,
-        `<h2>${sanitizedTitle}</h2>${sanitizedDescription}`,
-        ` <a href="/pages">main page</a>
-          <a href="/page_update/${sanitizedTitle}">update</a>
-          <form action="/page_delete_process" method="post">
-            <input type="hidden" name="id" value="${sanitizedTitle}">
-            <input type="submit" value="delete">
-          </form>`,
-        req.user.Student_id
-      );
-      res.send(html);
-    }
-  });
-});
-
-app.get('/page_create', authenticateToken, function (req, res) {
-  res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  if (req.user === undefined) {
-    res.redirect(`/login`);
-    return false;
-  }
-  var title = 'WEB - create';
-  var list = template.list(req.list);
-  var html = template.HTML(title, list, `
-    <form action="/page_create_process" method="post">
-      <p><input type="text" name="title" placeholder="title"></p>
-      <p>
-        <textarea name="description" placeholder="description"></textarea>
-      </p>
-      <p>
-        <input type="submit">
-
-      </p>
-    </form>
-  `, `<a href="/pages">main page</a>`, req.user.Student_id);
-  res.send(html);
-});
-
-app.post('/page_create_process', authenticateToken, function (req, res) {
-  if (req.user === undefined) {
-    res.redirect(`/login`);
-    return false;
-  }
-  if (req.headers.cookie === undefined) {
-    res.end('login plz');
-    return false;
-  }
-  var post = req.body;
-  var title = post.title;
-  var description = post.description;
-  fs.writeFile(`data/${title}`, description, 'utf8', function (err) {
-    res.redirect(`/pages`);
-    res.end();
-  });
-});
-
-app.get('/page_update/:pageId', authenticateToken, function (req, res) {
-  res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  if (req.user === undefined) {
-    res.redirect(`/login`);
-    return false;
-  }
-  var filteredId = path.parse(req.params.pageId).base;
-  fs.readFile(`data/${filteredId}`, 'utf8', function (err, description) {
-    var title = req.params.pageId;
-    var list = template.list(req.list);
-    var html = template.HTML(title, list,
-      `
-      <form action="/page_update_process" method="post">
-        <input type="hidden" name="id" value="${title}">
-        <p><input type="text" name="title" placeholder="title" value="${title}"></p>
-        <p>
-          <textarea name="description" placeholder="description">${description}</textarea>
-        </p>
-        <p>
-          <input type="submit">
-        </p>
-      </form>
-      `,
-      `<a href="/">main page</a>`,
-      req.user.Student_id
-    );
-    res.send(html);
-  });
-});
-
-app.post('/page_update_process', authenticateToken, function (req, res) {
-  res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  if (req.user === undefined) {
-    res.redirect(`/login`);
-    return false;
-  }
-  if (req.headers.cookie === undefined) {
-    res.end('login plz');
-    return false;
-  }
-  var post = req.body;
-  var id = post.id;
-  var title = post.title;
-  var description = post.description;
-  fs.rename(`data/${id}`, `data/${title}`, function (error) {
-    fs.writeFile(`data/${title}`, description, 'utf8', function (err) {
-      res.redirect(`/page/${title}`);
-    })
-  });
-});
-
-app.post('/page_delete_process', authenticateToken, function (req, res) {
-  if (req.user === undefined) {
-    res.redirect(`/login`);
-    return false;
-  }/*
-  if (req.headers.cookie === undefined) {
-    res.end('login plz');
-    return false;
-  }*/
-  var post = req.body;
-  var id = post.id;
-  var filteredId = path.parse(id).base;
-  fs.unlink(`data/${filteredId}`, function (error) {
-    res.redirect('/pages');
-  });
-});
 
 app.get('/main_page', authenticateToken, async (req, res) => {
   try {
@@ -521,7 +361,8 @@ app.post('/protected2', authenticateToken, (req, res) => {
 app.get('/my_page', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    var returnJson = { Student_id: Student_id, retCode: false, Student_name: '', Student_number: '',
+    var returnJson = {
+      Student_id: Student_id, retCode: false, Student_name: '', Student_number: '',
       department: '', Speed: 0, ProfilePhoto: null, description: ''
     }
     const student_info = JSON.parse(await DB_IO.get_student_table(Student_id));
@@ -543,7 +384,7 @@ app.get('/my_page', authenticateToken, async (req, res) => {
 app.get('/add_student_description', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const description  = req.query.description;
+    const description = req.query.description;
     const result = await DB_IO.add_student_description(description, Student_id);
     res.status(200).json({ success: result });
   } catch (error) {
@@ -555,8 +396,8 @@ app.get('/add_student_description', authenticateToken, async (req, res) => {
 app.get('/add_team_description', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const description  = req.query.description;
-    const Team_id  = req.query.Team_id;
+    const description = req.query.description;
+    const Team_id = req.query.Team_id;
     const result = await DB_IO.add_team_description(description, Team_id, Student_id);
     res.status(200).json({ success: result });
   } catch (error) {
@@ -645,7 +486,7 @@ app.get('/list_whole_project', authenticateToken, async (req, res) => {
     const year_semester = _year_semester();
     const result = JSON.parse(await DB_IO.list_whole_project(Student_id, year_semester));
     //console.log(result);
-    res.status(200).json({projects: result});
+    res.status(200).json({ projects: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
@@ -669,14 +510,14 @@ app.get('/list_my_team', authenticateToken, async (req, res) => {
 app.get('/list_whole_team', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const search  = req.query.search;
+    const search = req.query.search;
     const year_semester = _year_semester();
     const result = JSON.parse(await DB_IO.list_whole_team(Student_id, year_semester));
     //console.log(result)
-    if(search !== undefined) {
+    if (search !== undefined) {
       const jsonInfo = { teams: [] }
-      for(let i = 0; i < result.length; i++){
-        if(result[i].Course_name.includes(search)){
+      for (let i = 0; i < result.length; i++) {
+        if (result[i].Course_name.includes(search)) {
           jsonInfo.teams.push(result[i])
         }
       }
@@ -695,10 +536,10 @@ app.get('/list_whole_team', authenticateToken, async (req, res) => {
 app.get('/delete_team', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const Team_id  = req.query.Team_id;
+    const Team_id = req.query.Team_id;
     const result = await DB_IO.delete_team(Team_id, Student_id);
     //console.log(result);
-    res.status(200).json({retCode: result});
+    res.status(200).json({ retCode: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
@@ -708,10 +549,10 @@ app.get('/delete_team', authenticateToken, async (req, res) => {
 app.get('/leave_team', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const Team_id  = req.query.Team_id;
+    const Team_id = req.query.Team_id;
     const result = await DB_IO.leave_team(Team_id, Student_id);
     //console.log(result);
-    res.status(200).json({retCode: result});
+    res.status(200).json({ retCode: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
@@ -737,7 +578,7 @@ app.get('/vote_my_project2', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const Project_id = req.query.Project_id;
-    if(!await DB_IO.has_project_expired(Project_id)){
+    if (!await DB_IO.has_project_expired(Project_id)) {
       res.status(200).json({ success: false, message: 'project not expired' });
       return;
     }
@@ -755,17 +596,17 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const Project_id = req.body.Project_id;
-    if(!await DB_IO.has_project_expired(Project_id)){
+    if (!await DB_IO.has_project_expired(Project_id)) {
       res.status(200).json({ success: false, message: 'project not expired' });
       return;
     }
     const votes = req.body.votes;
-    if(await DB_IO.project_voted(Project_id, Student_id)){
+    if (await DB_IO.project_voted(Project_id, Student_id)) {
       res.status(200).json({ success: false, message: 'project already voted' });
       return;
     }
     const list_peole = JSON.parse(await DB_IO.list_project_peole(Student_id, Project_id));
-    if(list_peole.length !== votes.length){
+    if (list_peole.length !== votes.length) {
       res.status(200).json({ success: false, message: 'vote info incorrect' });
       return;
     }
@@ -779,7 +620,7 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
         res.status(200).json({ success: false, message: 'no vote for self' });
         return;
       }
-      if(!['1', '2', '3', '4', '5'].includes(votes[i].vote_value)) {
+      if (!['1', '2', '3', '4', '5'].includes(votes[i].vote_value)) {
         res.status(200).json({ success: false, message: 'unknown vote value' });
         return;
       }
@@ -808,7 +649,7 @@ app.get('/add_project1', authenticateToken, async (req, res) => {
     const year_semester = _year_semester();
     const result = JSON.parse(await DB_IO.db_to_timetable_small(Student_id, year_semester));
     //console.log(result);
-    res.status(200).json({timeTable: result});
+    res.status(200).json({ timeTable: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
@@ -837,7 +678,7 @@ app.get('/create_team1', authenticateToken, async (req, res) => {
     const year_semester = _year_semester();
     const result = JSON.parse(await DB_IO.db_to_timetable_small(Student_id, year_semester));
     //console.log(result);
-    res.status(200).json({timeTable: result});
+    res.status(200).json({ timeTable: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
@@ -850,7 +691,7 @@ app.get('/create_team2', authenticateToken, async (req, res) => {
     const Course_id = req.query.Course_id;
     const result = JSON.parse(await DB_IO.list_project(Course_id));
     //console.log(result);
-    res.status(200).json({projects: result});
+    res.status(200).json({ projects: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
@@ -860,7 +701,7 @@ app.get('/create_team2', authenticateToken, async (req, res) => {
 app.get('/create_team3', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const Project_id  = req.query.Project_id;
+    const Project_id = req.query.Project_id;
     const Team_name = req.query.Team_name;
     const max_member = req.query.max_member;
     const description = req.query.description;
@@ -879,7 +720,7 @@ app.get('/join_team1', authenticateToken, async (req, res) => {
     const year_semester = _year_semester();
     const result = JSON.parse(await DB_IO.db_to_timetable_small(Student_id, year_semester))
     //console.log(result);
-    res.status(200).json({timeTable: result});
+    res.status(200).json({ timeTable: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
@@ -889,10 +730,10 @@ app.get('/join_team1', authenticateToken, async (req, res) => {
 app.get('/join_team2', authenticateToken, async (req, res) => {
   try {
     //const Student_id = req.user.user.Student_id;
-    const Course_id  = req.query.Course_id;
+    const Course_id = req.query.Course_id;
     const result = JSON.parse(await DB_IO.list_project(Course_id));
     //console.log(result);
-    res.status(200).json({projects: result});
+    res.status(200).json({ projects: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
@@ -902,10 +743,10 @@ app.get('/join_team2', authenticateToken, async (req, res) => {
 app.get('/join_team3', authenticateToken, async (req, res) => {
   try {
     //const Student_id = req.user.user.Student_id;
-    const Project_id  = req.query.Project_id;
+    const Project_id = req.query.Project_id;
     const result = JSON.parse(await DB_IO.list_team(Project_id));
     //console.log(result);
-    res.status(200).json({teams: result});
+    res.status(200).json({ teams: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
@@ -915,7 +756,7 @@ app.get('/join_team3', authenticateToken, async (req, res) => {
 app.get('/join_team_request', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const Team_id  = req.query.Team_id;
+    const Team_id = req.query.Team_id;
     //const Team_name = req.query.Team_name
     const result = await DB_IO.join_team_request(Team_id, Student_id);
     //console.log(result);
@@ -946,16 +787,16 @@ app.get('/join_team_response', authenticateToken, async (req, res) => {
     const Team_id = req.query.Team_id;
     const requested_Student_id = req.query.requested_Student_id;
     const permit = req.query.permit;
-    if(permit === 'true') {
+    if (permit === 'true') {
       const result = await DB_IO.join_team_response_accept(JoinRequest_id, Team_id, requested_Student_id, Student_id);
       res.status(200).json(JSON.parse(result));
     }
-    else if (permit === 'false'){
+    else if (permit === 'false') {
       const result = await DB_IO.join_team_response_reject(JoinRequest_id, Team_id, requested_Student_id, Student_id);
       res.status(200).json(JSON.parse(result));
     }
     else {
-      res.status(200).json({success: false, message: 'unknown permit value'});
+      res.status(200).json({ success: false, message: 'unknown permit value' });
     }
   } catch (error) {
     console.error('오류 발생:', error);
@@ -966,7 +807,7 @@ app.get('/join_team_response', authenticateToken, async (req, res) => {
 app.get('/leave_team', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const Team_id  = req.query.Team_id;
+    const Team_id = req.query.Team_id;
     //const Team_name = req.query.Team_name
     const result = await DB_IO.leave_team(Team_id, Student_id);
     //console.log(result);
@@ -995,8 +836,8 @@ app.get('/add_schedule', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const Team_id = req.query.Team_id;
-    const Deadline  = req.query.Deadline;
-    const description  = req.query.description;
+    const Deadline = req.query.Deadline;
+    const description = req.query.description;
     //const Team_name = req.query.Team_name
     const result = await DB_IO.add_schedule(Student_id, Team_id, Deadline, description);
     //console.log(result);
