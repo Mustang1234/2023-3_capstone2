@@ -398,6 +398,84 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
+    find_pw_by_email_token_insert: async (email, new_pw_token) => {
+        try {
+            const _find_pw_by_email_token_insert1 = await new Promise((resolve, reject) => {
+                db.query(`SELECT * FROM StudentTable WHERE email = ?`, [email], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        //console.log(rows.length, rows[0].token, token)
+                        if(rows.length > 0 && rows[0].token === token){
+                            resolve(true);
+                        }
+                        else{
+                            resolve(false);
+                        }
+                    }
+                });
+            });
+            if(_find_pw_by_email_token_insert1){
+                const _find_pw_by_email_token_insert2 = await new Promise((resolve, reject) => {
+                    db.query(`UPDATE StudentTable SET new_pw_token = ? WHERE email = ?`, [new_pw_token, email], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                return _find_pw_by_email_token_insert1 && _find_pw_by_email_token_insert2;
+            }
+            else{
+                return _find_pw_by_email_token_insert1;
+            }
+        } catch (error) {
+            console.error('오류 발생:', error);
+            throw new Error('오류 발생');
+        }
+    },
+    find_pw_by_email_token_check: async (email, new_pw_token, new_password) => {
+        try {
+            const _find_pw_by_email_token_check1 = await new Promise((resolve, reject) => {
+                db.query(`SELECT * FROM StudentTable WHERE email = ? and new_pw_token = ?`, [email, new_pw_token], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        //console.log(rows.length, rows[0].token, token)
+                        if(rows.length > 0 && rows[0].new_pw_token === new_pw_token){
+                            resolve(true);
+                        }
+                        else{
+                            resolve(false);
+                        }
+                    }
+                });
+            });
+            if(_find_pw_by_email_token_check1){
+                const _find_pw_by_email_token_insert2 = await new Promise((resolve, reject) => {
+                    db.query(`UPDATE StudentTable SET new_pw_token = null and Student_pw = ? WHERE email = ?`, [new_password, email], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                return _find_pw_by_email_token_insert1 && _find_pw_by_email_token_insert2;
+            }
+            else{
+                return _find_pw_by_email_token_insert1;
+            }
+        } catch (error) {
+            console.error('오류 발생:', error);
+            throw new Error('오류 발생');
+        }
+    },
     get_portal_info: async (Student_id) => {
         try {
             const _get_portal_info = await new Promise((resolve, reject) => {
