@@ -12,7 +12,7 @@ const doc = {
 
 const outputFile = "./swagger-output.json";	// 같은 위치에 swagger-output.json을 만든다.
 const endpointsFiles = [
-  "./main6.js"					// 라우터가 명시된 곳을 지정해준다.
+  "./main6.js", './db_io.js', './Eclass.js', './FindUser.js'					// 라우터가 명시된 곳을 지정해준다.
 ];
 
 swaggerAutogen(outputFile, endpointsFiles, doc);  
