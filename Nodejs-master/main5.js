@@ -278,7 +278,7 @@ app.post('/signup', async (req, res) => {
             //console.log('result1', result1);
             //console.log('result2', result2);
 
-            const result = await DB_IO.add_student_table(email, Student_id, Student_pw, jsonInfo.student_name, jsonInfo.student_number, jsonInfo.department);
+            const result = await DB_IO.add_student_table(email, Student_id, Student_pw, jsonInfo.student_name, jsonInfo.student_number, jsonInfo.department, portal_id, portal_pw);
             //console.log(result);
             if (result) {
               return res.status(200).json({ success: result, message: 'sign up success' });
@@ -626,18 +626,15 @@ app.post('/get_timetable_from_db', authenticateToken, async (req, res) => {
 app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const { portal_id, portal_pw } = req.body;
     const year_semester = _year_semester();
-    if (portal_id === undefined || portal_pw === undefined) {
-      return res.status(200).json({ message: 'portal id and password are required' });
-    }
     ///console.log(Student_id, year_semester, portal_id, portal_pw);
     var jsonInfo = {};
     while (true) {
       try {
-        jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_id, portal_pw));
+        const portal_info = JSON.parse(await DB_IO.portal_info(Student_id));
+        jsonInfo = JSON.parse(await Eclass.Eclass(Student_id, portal_info.portal_id, portal_info.portal_pw));
         if (jsonInfo.timeTable.length !== 0) break;
-        if (jsonInfo.retCode === false) return res.status(200).json({ message: 'portal_login_failed' });
+        if (jsonInfo.retCode === false) return res.status(200).json({ success: false, message: 'portal_login_failed' });
       } catch (error) {
         console.error('오류 발생:', error);
         //res.status(400).json({ returnCode: false, error: error });  
@@ -652,7 +649,7 @@ app.post('/get_timetable_from_portal', authenticateToken, async (req, res) => {
     const projects = JSON.parse(await DB_IO.list_whole_project(Student_id, year_semester));
     //console.log(result1);
     //console.log(result2);
-    res.status(200).json({ timetable: result3, timetable_small: result4, projects: projects });
+    res.status(200).json({ success: true, timetable: result3, timetable_small: result4, projects: projects });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');

@@ -398,11 +398,31 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    add_student_table: async (email, Student_id, Student_pw, student_name, student_number, department) => {
+    get_portal_info: async (Student_id) => {
+        try {
+            const _get_portal_info = await new Promise((resolve, reject) => {
+                db.query(`SELECT portal_id, portal_pw FROM StudentTable WHERE Student_id = ?`, [Student_id, email], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(rows[0]);
+                    }
+                });
+            });
+            return JSON.stringify(_get_portal_info);
+
+        } catch (error) {
+            console.error('오류 발생:', error);
+            throw new Error('오류 발생');
+        }
+    },
+    add_student_table: async (email, Student_id, Student_pw, student_name, student_number, department, portal_id, portal_pw) => {
         try {
             const _add_student_table1 = await new Promise((resolve, reject) => {
                 db.query(`UPDATE StudentTable SET Student_id = ?, Student_pw = ?, student_name = ?, student_number = ?,
-                    speed = 100, department = ?, description = 'hello world!!' WHERE email = ? and verified = 1;`, [Student_id, Student_pw, student_name, student_number, department, email], (error) => {
+                    speed = 100, department = ?, description = 'hello world!!', portal_id = ?, portal_pw = ? WHERE email = ? and verified = 1;`,
+                    [Student_id, Student_pw, student_name, student_number, department, portal_id, portal_pw, email], (error) => {
                     if (error) {
                         console.error(error);
                         reject(error);
@@ -892,38 +912,59 @@ module.exports = {
     },
     create_team: async (Project_id, Team_name, max_member, Student_id, description) => {
         try {
-            const _create_team1 = await new Promise((resolve, reject) => {
-                db.query(`INSERT INTO TeamTable (Project_id, Team_name, max_member, current_member, head, description)
-                VALUES (?, ?, ?, 1, ?, ?)`, [Project_id, Team_name, max_member, Student_id, description], (error) => {
+            const _create_team0 = await new Promise((resolve, reject) => {
+                db.query(`SELECT DISTINCT * FROM ProjectTable as A INNER JOIN TimeTable as B
+                ON B.Student_id = ? and B.Course_id = A.Course_id and A.Project_id = ?;`, [Student_id, Project_id], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
                     } else {
-                        resolve(true);
+                        if(rows.length !== 0){
+                            resolve(true);
+                        }
+                        else{
+                            resolve(false);
+                        }
                     }
                 });
             });
-            const _create_team2 = await new Promise((resolve, reject) => {
-                db.query(`SELECT * FROM TeamTable ORDER BY Team_id DESC LIMIT 1;`, [], (error, rows) => {
-                    if (error) {
-                        console.error(error);
-                        reject(error);
-                    } else {
-                        resolve(rows[0].Team_id);
-                    }
+            if(_create_team0){
+                const _create_team1 = await new Promise((resolve, reject) => {
+                    db.query(`INSERT INTO TeamTable (Project_id, Team_name, max_member, current_member, head, description)
+                    VALUES (?, ?, ?, 1, ?, ?)`, [Project_id, Team_name, max_member, Student_id, description], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
                 });
-            });
-            const _create_team3 = await new Promise((resolve, reject) => {
-                db.query(`INSERT INTO TeamPeopleTable (Team_id, Student_id, voted) VALUES (?, ?, 0)`, [_create_team2, Student_id], (error) => {
-                    if (error) {
-                        console.error(error);
-                        reject(error);
-                    } else {
-                        resolve(true);
-                    }
+                const _create_team2 = await new Promise((resolve, reject) => {
+                    db.query(`SELECT * FROM TeamTable ORDER BY Team_id DESC LIMIT 1;`, [], (error, rows) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(rows[0].Team_id);
+                        }
+                    });
                 });
-            });
-            return _create_team1 && _create_team3;
+                const _create_team3 = await new Promise((resolve, reject) => {
+                    db.query(`INSERT INTO TeamPeopleTable (Team_id, Student_id, voted) VALUES (?, ?, 0)`, [_create_team2, Student_id], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                return _create_team1 && _create_team3;
+            }
+            else{
+                return _create_team0;
+            }
         } catch (error) {
             console.error('오류 발생:', error);
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
