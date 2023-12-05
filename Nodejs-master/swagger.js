@@ -1,24 +1,18 @@
-const swaggerJSDoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
-const express = require('express') 
-const app = express()
-const port = 1234;
+const swaggerAutogen = require('swagger-autogen')({ language: 'ko' });
 
-const options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Your API Title',
-      version: '1.0.0',
-    },
+const doc = {
+  info: {
+    title: "swagger_api",
+    description: "swagger_api",
   },
-  apis: ['./tester.js'], // API 스펙이 작성된 파일 경로
+  host: "http://20.39.186.138",
+  schemes: ["http"],
+  // schemes: ["https" ,"http"],
 };
 
-const swaggerSpec = swaggerJSDoc(options);
+const outputFile = "./swagger-output.json";	// 같은 위치에 swagger-output.json을 만든다.
+const endpointsFiles = [
+  "./main6.js"					// 라우터가 명시된 곳을 지정해준다.
+];
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-  })
+swaggerAutogen(outputFile, endpointsFiles, doc);  
