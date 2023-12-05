@@ -17,7 +17,7 @@ const doc = {
 };
 
 const outputFile = "./swagger-output.json";
-const endpointsFiles = ["./main6.js", './db_io.js', './Eclass.js', './FindUser.js'];
+const endpointsFiles = ["./main6.js"];
 
 swaggerAutogen(outputFile, endpointsFiles, doc);
 
