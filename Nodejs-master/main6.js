@@ -284,7 +284,7 @@ app.post('/change_password', authenticateToken, async (req, res) => {
       return res.status(200).json({ success: result, message: 'change password success' });
     }
     else {
-      return res.status(200).json({ success: result, message: 'change password fail' });
+      return res.status(200).json({ success: result, message: 'change password fail password incorrect' });
     }
   } catch (error) {
     console.error('오류 발생:', error);
