@@ -316,7 +316,7 @@ app.get('/signout', authenticateToken, async (req, res) => {
   }
 });
 
-app.get('/find_id_by_email', authenticateToken, async (req, res) => {
+app.get('/find_id_by_email', async (req, res) => {
   const email = req.query.email;
   try {
     result = await DB_IO.find_id_by_email(email);
