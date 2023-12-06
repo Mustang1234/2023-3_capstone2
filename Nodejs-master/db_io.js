@@ -883,7 +883,7 @@ module.exports = {
     list_my_team: async (Student_id, year_semester) => {
         try {
             const _list_my_team = await new Promise((resolve, reject) => {
-                db.query(`SELECT DISTINCT A.Team_name, A.Team_id, A.head, C.Course_id, C.Course_name, A.max_member, A.current_member, A.finish_time, A.description
+                db.query(`SELECT DISTINCT A.rapid_match, A.Team_name, A.Team_id, A.head, C.Course_id, C.Course_name, A.max_member, A.current_member, A.finish_time, A.description
                 FROM TeamTable as A INNER JOIN TeamPeopleTable as B INNER JOIN CourseTable as C
                 ON A.Team_id = B.Team_id and B.Student_id = ? and A.Course_id = C.Course_id and C.year_semester = ? ORDER BY A.finish_time;`, [Student_id, year_semester], (error, rows) => {
                     if (error) {
@@ -943,7 +943,7 @@ module.exports = {
     list_whole_team: async (Student_id, year_semester) => {
         try {
             const _list_whole_team = await new Promise((resolve, reject) => {
-                db.query(`SELECT DISTINCT A.Team_name, A.Team_id, A.head, D.Course_id, D.Course_name, A.max_member, A.current_member, A.finish_time, A.description
+                db.query(`SELECT DISTINCT A.rapid_match, A.Team_name, A.Team_id, A.head, D.Course_id, D.Course_name, A.max_member, A.current_member, A.finish_time, A.description
                 FROM TeamTable as A INNER JOIN CourseTable as D INNER JOIN TimeTable as E
                 ON E.Student_id = ? and E.Course_id = D.Course_id and D.Course_id = A.Course_id and D.year_semester = ? ORDER BY A.finish_time;`, [Student_id, year_semester], (error, rows) => {
                     if (error) {
@@ -1091,7 +1091,7 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    create_team: async (Course_id, Team_name, max_member, Student_id, description) => {
+    create_team: async (Course_id, Team_name, max_member, Student_id, description, rapid_match) => {
         try {/*
             const _create_team0 = await new Promise((resolve, reject) => {
                 db.query(`SELECT DISTINCT * FROM ProjectTable as A INNER JOIN TimeTable as B
@@ -1111,8 +1111,8 @@ module.exports = {
             });
             if(_create_team0){*/
                 const _create_team1 = await new Promise((resolve, reject) => {
-                    db.query(`INSERT INTO TeamTable (Course_id, Team_name, max_member, current_member, head, description)
-                    VALUES (?, ?, ?, 1, ?, ?)`, [Course_id, Team_name, max_member, Student_id, description], (error) => {
+                    db.query(`INSERT INTO TeamTable (Course_id, Team_name, max_member, current_member, head, description, rapid_match)
+                    VALUES (?, ?, ?, 1, ?, ?, ?)`, [Course_id, Team_name, max_member, Student_id, description, rapid_match], (error) => {
                         if (error) {
                             console.error(error);
                             reject(error);
@@ -1587,11 +1587,11 @@ module.exports = {
                             }
                         });
                     });
-                    return JSON.stringify({ success: false && !_join_team6, message: "team full" });
+                    return JSON.stringify({ success: _join_team2 && !_join_team6, message: "team full" });
                 }
             }
             else {
-                return JSON.stringify({ success: false, message: "not in request list" });
+                return JSON.stringify({ success: _join_team0, message: "not in request list" });
             }
         } catch (error) {
             console.error('오류 발생:', error);
@@ -1628,10 +1628,61 @@ module.exports = {
                         }
                     });
                 });
-                return JSON.stringify({ success: true && _join_team1, message: "rejected" });
+                return JSON.stringify({ success: _join_team0 && _join_team1, message: "rejected" });
             }
             else {
-                return JSON.stringify({ success: false, message: "not in request list" });
+                return JSON.stringify({ success: _join_team0, message: "not in request list" });
+            }
+        } catch (error) {
+            console.error('오류 발생:', error);
+            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
+            throw new Error('오류 발생');
+        }
+    },
+    rapid_match: async (Course_id, Student_id) => {
+        try {
+            const _rapid_match0 = await new Promise((resolve, reject) => {
+                db.query(`SELECT Team_id FROM TeamTable WHERE Course_id = ? and
+                max_member > current_member and rapid_match = 1 ORDER BY current_member LIMIT 1`,
+                [Course_id], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        if(rows.length !== 0){
+                            resolve(rows[0].Team_id);
+                        }
+                        else{
+                            resolve(false);
+                        }
+                    }
+                });
+            });
+            if(_rapid_match0){
+                const _rapid_match1 = await new Promise((resolve, reject) => {
+                    db.query(`INSERT INTO TeamPeopleTable (Team_id, Student_id, voted)VALUES (?, ?, 0);`, [_rapid_match0, Student_id], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                const _rapid_match2 = await new Promise((resolve, reject) => {
+                    db.query(`UPDATE TeamTable SET current_member = current_member + 1 WHERE Team_id = ?;`, [_rapid_match0], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                return JSON.stringify({ success: _rapid_match1 && _rapid_match2, joined_team: _rapid_match0, message: "team joined" });
+            }
+            else {
+                return JSON.stringify({ success: _rapid_match0, message: "no available team" });
             }
         } catch (error) {
             console.error('오류 발생:', error);

@@ -517,7 +517,7 @@ app.get('/get_timetable_from_portal', authenticateToken, async (req, res) => {
     res.status(400).send('오류 발생');
   }
 });
-
+/*
 app.get('/list_my_project', authenticateToken, async (req, res) => {
   //res.setHeader('Content-Security-Policy', "form-action 'self' *");
   try {
@@ -544,7 +544,7 @@ app.get('/list_whole_project', authenticateToken, async (req, res) => {
     res.status(400).send('오류 발생');
   }
 });
-
+*/
 app.get('/list_my_team', authenticateToken, async (req, res) => {
   //res.setHeader('Content-Security-Policy', "form-action 'self' *");
   try {
@@ -770,7 +770,10 @@ app.get('/create_team', authenticateToken, async (req, res) => {
     const Team_name = req.query.Team_name;
     const max_member = req.query.max_member;
     const description = req.query.description;
-    const result = await DB_IO.create_team(Course_id, Team_name, max_member, Student_id, description);
+    const rapid_match = req.query.rapid_match;
+    if(rapid_match === undefined || rapid_match === 'false') rapid_match = 0;
+    else  rapid_match = 1;
+    const result = await DB_IO.create_team(Course_id, Team_name, max_member, Student_id, description, rapid_match);
     //console.log(result);
     res.status(200).json({ success: result });
   } catch (error) {
@@ -817,6 +820,20 @@ app.get('/join_team3', authenticateToken, async (req, res) => {
     res.status(400).send('오류 발생');
   }
 });*/
+
+app.get('/rapid_match', authenticateToken, async (req, res) => {
+  try {
+    const Student_id = req.user.user.Student_id;
+    const Course_id = req.query.Course_id;
+    //const Team_name = req.query.Team_name
+    const result = await DB_IO.rapid_match(Course_id, Student_id);
+    //console.log(result);
+    res.status(200).json(JSON.parse(result));
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(400).send('오류 발생');
+  }
+});
 
 app.get('/join_team_request', authenticateToken, async (req, res) => {
   try {
