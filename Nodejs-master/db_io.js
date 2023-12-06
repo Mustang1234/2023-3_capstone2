@@ -675,7 +675,7 @@ module.exports = {
     get_whole_schedule: async (Student_id, year_semester) => {
         try {
             const schedules = await new Promise((resolve, reject) => {
-                db.query(`SELECT DISTINCT D.Course_id, F.Course_name, A.Team_name, C.Deadline, C.description
+                db.query(`SELECT DISTINCT D.Course_id, F.Course_name, A.Team_name, C.Deadline, C.description, C.Student_id
                 FROM TeamTable as A INNER JOIN TeamPeopleTable as B INNER JOIN ScheduleTable as C INNER JOIN TimeTable as D INNER JOIN CourseTable as F
                 ON A.Team_id = B.Team_id and B.Team_id = C.Team_id and B.Student_id = ? and A.Course_id = D.Course_id and A.Course_id = F.Course_id and F.year_semester = ? ORDER BY Deadline ASC;`, [Student_id, year_semester], (error, rows) => {
                     if (error) {
@@ -721,7 +721,8 @@ module.exports = {
             });
             if(_add_schedule1) {
                 const _add_schedule2 = await new Promise((resolve, reject) => {
-                    db.query(`INSERT INTO ScheduleTable (Team_id, Deadline, description)VALUES (?, ?, ?);`, [Team_id, Deadline, description], (error) => {
+                    db.query(`INSERT INTO ScheduleTable (Team_id, Deadline, description, Student_id)VALUES (?, ?, ?, ?);`,
+                    [Team_id, Deadline, description, Student_id], (error) => {
                         if (error) {
                             console.error(error);
                             reject(error);
