@@ -163,7 +163,7 @@ module.exports = {
     db_to_timetable_small: async (Student_id, year_semester) => {
         try {
             const timeTable = await new Promise((resolve, reject) => {
-                db.query(`SELECT Course_id FROM TimeTable WHERE Student_id = ? and year_semester = ?;`, [Student_id, year_semester], (error, rows) => {
+                db.query(`SELECT * FROM TimeTable WHERE Student_id = ? and year_semester = ?;`, [Student_id, year_semester], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);

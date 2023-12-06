@@ -497,10 +497,9 @@ app.get('/get_timetable_from_portal', authenticateToken, async (req, res) => {
     const result3 = JSON.parse(await DB_IO.db_to_timetable(Student_id, year_semester));
     const result4 = JSON.parse(await DB_IO.db_to_timetable_small(Student_id, year_semester));
     const teams = JSON.parse(await DB_IO.list_my_team(Student_id, year_semester));
-    const result5 = JSON.parse(await DB_IO.db_to_timetable_small(Student_id, year_semester));
     //console.log(result1);
     //console.log(result2);
-    res.status(200).json({ success: true, /*timetable: result3, */timetable_small: result5, teams: teams });
+    res.status(200).json({ success: true, /*timetable: result3, */timetable_small: result4, teams: teams });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
