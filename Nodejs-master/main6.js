@@ -155,7 +155,17 @@ async function sendEmail(email, token) {
     from: 'KrooKrew@noreply.com',
     to: email,
     subject: 'KrooKrew 이메일 인증',
-    text: `KrooKrew 인증을 완료하려면 다음 값을 입력하세요: ${token}`
+    html: `
+    <p>KrooKrew 인증을 완료하려면 다음 값을 입력하세요: ${token}</p>
+    <img src="KrooKrewImage" alt="Inline Image">
+  `,
+    attachments: [
+      {
+        filename: 'KrooKrew.png',
+        path: './KrooKrew.png',
+        cid: 'KrooKrewImage' // Content ID
+      }
+    ]
   };
 
   await transporter.sendMail(mailOptions);
@@ -450,7 +460,7 @@ app.post('/my_page_photo_upload', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const ProfilePhoto = req.body.ProfilePhoto;
-    //const ProfilePhoto = fs.readFileSync('hello.jpg');
+    //const ProfilePhoto = fs.readFileSync('KrooKrew.png');
     const result = await DB_IO.update_photo_student_table(Student_id, ProfilePhoto);
     res.status(200).json({ Student_id: Student_id, success: result });
   } catch (error) {
