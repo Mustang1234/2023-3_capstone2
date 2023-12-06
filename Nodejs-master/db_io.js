@@ -431,7 +431,7 @@ module.exports = {
                         reject(error);
                     } else {
                         //console.log(rows.length, rows[0].token, token)
-                        if(rows.length !== 0 && rows[0].Student_id === Student_id){
+                        if(rows.length !== 0){
                             resolve(rows[0].email);
                         }
                         else{
