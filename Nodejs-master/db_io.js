@@ -1112,6 +1112,7 @@ module.exports = {
             });
             if(_create_team0){*/
                 const _create_team1 = await new Promise((resolve, reject) => {
+                    console.log(finish_time)
                     db.query(`INSERT INTO TeamTable (Course_id, Team_name, max_member, current_member, head, description, finish_time, rapid_match)
                     VALUES (?, ?, ?, 1, ?, ?, ?, ?)`, [Course_id, Team_name, max_member, Student_id, description, finish_time, rapid_match], (error) => {
                         if (error) {
