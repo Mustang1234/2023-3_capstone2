@@ -770,9 +770,9 @@ app.get('/create_team', authenticateToken, async (req, res) => {
     const Team_name = req.query.Team_name;
     const max_member = req.query.max_member;
     const description = req.query.description;
-    const rapid_match = req.query.rapid_match;
-    if(rapid_match === undefined || rapid_match === 'false') rapid_match = 0;
-    else  rapid_match = 1;
+    var rapid_match = req.query.rapid_match;
+    if(rapid_match === undefined || rapid_match === 'false' || rapid_match === 0) rapid_match = 0;
+    else rapid_match = 1;
     const result = await DB_IO.create_team(Course_id, Team_name, max_member, Student_id, description, rapid_match);
     //console.log(result);
     res.status(200).json({ success: result });
