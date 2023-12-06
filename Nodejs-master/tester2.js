@@ -1,85 +1,24 @@
 const express = require('express');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken');
-const FindUser = require('./FindUser.js');
+const multer = require('multer');
+const sharp = require('sharp');
 
 const app = express();
+const upload = multer({ limits: { fileSize: 1024 * 1024 } }); // 1MB 제한
 
-// Your existing user authentication logic (FindUser.findByIdPw) goes here
+app.post('/upload', upload.single('image'), async (req, res) => {
+  try {
+    const { buffer } = await sharp(req.file.buffer).resize({ width: 500, height: 500 }).jpeg().toBuffer();
+    
+    // 여기에서 buffer를 사용하여 DB에 저장하거나 다른 작업을 수행합니다.
+    console.log(buffer);
 
-passport.use(new LocalStrategy(
-  {
-    usernameField: 'Student_id',
-    passwordField: 'Student_pw'
-  },
-  function verify(Student_id, Student_pw, cb) {
-    FindUser.findByIdPw(Student_id, Student_pw, function (user) {
-      if (user !== false) return cb(null, user);
-      return cb(null, false, { message: 'no' });
-    });
+    res.status(200).send('Uploaded successfully');
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    res.status(500).send('Internal Server Error');
   }
-));
-
-// Serialize user information to store in the token
-passport.serializeUser(function (user, done) {
-  done(null, user.Student_id);
 });
 
-// Deserialize user information from the token
-passport.deserializeUser(function (Student_id, done) {
-  FindUser.findById(Student_id, function (user) {
-    done(null, user);
-  });
-});
-
-// Middleware to generate and sign a token after successful login
-function generateToken(req, res, next) {
-  passport.authenticate('local', { session: false }, (err, user, info) => {
-    if (err) { return next(err); }
-    if (!user) {
-      return res.json({ success: false, message: 'login failed' });
-    }
-
-    const token = jwt.sign({ user }, 'your_secret_key', { expiresIn: '1h' });
-    res.json({ success: true, message: 'login success', token });
-  })(req, res, next);
-}
-
-// Route for login
-app.post('/login', express.json(), generateToken);
-
-// Middleware to protect routes that require authentication
-function authenticateToken(req, res, next) {
-  const token = req.headers['authorization'];
-
-  if (!token) {
-    return res.sendStatus(401);
-  }
-
-  jwt.verify(token, 'your_secret_key', (err, user) => {
-    if (err) {
-      return res.sendStatus(403);
-    }
-
-    req.user = user;
-    next();
-  });
-}
-
-// Example route that requires authentication
-app.get('/protected', authenticateToken, (req, res) => {
-  res.json({ message: 'Protected route', user: req.user });
-});
-
-// Example route that requires authentication
-app.post('/protected2', authenticateToken, (req, res) => {
-  res.json({ message: 'Protected route2', user: req.user });
-});
-
-// Your other routes go here
-
-app.listen(1234, () => {
-  console.log('Server is running on port 1234');
+app.listen(4321, () => {
+  console.log('Server is running on port 3000');
 });
