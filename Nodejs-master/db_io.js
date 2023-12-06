@@ -1145,7 +1145,27 @@ module.exports = {
                         }
                     });
                 });
-                return _delete_team2 && _delete_team3;
+                const _delete_team4 = await new Promise((resolve, reject) => {
+                    db.query(`DELETE FROM JoinRequestTable WHERE Team_id = ?;`, [Team_id], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                const _delete_team5 = await new Promise((resolve, reject) => {
+                    db.query(`DELETE FROM ScheduleTable WHERE Team_id = ?;`, [Team_id], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                return _delete_team2 && _delete_team3 && _delete_team4 && _delete_team5;
             }
             else{
                 return false;
@@ -1254,6 +1274,16 @@ module.exports = {
                             });
                         });
                         const _delete_team3 = await new Promise((resolve, reject) => {
+                            db.query(`DELETE FROM JoinRequestTable WHERE Team_id = ?;`, [Team_id], (error) => {
+                                if (error) {
+                                    console.error(error);
+                                    reject(error);
+                                } else {
+                                    resolve(true);
+                                }
+                            });
+                        });
+                        const _delete_team4 = await new Promise((resolve, reject) => {
                             db.query(`DELETE FROM ScheduleTable WHERE Team_id = ?;`, [Team_id], (error) => {
                                 if (error) {
                                     console.error(error);
