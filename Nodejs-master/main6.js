@@ -642,11 +642,11 @@ app.post('/vote_my_team', authenticateToken, async (req, res) => {
       return;
     }
     const votes = req.body.votes;
-    if (await DB_IO.project_voted(Course_id, Student_id)) {
+    if (await DB_IO.team_voted(Team_id, Student_id)) {
       res.status(200).json({ success: false, message: 'team already voted' });
       return;
     }
-    const list_peole = JSON.parse(await DB_IO.list_team_peole(Student_id, Course_id));
+    const list_peole = JSON.parse(await DB_IO.list_team_peole(Student_id, Team_id));
     if (list_peole.length !== votes.length) {
       res.status(200).json({ success: false, message: 'vote info incorrect' });
       return;

@@ -785,16 +785,16 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },*/
-    team_voted: async (Course_id, Student_id) => {
+    team_voted: async (Team_id, Student_id) => {
         try {
             const _team_voted = await new Promise((resolve, reject) => {
-                db.query(`SELECT DISTINCT Student_id, voted
-                FROM TeamTable as A INNER JOIN TeamPeopleTable as B
-                ON A.Course_id = ? and A.Team_id = B.Team_id and B.Student_id = ?;`, [Course_id, Student_id], (error, rows) => {
+                db.query(`SELECT DISTINCT Student_id, voted FROM TeamPeopleTable
+                WHERE Team_id = ? and Student_id = ?;`, [Team_id, Student_id], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
                     } else {
+                        if(rows.length === 0) resolve(true);
                         if(rows[0].voted === 0) resolve(false);
                         else if(rows[0].voted === 1) resolve(true);
                     }
