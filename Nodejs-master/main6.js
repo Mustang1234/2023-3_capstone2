@@ -152,7 +152,7 @@ async function sendEmail(email, token) {
   });
 
   const mailOptions = {
-    from: '32gurihs@gmail.com',
+    from: 'KrooKrew@noreply.com',
     to: email,
     subject: 'KrooKrew 이메일 인증',
     text: `KrooKrew 인증을 완료하려면 다음 값을 입력하세요: ${token}`
