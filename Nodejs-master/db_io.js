@@ -267,27 +267,47 @@ module.exports = {
     },
     add_student_table_not_verified: async (email, token) => {
         try {
-            const _add_student_table_not_verified1 = await new Promise((resolve, reject) => {
-                db.query(`DELETE FROM StudentTable WHERE email = ?`, [email], (error) => {
+            const _add_student_table_not_verified0 = await new Promise((resolve, reject) => {
+                db.query(`SELECT * FROM StudentTable WHERE email = ? ans verified = 1`, [email], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
                     } else {
-                        resolve(true);
+                        if(rows.length === 0){
+                            resolve(true);
+                        }
+                        else{
+                            resolve(false);
+                        }
                     }
                 });
             });
-            const _add_student_table_not_verified2 = await new Promise((resolve, reject) => {
-                db.query(`INSERT INTO StudentTable (email, token, verified) VALUES (?, ?, 0)`, [email, token], (error) => {
-                    if (error) {
-                        console.error(error);
-                        reject(error);
-                    } else {
-                        resolve(true);
-                    }
+            if(_add_student_table_not_verified0){
+                const _add_student_table_not_verified1 = await new Promise((resolve, reject) => {
+                    db.query(`DELETE FROM StudentTable WHERE email = ?`, [email], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
                 });
-            });
-            return _add_student_table_not_verified1 && _add_student_table_not_verified2;
+                const _add_student_table_not_verified2 = await new Promise((resolve, reject) => {
+                    db.query(`INSERT INTO StudentTable (email, token, verified) VALUES (?, ?, 0)`, [email, token], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                return _add_student_table_not_verified1 && _add_student_table_not_verified2;
+            }
+            else{
+                return false;
+            }
 
         } catch (error) {
             console.error('오류 발생:', error);

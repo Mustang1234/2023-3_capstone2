@@ -174,7 +174,7 @@ app.get('/verify1', async (req, res) => {
         res.status(200).json({ success: true, message: 'email send success' });
       }
       else {
-        res.status(200).json({ success: false, message: 'email send fail' });
+        res.status(200).json({ success: false, message: 'email already used' });
       }
     }
     else {
