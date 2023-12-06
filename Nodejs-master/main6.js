@@ -590,9 +590,10 @@ app.get('/leave_team', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const Team_id = req.query.Team_id;
+    //const Team_name = req.query.Team_name
     const result = await DB_IO.leave_team(Team_id, Student_id);
     //console.log(result);
-    res.status(200).json({ retCode: result });
+    res.status(200).json({ success: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
@@ -844,19 +845,6 @@ app.get('/join_team_response', authenticateToken, async (req, res) => {
   }
 });
 
-app.get('/leave_team', authenticateToken, async (req, res) => {
-  try {
-    const Student_id = req.user.user.Student_id;
-    const Team_id = req.query.Team_id;
-    //const Team_name = req.query.Team_name
-    const result = await DB_IO.leave_team(Team_id, Student_id);
-    //console.log(result);
-    res.status(200).json({ success: result });
-  } catch (error) {
-    console.error('오류 발생:', error);
-    res.status(400).send('오류 발생');
-  }
-});
 /*
 app.get('/add_schedule1', authenticateToken, async (req, res) => {
   try {
