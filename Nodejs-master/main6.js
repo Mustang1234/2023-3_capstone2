@@ -155,17 +155,7 @@ async function sendEmail(email, token) {
     from: 'KrooKrew@noreply.com',
     to: email,
     subject: 'KrooKrew 이메일 인증',
-    html: `
-    <p>KrooKrew 인증을 완료하려면 다음 값을 입력하세요: ${token}</p>
-    <img src="KrooKrewImage" alt="Inline Image">
-  `,
-    attachments: [
-      {
-        filename: 'KrooKrew.png',
-        path: './KrooKrew.png',
-        cid: 'KrooKrewImage' // Content ID
-      }
-    ]
+    text: `KrooKrew 인증을 완료하려면 다음 값을 입력하세요: ${token}`
   };
 
   await transporter.sendMail(mailOptions);
