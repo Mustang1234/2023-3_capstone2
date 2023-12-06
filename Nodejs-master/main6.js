@@ -336,6 +336,7 @@ app.get('/find_pw_by_email_token_insert', async (req, res) => {
   try {
     const Student_id = req.query.Student_id;
     const email = await DB_IO.get_email_from_id(Student_id);
+    console.log(Student_id, email);
     if(email){
       const new_pw_token = email_generateToken();
       sendEmail(email, new_pw_token);
