@@ -422,6 +422,30 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
+    get_email_from_id: async (Student_id) => {
+        try {
+            const _get_email_from_id = await new Promise((resolve, reject) => {
+                db.query(`SELECT email FROM StudentTable WHERE Student_id = ?`, [Student_id], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        //console.log(rows.length, rows[0].token, token)
+                        if(rows.length !== 0 && rows[0].Student_id === Student_id){
+                            resolve(rows[0].email);
+                        }
+                        else{
+                            resolve(false);
+                        }
+                    }
+                });
+            });
+            return _get_email_from_id;
+        } catch (error) {
+            console.error('오류 발생:', error);
+            throw new Error('오류 발생');
+        }
+    },
     find_pw_by_email_token_insert: async (email, new_pw_token) => {
         try {
             const _find_pw_by_email_token_insert1 = await new Promise((resolve, reject) => {

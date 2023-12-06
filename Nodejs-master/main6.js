@@ -333,16 +333,22 @@ app.get('/find_id_by_email', async (req, res) => {
 });
 
 app.get('/find_pw_by_email_token_insert', async (req, res) => {
-  const email = req.query.email;
   try {
-    const new_pw_token = email_generateToken();
-    sendEmail(email, new_pw_token);
-    result = await DB_IO.find_pw_by_email_token_insert(email, new_pw_token);
-    if (result) {
-      res.status(200).json({ success: true, message: 'email send success' });
+    const Student_id = req.query.Student_id;
+    const email = await DB_IO.get_email_from_id(Student_id);
+    if(email){
+      const new_pw_token = email_generateToken();
+      sendEmail(email, new_pw_token);
+      result = await DB_IO.find_pw_by_email_token_insert(email, new_pw_token);
+      if (result) {
+        res.status(200).json({ success: true, message: 'email send success' });
+      }
+      else {
+        res.status(200).json({ success: false, message: 'email send fail' });
+      }
     }
-    else {
-      res.status(200).json({ success: false, message: 'email send fail' });
+    else{
+      res.status(200).json({ success: false, message: 'no email found' });
     }
   } catch (error) {
     console.error('오류 발생:', error);
@@ -351,14 +357,20 @@ app.get('/find_pw_by_email_token_insert', async (req, res) => {
 });
 
 app.post('/find_pw_by_email_token_check', async (req, res) => {
-  const { email, new_pw_token, new_password } = req.body;
   try {
-    result = await DB_IO.find_pw_by_email_token_check(email, new_pw_token, new_password);
-    if (result) {
-      res.status(200).json({ success: true, message: 'password changed' });
+    const { Student_id, new_pw_token, new_password } = req.body;
+    const email = await DB_IO.get_email_from_id(Student_id);
+    if(email){
+      result = await DB_IO.find_pw_by_email_token_check(email, new_pw_token, new_password);
+      if (result) {
+        res.status(200).json({ success: true, message: 'password changed' });
+      }
+      else {
+        res.status(200).json({ success: false, message: 'wrong token or email' });
+      }
     }
-    else {
-      res.status(200).json({ success: false, message: 'wrong token or email' });
+    else{
+      res.status(200).json({ success: false, message: 'no email found' });
     }
   } catch (error) {
     console.error('오류 발생:', error);
