@@ -268,7 +268,7 @@ module.exports = {
     add_student_table_not_verified: async (email, token) => {
         try {
             const _add_student_table_not_verified0 = await new Promise((resolve, reject) => {
-                db.query(`SELECT * FROM StudentTable WHERE email = ? ans verified = 1`, [email], (error, rows) => {
+                db.query(`SELECT * FROM StudentTable WHERE email = ? and verified = 1`, [email], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
