@@ -600,50 +600,50 @@ app.get('/leave_team', authenticateToken, async (req, res) => {
   }
 });
 
-app.get('/vote_my_project1', authenticateToken, async (req, res) => {
+app.get('/vote_my_team_list_expired_teams', authenticateToken, async (req, res) => {
   //res.setHeader('Content-Security-Policy', "form-action 'self' *");
   try {
     const Student_id = req.user.user.Student_id;
     const year_semester = _year_semester();
-    const result = JSON.parse(await DB_IO.list_project_expired(Student_id, year_semester));
-    //console.log(result);
-    res.status(200).json({ projects: result });
-  } catch (error) {
-    console.error('오류 발생:', error);
-    res.status(400).send('오류 발생');
-  }
-});
-
-app.get('/vote_my_project2', authenticateToken, async (req, res) => {
-  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
-  try {
-    const Student_id = req.user.user.Student_id;
-    const year_semester = _year_semester();
-    if (!await DB_IO.has_team_expired(Team)) {
-      res.status(200).json({ success: false, message: 'project not expired' });
-      return;
-    }
     const result = JSON.parse(await DB_IO.list_team_expired(Student_id, year_semester));
     //console.log(result);
-    res.status(200).json({ Team: Team, people: result });
+    res.status(200).json({ teams: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
   }
 });
 
-app.post('/vote_my_project3', authenticateToken, async (req, res) => {
+app.get('/vote_my_team_list_team_people', authenticateToken, async (req, res) => {
   //res.setHeader('Content-Security-Policy', "form-action 'self' *");
   try {
     const Student_id = req.user.user.Student_id;
-    const Course_id = req.body.Course_id;
+    const Team_id = req.query.Team_id;
+    if (!await DB_IO.has_team_expired(Team)) {
+      res.status(200).json({ success: false, message: 'team not expired' });
+      return;
+    }
+    const result = JSON.parse(await DB_IO.list_team_peole(Student_id, Team_id));
+    //console.log(result);
+    res.status(200).json({ Team_id: Team_id, people: result });
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(400).send('오류 발생');
+  }
+});
+
+app.post('/vote_my_team', authenticateToken, async (req, res) => {
+  //res.setHeader('Content-Security-Policy', "form-action 'self' *");
+  try {
+    const Student_id = req.user.user.Student_id;
+    const Team_id = req.body.Team_id;
     if (!await DB_IO.has_team_expired(Team_id)) {
-      res.status(200).json({ success: false, message: 'project not expired' });
+      res.status(200).json({ success: false, message: 'team not expired' });
       return;
     }
     const votes = req.body.votes;
     if (await DB_IO.project_voted(Course_id, Student_id)) {
-      res.status(200).json({ success: false, message: 'project already voted' });
+      res.status(200).json({ success: false, message: 'team already voted' });
       return;
     }
     const list_peole = JSON.parse(await DB_IO.list_team_peole(Student_id, Course_id));
@@ -684,7 +684,7 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
   }
 });
 
-app.get('/add_project1', authenticateToken, async (req, res) => {
+/*app.get('/add_project1', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const year_semester = _year_semester();
@@ -711,9 +711,9 @@ app.get('/add_project2', authenticateToken, async (req, res) => {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
   }
-});
+});*/
 
-app.get('/create_team1', authenticateToken, async (req, res) => {
+/*app.get('/create_team1', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const year_semester = _year_semester();
@@ -737,9 +737,9 @@ app.get('/create_team2', authenticateToken, async (req, res) => {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
   }
-});
+});*/
 
-app.get('/create_team3', authenticateToken, async (req, res) => {
+app.get('/create_team', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const Course_id = req.query.Course_id;
