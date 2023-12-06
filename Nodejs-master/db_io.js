@@ -810,7 +810,7 @@ module.exports = {
     team_vote: async (Team_id, Student_id) => {
         try {
             const _team_vote = await new Promise((resolve, reject) => {
-                db.query(`UPDATE TeamPeopleTable SET voted = 1 WHERE Team_id = ? nad Student_id = ?`, [Team_id, Student_id], (error, rows) => {
+                db.query(`UPDATE TeamPeopleTable SET voted = 1 WHERE Team_id = ? and Student_id = ?`, [Team_id, Student_id], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
