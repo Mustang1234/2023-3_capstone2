@@ -1092,7 +1092,7 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    create_team: async (Course_id, Team_name, max_member, Student_id, description, rapid_match) => {
+    create_team: async (Course_id, Team_name, max_member, Student_id, description, finish_time, rapid_match) => {
         try {/*
             const _create_team0 = await new Promise((resolve, reject) => {
                 db.query(`SELECT DISTINCT * FROM ProjectTable as A INNER JOIN TimeTable as B
@@ -1112,8 +1112,8 @@ module.exports = {
             });
             if(_create_team0){*/
                 const _create_team1 = await new Promise((resolve, reject) => {
-                    db.query(`INSERT INTO TeamTable (Course_id, Team_name, max_member, current_member, head, description, rapid_match)
-                    VALUES (?, ?, ?, 1, ?, ?, ?)`, [Course_id, Team_name, max_member, Student_id, description, rapid_match], (error) => {
+                    db.query(`INSERT INTO TeamTable (Course_id, Team_name, max_member, current_member, head, description, finish_time, rapid_match)
+                    VALUES (?, ?, ?, 1, ?, ?, ?, ?)`, [Course_id, Team_name, max_member, Student_id, description, finish_time, rapid_match], (error) => {
                         if (error) {
                             console.error(error);
                             reject(error);
