@@ -618,14 +618,14 @@ app.get('/vote_my_project2', authenticateToken, async (req, res) => {
   //res.setHeader('Content-Security-Policy', "form-action 'self' *");
   try {
     const Student_id = req.user.user.Student_id;
-    const Project_id = req.query.Project_id;
-    if (!await DB_IO.has_project_expired(Project_id)) {
+    const year_semester = _year_semester();
+    if (!await DB_IO.has_team_expired(Team)) {
       res.status(200).json({ success: false, message: 'project not expired' });
       return;
     }
-    const result = JSON.parse(await DB_IO.list_project_peole(Student_id, Project_id));
+    const result = JSON.parse(await DB_IO.list_team_expired(Student_id, year_semester));
     //console.log(result);
-    res.status(200).json({ Project_id: Project_id, people: result });
+    res.status(200).json({ Team: Team, people: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
@@ -636,17 +636,17 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
   //res.setHeader('Content-Security-Policy', "form-action 'self' *");
   try {
     const Student_id = req.user.user.Student_id;
-    const Project_id = req.body.Project_id;
-    if (!await DB_IO.has_project_expired(Project_id)) {
+    const Course_id = req.body.Course_id;
+    if (!await DB_IO.has_team_expired(Team_id)) {
       res.status(200).json({ success: false, message: 'project not expired' });
       return;
     }
     const votes = req.body.votes;
-    if (await DB_IO.project_voted(Project_id, Student_id)) {
+    if (await DB_IO.project_voted(Course_id, Student_id)) {
       res.status(200).json({ success: false, message: 'project already voted' });
       return;
     }
-    const list_peole = JSON.parse(await DB_IO.list_project_peole(Student_id, Project_id));
+    const list_peole = JSON.parse(await DB_IO.list_team_peole(Student_id, Course_id));
     if (list_peole.length !== votes.length) {
       res.status(200).json({ success: false, message: 'vote info incorrect' });
       return;
@@ -676,7 +676,7 @@ app.post('/vote_my_project3', authenticateToken, async (req, res) => {
       else if (votes[i].vote_value === '5') vote_value = 15;
       result = result && await DB_IO.vote_peole(votes[i].Student_id, vote_value);
     }
-    result = result && await DB_IO.project_vote(Project_id, Student_id);
+    result = result && await DB_IO.project_vote(Course_id, Student_id);
     res.status(200).json({ success: result, message: 'success' });
   } catch (error) {
     console.error('오류 발생:', error);
@@ -742,11 +742,11 @@ app.get('/create_team2', authenticateToken, async (req, res) => {
 app.get('/create_team3', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
-    const Project_id = req.query.Project_id;
+    const Course_id = req.query.Course_id;
     const Team_name = req.query.Team_name;
     const max_member = req.query.max_member;
     const description = req.query.description;
-    const result = await DB_IO.create_team(Project_id, Team_name, max_member, Student_id, description);
+    const result = await DB_IO.create_team(Course_id, Team_name, max_member, Student_id, description);
     //console.log(result);
     res.status(200).json({ success: result });
   } catch (error) {
@@ -755,7 +755,7 @@ app.get('/create_team3', authenticateToken, async (req, res) => {
   }
 });
 
-app.get('/join_team1', authenticateToken, async (req, res) => {
+/*app.get('/join_team1', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
     const year_semester = _year_semester();
@@ -784,15 +784,15 @@ app.get('/join_team2', authenticateToken, async (req, res) => {
 app.get('/join_team3', authenticateToken, async (req, res) => {
   try {
     //const Student_id = req.user.user.Student_id;
-    const Project_id = req.query.Project_id;
-    const result = JSON.parse(await DB_IO.list_team(Project_id));
+    const Course_id = req.query.Course_id;
+    const result = JSON.parse(await DB_IO.list_team(Course_id));
     //console.log(result);
     res.status(200).json({ teams: result });
   } catch (error) {
     console.error('오류 발생:', error);
     res.status(400).send('오류 발생');
   }
-});
+});*/
 
 app.get('/join_team_request', authenticateToken, async (req, res) => {
   try {
