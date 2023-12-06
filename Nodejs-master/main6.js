@@ -676,7 +676,7 @@ app.post('/vote_my_team', authenticateToken, async (req, res) => {
       else if (votes[i].vote_value === '5') vote_value = 15;
       result = result && await DB_IO.vote_peole(votes[i].Student_id, vote_value);
     }
-    result = result && await DB_IO.project_vote(Course_id, Student_id);
+    result = result && await DB_IO.project_vote(Team_id, Student_id);
     res.status(200).json({ success: result, message: 'success' });
   } catch (error) {
     console.error('오류 발생:', error);
