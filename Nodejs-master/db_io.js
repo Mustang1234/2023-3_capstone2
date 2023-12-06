@@ -179,7 +179,9 @@ module.exports = {
                     }
                 });
             });
-            return JSON.stringify(timeTable);
+            const timetable_small = Array.from(new Set(timeTable.map(item => item.Course_id)))
+                .map(courseId => timeTable.find(item => item.Course_id === courseId));
+            return JSON.stringify(timetable_small);
         } catch (error) {
             console.error('오류 발생:', error);
             res.status(500).send('오류 발생');
