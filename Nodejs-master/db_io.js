@@ -874,7 +874,7 @@ module.exports = {
             const projects = await new Promise((resolve, reject) => {
                 db.query(`SELECT DISTINCT B.Project_id, B.Project_name, B.Course_id, B.start_time, B.finish_time, B.description
                 FROM TimeTable as A INNER JOIN ProjectTable as B
-                ON A.Student_id = ? and A.year_semester = ? and A.Course_id = B.Course_id ORDER BY B.finish_time`, [Student_id, year_semester], (error, rows) => {
+                ON A.Student_id = ? and A.year_semester = ? and A.Course_id = B.Course_id`, [Student_id, year_semester], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
@@ -904,7 +904,7 @@ module.exports = {
             const _list_whole_team = await new Promise((resolve, reject) => {
                 db.query(`SELECT DISTINCT A.Team_name, A.Team_id, A.head, C.Course_id, D.Course_name, A.max_member, A.current_member, C.finish_time, A.description
                 FROM TeamTable as A INNER JOIN ProjectTable as C INNER JOIN CourseTable as D INNER JOIN TimeTable as E
-                ON E.Student_id = ? and E.Course_id = D.Course_id and D.Course_id = C.Course_id and C.Project_id = A.Project_id and D.year_semester = ?;`, [Student_id, year_semester], (error, rows) => {
+                ON E.Student_id = ? and E.Course_id = D.Course_id and D.Course_id = C.Course_id and C.Project_id = A.Project_id and D.year_semester = ? ORDER BY C.finish_time;`, [Student_id, year_semester], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
