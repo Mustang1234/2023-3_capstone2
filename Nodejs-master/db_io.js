@@ -807,13 +807,10 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
-    team_vote: async (Course_id, Student_id) => {
+    team_vote: async (Team_id, Student_id) => {
         try {
             const _team_vote = await new Promise((resolve, reject) => {
-                db.query(`UPDATE TeamPeopleTable 
-                INNER JOIN TeamTable ON TeamTable.Course_id = ? and
-                TeamTable.Team_id = TeamPeopleTable.Team_id and TeamPeopleTable.Student_id = ?
-                SET TeamPeopleTable.voted = 1;`, [Course_id, Student_id], (error, rows) => {
+                db.query(`UPDATE TeamPeopleTable SET voted = 1 WHERE Team_id = ? nad Student_id = ?`, [Team_id, Student_id], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
