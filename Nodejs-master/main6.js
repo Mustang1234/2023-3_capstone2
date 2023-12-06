@@ -586,6 +586,19 @@ app.get('/delete_team', authenticateToken, async (req, res) => {
   }
 });
 
+app.get('/get_team_avg_speed', authenticateToken, async (req, res) => {
+  try {
+    const Team_id = req.query.Team_id;
+    //const Team_name = req.query.Team_name
+    const result = await DB_IO.get_team_avg_speed(Team_id);
+    //console.log(result);
+    res.status(200).json({ success: result });
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(400).send('오류 발생');
+  }
+});
+
 app.get('/leave_team', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;

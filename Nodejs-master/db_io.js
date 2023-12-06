@@ -1029,8 +1029,8 @@ module.exports = {
         try {
             const _vote_people = await new Promise((resolve, reject) => {
                 db.query(`UPDATE StudentTable
-                SET speed = speed + ?
-                WHERE Student_id = ?;`, [vote_value, Student_id2], (error) => {
+                    SET speed = LEAST(300, GREATEST(0, speed + ?))
+                    WHERE Student_id = ?;`, [vote_value, Student_id2], (error) => {
                     if (error) {
                         console.error(error);
                         reject(error);
@@ -1040,6 +1040,27 @@ module.exports = {
                 });
             });
             return _vote_people;
+        } catch (error) {
+            console.error('오류 발생:', error);
+            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
+            throw new Error('오류 발생');
+        }
+    },
+    get_team_avg_speed: async (Team_id) => {
+        try {
+            const _get_team_avg_speed = await new Promise((resolve, reject) => {
+                db.query(`SELECT AVG(B.speed) AS average_speed
+                FROM TeamPeopleTable as A INNER JOIN StudentTable as B
+                ON A.Team_id = ? and A.Student_id = B.Student_id;`, [Team_id], (error) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(rows[0].average_speed);
+                    }
+                });
+            });
+            return _get_team_avg_speed;
         } catch (error) {
             console.error('오류 발생:', error);
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
