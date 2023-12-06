@@ -619,7 +619,7 @@ app.get('/vote_my_team_list_team_people', authenticateToken, async (req, res) =>
   try {
     const Student_id = req.user.user.Student_id;
     const Team_id = req.query.Team_id;
-    if (!await DB_IO.has_team_expired(Team)) {
+    if (!await DB_IO.has_team_expired(Team_id)) {
       res.status(200).json({ success: false, message: 'team not expired' });
       return;
     }
