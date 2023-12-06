@@ -850,6 +850,41 @@ module.exports = {
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
             throw new Error('오류 발생');
         }
+    },
+    rapid_match_on_off: async (Team_id, Student_id, rapid_match) => {
+        try {
+            const _rapid_match_on0 = await new Promise((resolve, reject) => {
+                db.query(`SELECT * FROM TeamTable WHERE Team_id = ? and head = ?;`, [Team_id, Student_id], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        if(rows.length === 0) resolve(false);
+                        else resolve(true);
+                    }
+                });
+            });
+            if(_rapid_match_on0){
+                const _rapid_match_on1 = await new Promise((resolve, reject) => {
+                    db.query(`UPDATE TeamTable SET rapid_match = ? WHERE Team_id = ? and head = ?`, [rapid_match, Team_id, Student_id], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                return _rapid_match_on1;
+            }
+            else{
+                return _rapid_match_on0;
+            }
+        } catch (error) {
+            console.error('오류 발생:', error);
+            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
+            throw new Error('오류 발생');
+        }
     },/*
     list_my_project: async (Student_id, year_semester) => {
         try {

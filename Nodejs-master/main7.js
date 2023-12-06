@@ -448,6 +448,26 @@ app.get('/add_team_description', authenticateToken, async (req, res) => {
   }
 });
 
+app.get('/rapid_match_on_off', authenticateToken, async (req, res) => {
+  try {
+    const Student_id = req.user.user.Student_id;
+    const Team_id = req.query.Team_id;
+    var rapid_match = req.query.rapid_match;
+    if(rapid_match === undefined || rapid_match === 'false' || rapid_match === 0) rapid_match = 0;
+    else rapid_match = 1;
+    const result = await DB_IO.rapid_match_on_off(Team_id, Student_id, rapid_match);
+    if(result){
+      res.status(200).json({ success: result, message: "rapid_change updated" });
+    }
+    else{
+      res.status(200).json({ success: result, message: "no team or not head" });
+    }
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(400).send('오류 발생');
+  }
+});
+
 app.post('/my_page_photo_upload', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
