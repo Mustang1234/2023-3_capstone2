@@ -1051,7 +1051,7 @@ module.exports = {
             const _get_team_avg_speed = await new Promise((resolve, reject) => {
                 db.query(`SELECT AVG(B.speed) AS average_speed
                 FROM TeamPeopleTable as A INNER JOIN StudentTable as B
-                ON A.Team_id = ? and A.Student_id = B.Student_id;`, [Team_id], (error) => {
+                ON A.Team_id = ? and A.Student_id = B.Student_id;`, [Team_id], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
