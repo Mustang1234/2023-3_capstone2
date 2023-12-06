@@ -1420,6 +1420,7 @@ module.exports = {
     join_team_response_accept: async (JoinRequest_id, Team_id, Student_id, head) => {
         try {
             const _join_team0 = await new Promise((resolve, reject) => {
+                console.log(JoinRequest_id, head, Team_id, Student_id);
                 db.query(`select * from JoinRequestTable where JoinRequest_id = ? and Student_id = ? and Team_id = ? and req_Student_id = ?;`,
                 [JoinRequest_id, head, Team_id, Student_id], (error, rows) => {
                     if (error) {
