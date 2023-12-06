@@ -163,7 +163,9 @@ module.exports = {
     db_to_timetable_small: async (Student_id, year_semester) => {
         try {
             const timeTable = await new Promise((resolve, reject) => {
-                db.query(`SELECT * FROM TimeTable WHERE Student_id = ? and year_semester = ?;`, [Student_id, year_semester], (error, rows) => {
+                db.query(`SELECT DISTINCT A.Course_id, A.Course_name, A.day, A.time
+                FROM CourseTable as A INNER JOIN TimeTable as B
+                WHERE B.Student_id = ? and B.year_semester = ? and B.Course_id = A.Course_id;`, [Student_id, year_semester], (error, rows) => {
                     if (error) {
                         console.error(error);
                         reject(error);
