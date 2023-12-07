@@ -919,10 +919,10 @@ module.exports = {
                     }
                 });
             });
-            const j = result.length;
+            const j = _list_whole_team.length;
             for (let i = 0; i < j; i++) {
-                if(result[i].rapid_match === 1) esult[i].rapid_match = true;
-                else if(result[i].rapid_match === 0) esult[i].rapid_match = false;
+                if(_list_whole_team[i].rapid_match === 1) _list_whole_team[i].rapid_match = true;
+                else if(_list_whole_team[i].rapid_match === 0) _list_whole_team[i].rapid_match = false;
             }
             return JSON.stringify(_list_whole_team);
         } catch (error) {
