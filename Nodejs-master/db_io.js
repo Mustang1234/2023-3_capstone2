@@ -919,6 +919,11 @@ module.exports = {
                     }
                 });
             });
+            const j = result.length;
+            for (let i = 0; i < j; i++) {
+                if(result[i].rapid_match === 1) esult[i].rapid_match = true;
+                else if(result[i].rapid_match === 0) esult[i].rapid_match = false;
+            }
             return JSON.stringify(_list_whole_team);
         } catch (error) {
             console.error('오류 발생:', error);
