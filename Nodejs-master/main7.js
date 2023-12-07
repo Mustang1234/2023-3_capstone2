@@ -671,6 +671,8 @@ app.post('/vote_my_team', authenticateToken, async (req, res) => {
       res.status(200).json({ success: false, message: 'vote info incorrect' });
       return;
     }
+    list_peole.sort((a, b) => a.Student_id.localeCompare(b.Student_id));
+    votes.sort((a, b) => a.Student_id.localeCompare(b.Student_id));
     const j = votes.length;
     for (let i = 0; i < j; i++) {
       if (list_peole[i].Student_id !== votes[i].Student_id) {
