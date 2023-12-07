@@ -265,23 +265,6 @@ app.post('/signup', async (req, res) => {
   }
 });
 
-app.post('/change_password', authenticateToken, async (req, res) => {
-  const Student_id = req.user.user.Student_id;
-  const { current_password, new_password } = req.body;
-  try {
-    const result = await DB_IO.change_password(Student_id, current_password, new_password);
-    if (result) {
-      return res.status(200).json({ success: result, message: 'change password success' });
-    }
-    else {
-      return res.status(200).json({ success: result, message: 'change password fail password incorrect' });
-    }
-  } catch (error) {
-    console.error('오류 발생:', error);
-    res.status(400).send('오류 발생');
-  }
-});
-
 app.get('/signout', authenticateToken, async (req, res) => {
   const Student_id = req.user.user.Student_id;
   const year_semester = _year_semester();
