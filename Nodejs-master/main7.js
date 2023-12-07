@@ -469,7 +469,7 @@ app.get('/rapid_match_on_off', authenticateToken, async (req, res) => {
   }
 });
 
-app.get('/rapid_match_on_off', authenticateToken, async (req, res) => {
+app.get('/get_rapid_match', authenticateToken, async (req, res) => {
   try {
     //const Student_id = req.user.user.Student_id;
     const Team_id = req.query.Team_id;
