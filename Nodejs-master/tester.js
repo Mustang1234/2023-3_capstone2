@@ -16,13 +16,13 @@ const doc = {
   // schemes: ["https" ,"http"],
 };
 
-const outputFile = "./swagger-output.json";
+const outputFile = "./swagger_output.json";
 const endpointsFiles = ["./main7.js"];
 
 swaggerAutogen(outputFile, endpointsFiles, doc);
 
 // Swagger 미들웨어 추가
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(require('./swagger-output.json')));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(require('./swagger_output.json')));
 
 // 서버 시작
 app.listen(PORT, () => {
