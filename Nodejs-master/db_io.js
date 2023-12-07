@@ -884,11 +884,12 @@ module.exports = {
                         console.error(error);
                         reject(error);
                     } else {
-                        if(rows[0].rapid_match === 0) return false;
-                        else if(rows[0].rapid_match === 1) return true;
+                        if(rows[0].rapid_match === 0) resolve(false);
+                        else if(rows[0].rapid_match === 1) resolve(true);
                     }
                 });
             });
+            return _rapid_match_on0;
         } catch (error) {
             console.error('오류 발생:', error);
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
