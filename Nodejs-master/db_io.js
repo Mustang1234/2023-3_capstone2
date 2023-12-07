@@ -982,6 +982,8 @@ module.exports = {
                             const scheduleTime = rows[i].finish_time;
                             const currentTime = getCurrentDateTime();
                             if(scheduleTime <= currentTime){
+                                if(rows[i].rapid_match === 1) rows[i].rapid_match = true;
+                                else if(rows[i].rapid_match === 0) rows[i].rapid_match = false;
                                 result.push(rows[i]);
                             }
                         }
