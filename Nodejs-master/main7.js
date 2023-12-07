@@ -457,7 +457,8 @@ app.get('/rapid_match_on_off', authenticateToken, async (req, res) => {
     else rapid_match = 1;
     const result = await DB_IO.rapid_match_on_off(Team_id, Student_id, rapid_match);
     if(result){
-      res.status(200).json({ success: result, message: "rapid_change updated" });
+      if(rapid_match === 1) res.status(200).json({ success: result, message: "rapid_change now on" });
+      else res.status(200).json({ success: result, message: "rapid_change now off" });
     }
     else{
       res.status(200).json({ success: result, message: "no team or not head" });
