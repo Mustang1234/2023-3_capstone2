@@ -808,7 +808,13 @@ app.get('/get_schedule', authenticateToken, async (req, res) => {
 
 app.get('/kill', authenticateToken, async (req, res) => {
   const Student_id = req.user.user.Student_id;
-  if(Student_id === 'admin') process.exit();
+  if(Student_id === 'admin'){
+    res.status(200).send('killed!!!');
+    process.exit();
+  }
+  else{
+    res.status(200).send('nonono~~~');
+  }
 });
 
 app.use(function (req, res, next) {
