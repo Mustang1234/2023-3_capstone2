@@ -969,7 +969,7 @@ module.exports = {
     list_team_expired: async (Student_id, year_semester) => {
         try {
             const teams = await new Promise((resolve, reject) => {
-                db.query(`SELECT B.Team_id FROM TimeTable as A INNER JOIN TeamTable as B INNER JOIN TeamPeopleTable as C
+                db.query(`SELECT * FROM TeamTable as B INNER JOIN TimeTable as A INNER JOIN TeamPeopleTable as C
                 ON A.Student_id = ? and A.year_semester = ? and A.Course_id = B.Course_id and B.Team_id = C.Team_id and C.Student_id = ? and C.voted = 0;`, [Student_id, year_semester, Student_id], (error, rows) => {
                     if (error) {
                         console.error(error);
