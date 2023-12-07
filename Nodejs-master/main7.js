@@ -294,10 +294,10 @@ app.get('/find_id_by_email', async (req, res) => {
   try {
     result = await DB_IO.find_id_by_email(email);
     if (result) {
-      return res.status(200).json({ success: result, Student_id: result });
+      return res.status(200).json({ success: true, Student_id: result });
     }
     else {
-      return res.status(200).json({ success: result, message: 'cannot find id' });
+      return res.status(200).json({ success: false, message: 'cannot find id' });
     }
   } catch (error) {
     console.error('오류 발생:', error);
