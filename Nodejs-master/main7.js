@@ -311,10 +311,27 @@ app.get('/find_id_by_email', async (req, res) => {
   try {
     result = await DB_IO.find_id_by_email(email);
     if (result) {
-      return res.status(200).json({ success: true, Student_id: result });
+      return res.status(200).json({ success: result, Student_id: result });
     }
     else {
-      return res.status(200).json({ success: false, message: 'cannot find id' });
+      return res.status(200).json({ success: result, message: 'cannot find id' });
+    }
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(400).send('오류 발생');
+  }
+});
+
+app.post('/set_new_pw', authenticateToken, async (req, res) => {
+  const Student_id = req.user.user.Student_id;
+  const { current_password, new_password } = req.body;
+  try {
+    result = await DB_IO.set_new_pw(Student_id, current_password, new_password);
+    if (result) {
+      return res.status(200).json({ success: result, message: 'password updated' });
+    }
+    else {
+      return res.status(200).json({ success: result, message: 'invalid password' });
     }
   } catch (error) {
     console.error('오류 발생:', error);

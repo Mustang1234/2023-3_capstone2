@@ -446,6 +446,45 @@ module.exports = {
             throw new Error('오류 발생');
         }
     },
+    set_new_pw: async (Student_id, current_password, new_password) => {
+        try {
+            const _set_new_pw1 = await new Promise((resolve, reject) => {
+                db.query(`SELECT * FROM StudentTable WHERE Student_id = ? and Student_pw = ?`, [Student_id, current_password], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        //console.log(rows.length, rows[0].token, token)
+                        if(rows.length !== 0){
+                            resolve(true);
+                        }
+                        else{
+                            resolve(false);
+                        }
+                    }
+                });
+            });
+            if(_set_new_pw1){
+                const _set_new_pw2 = await new Promise((resolve, reject) => {
+                    db.query(`UPDATE StudentTable SET Student_pw = ? WHERE Student_id = ? and Student_pw = ?`, [new_password, Student_id, current_password], (error) => {
+                        if (error) {
+                            console.error(error);
+                            reject(error);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                });
+                return _set_new_pw1 && _set_new_pw2;
+            }
+            else{
+                return _set_new_pw1;
+            }
+        } catch (error) {
+            console.error('오류 발생:', error);
+            throw new Error('오류 발생');
+        }
+    },
     find_pw_by_email_token_insert: async (email, new_pw_token) => {
         try {
             const _find_pw_by_email_token_insert1 = await new Promise((resolve, reject) => {
