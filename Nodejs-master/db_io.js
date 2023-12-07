@@ -1005,10 +1005,12 @@ module.exports = {
                         reject(error);
                     } else {
                         if(rows.length === 0) resolve(false);
-                        const scheduleTime = rows[0].finish_time;
-                        const currentTime = getCurrentDateTime();
-                        if(scheduleTime <= currentTime) resolve(true);
-                        else resolve(false);
+                        else{
+                            const scheduleTime = rows[0].finish_time;
+                            const currentTime = getCurrentDateTime();
+                            if(scheduleTime <= currentTime) resolve(true);
+                            else resolve(false);
+                        }
                     }
                 });
             });
