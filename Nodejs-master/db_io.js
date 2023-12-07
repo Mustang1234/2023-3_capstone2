@@ -666,7 +666,17 @@ module.exports = {
                     }
                 });
             });
-            return _sign_out1 && _sign_out2 && _sign_out3 && _sign_out4;
+            const _sign_out5 = await new Promise((resolve, reject) => {
+                db.query(`DELETE FROM StudentPhotoTable WHERE Student_id = ?`, [Student_id], (error) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
+                });
+            });
+            return _sign_out1 && _sign_out2 && _sign_out3 && _sign_out4 && _sign_out5;
         } catch (error) {
             console.error('오류 발생:', error);
             throw new Error('오류 발생');
@@ -860,6 +870,25 @@ module.exports = {
             else{
                 return _rapid_match_on0;
             }
+        } catch (error) {
+            console.error('오류 발생:', error);
+            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
+            throw new Error('오류 발생');
+        }
+    },
+    get_rapid_match: async (Team_id) => {
+        try {
+            const _rapid_match_on0 = await new Promise((resolve, reject) => {
+                db.query(`SELECT rapid_match FROM TeamTable WHERE Team_id = ?`, [Team_id], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        if(rows[0].rapid_match === 0) return false;
+                        else if(rows[0].rapid_match === 1) return true;
+                    }
+                });
+            });
         } catch (error) {
             console.error('오류 발생:', error);
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.

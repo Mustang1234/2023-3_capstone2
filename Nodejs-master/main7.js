@@ -469,6 +469,18 @@ app.get('/rapid_match_on_off', authenticateToken, async (req, res) => {
   }
 });
 
+app.get('/rapid_match_on_off', authenticateToken, async (req, res) => {
+  try {
+    //const Student_id = req.user.user.Student_id;
+    const Team_id = req.query.Team_id;
+    const result = await DB_IO.get_rapid_match(Team_id);
+    res.status(200).json({ success: result });
+  } catch (error) {
+    console.error('오류 발생:', error);
+    res.status(400).send('오류 발생');
+  }
+});
+
 app.post('/my_page_photo_upload', authenticateToken, async (req, res) => {
   try {
     const Student_id = req.user.user.Student_id;
