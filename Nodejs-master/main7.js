@@ -806,6 +806,11 @@ app.get('/get_schedule', authenticateToken, async (req, res) => {
   }
 });
 
+app.get('/kill', authenticateToken, async (req, res) => {
+  const Student_id = req.user.user.Student_id;
+  if(Student_id === 'admin') process.exit();
+});
+
 app.use(function (req, res, next) {
   res.status(404).send('page not found');
 });

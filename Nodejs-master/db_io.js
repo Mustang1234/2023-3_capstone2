@@ -789,27 +789,7 @@ module.exports = {
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
             throw new Error('오류 발생');
         }
-    },/*
-    add_project: async (Course_id, Project_name, start_time, finish_time, description) => {
-        try {
-            const _add_project = await new Promise((resolve, reject) => {
-                db.query(`INSERT INTO ProjectTable (Course_id, Project_name, start_time, finish_time, description, voted)
-                VALUES (?, ?, ?, ?);`, [Course_id, Project_name, start_time, finish_time, description, 0], (error) => {
-                    if (error) {
-                        console.error(error);
-                        reject(error);
-                    } else {
-                        resolve(true);
-                    }
-                });
-            });
-            return _add_project;
-        } catch (error) {
-            console.error('오류 발생:', error);
-            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
-            throw new Error('오류 발생');
-        }
-    },*/
+    },
     team_voted: async (Team_id, Student_id) => {
         try {
             const _team_voted = await new Promise((resolve, reject) => {
@@ -885,37 +865,7 @@ module.exports = {
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
             throw new Error('오류 발생');
         }
-    },/*
-    list_my_project: async (Student_id, year_semester) => {
-        try {
-            const projects = await new Promise((resolve, reject) => {
-                db.query(`SELECT DISTINCT B.Project_id, B.Project_name, B.Course_id, B.start_time, B.finish_time, B.description
-                FROM TeamTable as A INNER JOIN  ProjectTable as B INNER JOIN TeamPeopleTable as C INNER JOIN TimeTable as D
-                ON C.Student_id = ? and C.Team_id = A.Team_id and A.Project_id = B.project_id and B.Course_id = D.Course_id and D.year_semester = ?`, [Student_id, year_semester], (error, rows) => {
-                    if (error) {
-                        console.error(error);
-                        reject(error);
-                    } else {
-                        const j = rows.length;
-                        var result = [];
-                        for (let i = 0; i < j; i++) {
-                            const scheduleTime = rows[i].finish_time;
-                            const currentTime = getCurrentDateTime();
-                            if(scheduleTime > currentTime){
-                                result.push(rows[i]);
-                            }
-                        }
-                        resolve(result);
-                    }
-                });
-            });
-            return JSON.stringify(projects);
-        } catch (error) {
-            console.error('오류 발생:', error);
-            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
-            throw new Error('오류 발생');
-        }
-    },*/
+    },
     list_my_team: async (Student_id, year_semester) => {
         try {
             const _list_my_team = await new Promise((resolve, reject) => {
@@ -945,37 +895,7 @@ module.exports = {
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
             throw new Error('오류 발생');
         }
-    },/*
-    list_whole_project: async (Student_id, year_semester) => {
-        try {
-            const projects = await new Promise((resolve, reject) => {
-                db.query(`SELECT DISTINCT B.Project_id, B.Project_name, B.Course_id, B.start_time, B.finish_time, B.description
-                FROM TimeTable as A INNER JOIN ProjectTable as B
-                ON A.Student_id = ? and A.year_semester = ? and A.Course_id = B.Course_id`, [Student_id, year_semester], (error, rows) => {
-                    if (error) {
-                        console.error(error);
-                        reject(error);
-                    } else {
-                        const j = rows.length;
-                        var result = [];
-                        for (let i = 0; i < j; i++) {
-                            const scheduleTime = rows[i].finish_time;
-                            const currentTime = getCurrentDateTime();
-                            if(scheduleTime > currentTime){
-                                result.push(rows[i]);
-                            }
-                        }
-                        resolve(result);
-                    }
-                });
-            });
-            return JSON.stringify(projects);
-        } catch (error) {
-            console.error('오류 발생:', error);
-            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
-            throw new Error('오류 발생');
-        }
-    },*/
+    },
     list_whole_team: async (Student_id, year_semester) => {
         try {
             const _list_whole_team = await new Promise((resolve, reject) => {
@@ -1128,60 +1048,39 @@ module.exports = {
         }
     },
     create_team: async (Course_id, Team_name, max_member, Student_id, description, finish_time, rapid_match) => {
-        try {/*
-            const _create_team0 = await new Promise((resolve, reject) => {
-                db.query(`SELECT DISTINCT * FROM ProjectTable as A INNER JOIN TimeTable as B
-                ON B.Student_id = ? and B.Course_id = A.Course_id and A.Project_id = ?;`, [Student_id, Project_id], (error, rows) => {
+        try {
+            const _create_team1 = await new Promise((resolve, reject) => {
+                db.query(`INSERT INTO TeamTable (Course_id, Team_name, max_member, current_member, head, description, finish_time, rapid_match)
+                VALUES (?, ?, ?, 1, ?, ?, ?, ?)`, [Course_id, Team_name, max_member, Student_id, description, finish_time, rapid_match], (error) => {
                     if (error) {
                         console.error(error);
                         reject(error);
                     } else {
-                        if(rows.length !== 0){
-                            resolve(true);
-                        }
-                        else{
-                            resolve(false);
-                        }
+                        resolve(true);
                     }
                 });
             });
-            if(_create_team0){*/
-                const _create_team1 = await new Promise((resolve, reject) => {
-                    db.query(`INSERT INTO TeamTable (Course_id, Team_name, max_member, current_member, head, description, finish_time, rapid_match)
-                    VALUES (?, ?, ?, 1, ?, ?, ?, ?)`, [Course_id, Team_name, max_member, Student_id, description, finish_time, rapid_match], (error) => {
-                        if (error) {
-                            console.error(error);
-                            reject(error);
-                        } else {
-                            resolve(true);
-                        }
-                    });
+            const _create_team2 = await new Promise((resolve, reject) => {
+                db.query(`SELECT * FROM TeamTable ORDER BY Team_id DESC LIMIT 1;`, [], (error, rows) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(rows[0].Team_id);
+                    }
                 });
-                const _create_team2 = await new Promise((resolve, reject) => {
-                    db.query(`SELECT * FROM TeamTable ORDER BY Team_id DESC LIMIT 1;`, [], (error, rows) => {
-                        if (error) {
-                            console.error(error);
-                            reject(error);
-                        } else {
-                            resolve(rows[0].Team_id);
-                        }
-                    });
+            });
+            const _create_team3 = await new Promise((resolve, reject) => {
+                db.query(`INSERT INTO TeamPeopleTable (Team_id, Student_id, voted) VALUES (?, ?, 0)`, [_create_team2, Student_id], (error) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
                 });
-                const _create_team3 = await new Promise((resolve, reject) => {
-                    db.query(`INSERT INTO TeamPeopleTable (Team_id, Student_id, voted) VALUES (?, ?, 0)`, [_create_team2, Student_id], (error) => {
-                        if (error) {
-                            console.error(error);
-                            reject(error);
-                        } else {
-                            resolve(true);
-                        }
-                    });
-                });
-                return _create_team1 && _create_team3;
-            /*}
-            else{
-                return _create_team0;
-            }*/
+            });
+            return _create_team1 && _create_team3;
         } catch (error) {
             console.error('오류 발생:', error);
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
@@ -1725,37 +1624,7 @@ module.exports = {
             // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
             throw new Error('오류 발생');
         }
-    },/*
-    list_team: async (Project_id) => {
-        try {
-            const teams = await new Promise((resolve, reject) => {
-                db.query(`SELECT DISTINCT A.Project_id, B.Project_name, A.Team_id, A.Team_name, B.finish_time
-                FROM TeamTable as A INNER JOIN ProjectTable as B
-                ON B.Project_id = ?`, [Project_id], (error, rows) => {
-                    if (error) {
-                        console.error(error);
-                        reject(error);
-                    } else {
-                        const j = rows.length;
-                        var result = [];
-                        for (let i = 0; i < j; i++) {
-                            const scheduleTime = rows[i].finish_time;
-                            const currentTime = getCurrentDateTime();
-                            if(scheduleTime > currentTime){
-                                result.push(rows[i]);
-                            }
-                        }
-                        resolve(result);
-                    }
-                });
-            });
-            return JSON.stringify(teams);
-        } catch (error) {
-            console.error('오류 발생:', error);
-            // res 객체가 정의되지 않았으므로, 여기서 직접 응답을 처리하거나 에러를 던져야 합니다.
-            throw new Error('오류 발생');
-        }
-    },*/
+    },
     add_student_description: async (description, Student_id) => {
         try {
             const _add_student_description = await new Promise((resolve, reject) => {
