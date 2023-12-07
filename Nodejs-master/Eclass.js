@@ -44,7 +44,6 @@ async function Eclass(_studentID, portal_id, portal_pw) {
             await page.waitForNavigation({ timeout : 2000 });
         } catch (error) {
             if (error instanceof puppeteer.errors.TimeoutError) {
-                //console.error('Navigation timed out');
             } else {
                 throw error;
             }
@@ -54,27 +53,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         return JSON.stringify(jsonInfo);
     }
 
-    /*try {
-        await page.waitForNavigation({ timeout : 2000 });
-    } catch (error) {
-        if (error instanceof puppeteer.errors.TimeoutError) {
-            //console.error('Navigation timed out');
-        } else {
-            throw error;
-        }
-    }*/
-
     const cookies = await page.cookies();
-    //console.log(cookies);
-    /*try {
-        await page.waitForNavigation({ timeout : 2000 });
-    } catch (error) {
-        if (error instanceof puppeteer.errors.TimeoutError) {
-            //console.error('Navigation timed out');
-        } else {
-            throw error;
-        }
-    }*/
 
     if(cookies[0].name == 'prdct-NA'){
         //console.log('no cookie');
@@ -85,19 +64,7 @@ async function Eclass(_studentID, portal_id, portal_pw) {
 
     // 로그인 후 원하는 페이지로 이동 (예: 시간표 페이지)
     await page.setCookie(...cookies);
-    /*try {
-	await page.waitForNavigation({ timeout : 2000 });
-    } catch (error) {
-        if (error instanceof puppeteer.errors.TimeoutError) {
-	    //console.error('Navigation timed out');
-        } else {
-	    throw error;
-        }
-    }*/
     await page.goto('https://mportal.cau.ac.kr/std/uhs/sUhsPer001/index.do');
-    //await page.setCookie(...cookies);
-    //await page.setCookie(...cookies);
-    //await page.waitForNavigation();
     try {
         await page.waitForNavigation({ timeout : 2500 });
     } catch (error) {
@@ -115,7 +82,6 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     const wow6 = '<span class="ng-binding">';
     pageContent_name = pageContent_name.substring(pageContent_name.indexOf(wow6) + wow6.length, pageContent_name.indexOf('</span>'));
 
-    //console.log(pageContent_department, pageContent_department.length);
     jsonInfo.student_name = pageContent_name;
 
     const wow = '학번';
@@ -123,7 +89,6 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     const wow2 = '<span class="ng-binding">';
     pageContent_number = pageContent_number.substring(pageContent_number.indexOf(wow2) + wow2.length, pageContent_number.indexOf('</span>'));
     
-    //console.log(pageContent_number, pageContent_number.length);
     jsonInfo.student_number = pageContent_number;
     
     const wow3 = '소속 (학과)';
@@ -131,7 +96,6 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     const wow4 = '<span class="ng-binding">';
     pageContent_department = pageContent_department.substring(pageContent_department.indexOf(wow4) + wow4.length, pageContent_department.indexOf('</span>'));
 
-    //console.log(pageContent_department, pageContent_department.length);
     pageContent_department = pageContent_department.replace('&nbsp;&nbsp;', " ");
     jsonInfo.department = pageContent_department;
     
@@ -141,39 +105,19 @@ async function Eclass(_studentID, portal_id, portal_pw) {
         return JSON.stringify(jsonInfo);
     }
 
-    // JSON 문자열로 변환
-    //const jsonString = JSON.stringify(jsonArray);
-
-    //const page2 = await browser.newPage();
-    //await page2.setCookie(...cookies);
-    //await page2.setCookie(...cookies);
-    /*try {
-        await page2.waitForNavigation({ timeout : 2000 });
-    } catch (error) {
-        if (error instanceof puppeteer.errors.TimeoutError) {
-            //console.error('Navigation timed out');
-        } else {
-            throw error;
-        }
-    }*/
     await page.goto('https://mportal.cau.ac.kr/std/usk/sUskCap003/index.do');
-    //await page2.setCookie(...cookies);
-    //await page2.waitForNavigation();
     try {
         await page.waitForNavigation({ timeout: 2500 });
     } catch (error) {
         if (error instanceof puppeteer.errors.TimeoutError) {
-            //console.error('Navigation timed out');
         } else {
             throw error;
         }
     }
     const pageContent2 = await page.content();
-    //console.log(pageContent2);
     await browser.close();
 
     var timeTableArray = []
-    //const Days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const Days_kor = ['월', '화', '수', '목', '금', '토', '일'];
     const times = ['08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30','20:00','20:30','21:00','21:30','22:00','22:30','23:00','23:30']
     for (let i = 0; i < 31; i++) {
@@ -205,7 +149,6 @@ async function Eclass(_studentID, portal_id, portal_pw) {
     jsonInfo.timeTable = timeTableArray;
     jsonInfo.timeTable_small = result;
 
-    console.log(jsonInfo);
     return JSON.stringify(jsonInfo);
 }
 
