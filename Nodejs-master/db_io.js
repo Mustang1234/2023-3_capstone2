@@ -1004,6 +1004,7 @@ module.exports = {
                         console.error(error);
                         reject(error);
                     } else {
+                        if(rows.length === 0) resolve(false);
                         const scheduleTime = rows[0].finish_time;
                         const currentTime = getCurrentDateTime();
                         if(scheduleTime <= currentTime) resolve(true);
