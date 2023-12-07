@@ -911,9 +911,9 @@ module.exports = {
                         for (let i = 0; i < j; i++) {
                             const scheduleTime = rows[i].finish_time;
                             const currentTime = getCurrentDateTime();
-                            if(scheduleTime > currentTime){
-                                result.push(rows[i]);
-                            }
+                            if(scheduleTime > currentTime) rows[i].expired = false;
+                            else rows[i].expired = true;
+                            result.push(rows[i]);
                         }
                         resolve(result);
                     }
@@ -946,9 +946,9 @@ module.exports = {
                         for (let i = 0; i < j; i++) {
                             const scheduleTime = rows[i].finish_time;
                             const currentTime = getCurrentDateTime();
-                            if(scheduleTime > currentTime){
-                                result.push(rows[i]);
-                            }
+                            if(scheduleTime > currentTime) rows[i].expired = false;
+                            else rows[i].expired = true;
+                            result.push(rows[i]);
                         }
                         resolve(result);
                     }
