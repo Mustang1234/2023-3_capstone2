@@ -697,9 +697,7 @@ module.exports = {
                         for (let i = 0; i < j; i++) {
                             const scheduleTime = rows[i].Deadline;
                             const currentTime = getCurrentDateTime();
-                            if(scheduleTime > currentTime){
-                                result.push(rows[i]);
-                            }
+                            result.push(rows[i]);
                         }
                         resolve(result);
                     }
