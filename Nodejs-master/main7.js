@@ -350,6 +350,7 @@ app.post('/find_pw_by_email_token_check', async (req, res) => {
   try {
     const { Student_id, new_pw_token, new_password } = req.body;
     const email = await DB_IO.get_email_from_id(Student_id);
+    console.log(email)
     if(email){
       result = await DB_IO.find_pw_by_email_token_check(email, new_pw_token, new_password);
       if (result) {
